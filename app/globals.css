@@ -69,6 +69,8 @@
   .font-en-xxl-r      { @apply font-gilda text-[80px] font-normal tracking-[0em] leading-[1.0]; }
   .font-en-xl-r       { @apply font-gilda text-[56px] font-normal tracking-[-0.05em] leading-[1.2]; }
   .font-en-l-reg      { @apply font-gilda text-[36px] font-normal tracking-[-0.05em] leading-[1.2]; }
+  .font-en-m-reg      { @apply font-gilda text-[24px] font-normal tracking-[-0.05em] leading-[1.2]; }
+  .font-en-s-reg      { @apply font-gilda text-[18px] font-normal tracking-[-0.05em] leading-[1.2]; } 
 
   /* Crimson Text */
   .font-en-m-bold     { @apply font-crimson text-[24px] font-bold tracking-[0em] leading-normal; }
