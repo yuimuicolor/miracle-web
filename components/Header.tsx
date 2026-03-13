@@ -49,22 +49,20 @@ export default function Header() {
         <img src="/images/miracle-main-logo.png" alt="Logo" />
       </Link>
       {/* 메뉴 내비게이션 */}
-      <nav className="flex gap-12 relative">
+      <nav className="flex relative">
         {menuData.map((menu, index) => (
-          <div key={menu.title} className="relative">
+          <div key={menu.title} className="relative" onMouseEnter={() => isPC && setHoveredMenu(index)} onMouseLeave={() => setHoveredMenu(null)}>
             <Link 
               href={menu.href}
-              className="font-en-m-reg text-white/80 hover:text-white transition-colors h-[80px] sm:h-[120px] md:h-[150px] w-[200px] flex items-center justify-center hover:bg-point"
-              onMouseEnter={() => isPC && setHoveredMenu(index)}
-              onMouseLeave={() => setHoveredMenu(null)}
+              className={`font-en-m-reg text-white/80 hover:text-white transition-colors h-[80px] sm:h-[120px] md:h-[150px] w-[200px] flex items-center justify-center ${hoveredMenu === index ? 'bg-point border-b border-white' : ''}`}
             >
               {menu.title}
             </Link>
             {/* 하위 메뉴 */}
             {hoveredMenu === index && isHovered && isPC && (
-              <div className="absolute top-full left-0 bg-point w-[200px] z-50 shadow-lg">
+              <div className="absolute top-full left-0 bg-point w-full z-50 shadow-lg text-center">
                 {menu.submenus.map((sub) => (
-                  <Link key={sub} href={`${menu.href}/${sub.replace(/\s+/g, '').toLowerCase()}`} className="block h-[60px] px-4 py-4 font-kr-s-semibold text-white hover:bg-white/10 transition-colors">
+                  <Link key={sub} href={`${menu.href}/${sub.replace(/\s+/g, '').toLowerCase()}`} className="block h-[60px] px-4 py-4 font-kr-s-reg hover:font-semibold text-white hover:bg-white/10 transition-colors">
                     {sub}
                   </Link>
                 ))}
