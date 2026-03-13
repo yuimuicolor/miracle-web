@@ -1,5 +1,7 @@
 @import url("https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css");
 @import url('https://fonts.googleapis.com/css2?family=Crimson+Pro:ital,wght@0,200..900;1,200..900&family=Gilda+Display&family=Noto+Sans+KR:wght@100..900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Playwrite+US+Trad&display=swap');
+
 @import "tailwindcss";
 
 @theme {
@@ -8,6 +10,7 @@
   --font-crimson: "Crimson Pro", serif;
   --font-gilda: "Gilda Display", serif;
   --font-noto: "Noto Sans KR", sans-serif;
+  --font-playwrite: "Playwrite US Trad", cursive;
 
   /* 컬러 등록  */
   --color-bg-dark: #030303;
@@ -24,7 +27,7 @@
   button {
     cursor: pointer;
   }
-  
+
   body {
     font-family: var(--font-noto);
     background-color: var(--color-bg-dark);
@@ -36,7 +39,7 @@
 @layer utilities {
   /* --- KOREAN (Noto Sans KR) --- */
   .font-kr-xxl-bold { @apply font-noto text-[56px] font-bold tracking-[-0.04em] leading-[1.3]; }
-  .font-kr-xxl-reg  { @apply font-noto text-[56px] font-normal tracking-[-0.03em] leading-[1.5]; }
+  .font-kr-xxl-reg  { @apply font-noto text-[56px] font-[400] tracking-[-0.03em] leading-[1.5]; }
   
   .font-kr-xl-reg   { @apply font-noto text-[56px] font-normal tracking-[-0.03em] leading-[1.5]; }
   .font-kr-xl-bold  { @apply font-noto text-[48px] font-bold tracking-[-0.04em] leading-[1.3]; }
@@ -73,8 +76,8 @@
   .font-en-s-bold     { @apply font-crimson text-[18px] font-bold tracking-[0em] leading-normal; }
 
   /* Crimson Pro */
-  .font-en-crimson-pc { @apply font-crimson text-[72px] font-extralight tracking-[-0.03em] leading-normal; }
-  .font-en-crimson-mo { @apply font-crimson text-[40px] font-extralight tracking-[-0.03em] leading-normal; }
+  .font-en-crimson-pc { @apply font-crimson text-[60px] font-extralight tracking-[-0.03em] leading-normal; }
+  .font-en-crimson-mo { @apply font-crimson text-[32px] font-extralight tracking-[-0.03em] leading-normal; }
 
   /* --- SPECIAL: UPPERCASE (Noto Sans KR with Spacing) --- */
   .font-en-noto-l-med  { @apply font-noto text-[24px] font-medium tracking-[0.2em] leading-[1.3] uppercase; }
