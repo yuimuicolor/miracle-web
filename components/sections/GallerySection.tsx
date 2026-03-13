@@ -1,5 +1,6 @@
 import React from 'react'
 import Link from 'next/link'
+import MoreButton from '../MoreButton'
 
 export default function GallerySection() {
   return (
@@ -21,9 +22,7 @@ export default function GallerySection() {
       {/* 버튼 */}
       <div className="mt-10 flex justify-center">
         <Link href="/gallery">
-          <button className="px-6 py-3 bg-point-light text-black font-pretendard uppercase hover:bg-opacity-80 transition">
-            전체보기
-          </button>
+          <MoreButton text="전체보기" size="L" mode="light" />
         </Link>
       </div>
     </section>

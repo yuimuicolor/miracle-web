@@ -20,6 +20,11 @@
 }
 
 @layer base {
+
+  button {
+    cursor: pointer;
+  }
+  
   body {
     font-family: var(--font-noto);
     background-color: var(--color-bg-dark);
