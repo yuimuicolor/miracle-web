@@ -37,46 +37,97 @@ const certificates = Array.from({ length: 10 }).map((_, index) => ({
 	desc: '브랜드 디자인 최우수상',
 }));
 
+const STYLE = {
+	main: 'bg-bg-dark text-white min-h-screen pt-[11.25rem] pb-32 px-6 sm:px-10 md:px-20',
+	sectionBase: 'max-w-[80rem] mx-auto',
+	headerRow: 'flex items-center gap-4 mb-8',
+	mainTitle: 'font-en-xl-r sm:font-en-xxl-r',
+	pointStar: 'text-point',
+	titleLine: 'h-[0.125rem] bg-white/90 flex-1',
+	introList: 'space-y-14',
+	introGrid: (reverse: boolean) =>
+		`grid grid-cols-1 lg:grid-cols-2 gap-8 items-center ${reverse ? 'lg:[&>*:first-child]:order-2' : ''}`,
+	introTextWrap: 'space-y-5',
+	introBadgeTitle: 'font-kr-l-bold',
+	introBadgeTitleText: 'bg-point px-2 py-1 inline-block',
+	introAccent: 'font-kr-l-med leading-[1.35]',
+	introAccentText: 'bg-white text-point px-2 py-1 inline-block',
+	introBody: 'font-kr-xs-reg text-white/85 whitespace-pre-line max-w-[35rem]',
+	introVisualWrap: 'flex justify-center lg:justify-end',
+	introVisual: (imageClass: string) => `w-[17.5rem] h-[17.5rem] sm:w-[22.5rem] sm:h-[22.5rem] overflow-hidden ${imageClass}`,
+	introImage: 'w-full h-full object-cover saturate-150 contrast-110',
+	trustWrap: 'lg:col-span-2 pt-4',
+	trustText: 'font-playwrite text-[3rem] sm:text-[4rem] text-white/95 leading-none break-words',
+	sectionGapTop: 'mt-28',
+	sectionHeading: 'text-center mb-12',
+	sectionHeadingEn: 'font-en-noto-xs-med tracking-[0.32em] text-white/80',
+	sectionHeadingKr: 'font-kr-l-bold inline-block bg-point px-3 py-1 mt-2',
+	sectionHeadingDesc: 'font-kr-xs-reg text-white/70 mt-3',
+	historyGrid: 'grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8',
+	historyCard: 'relative',
+	historyImageWrap: 'w-full h-[16.25rem] overflow-hidden',
+	historyImage: 'w-full h-full object-cover',
+	historyYear: 'absolute top-3 right-3 text-point bg-white/95 px-2 py-1 font-en-xl-r leading-none',
+	historyMetaWrap: 'mt-3',
+	historyDate: 'font-en-s-reg text-white/80',
+	historyTitle: 'font-kr-xs-bold',
+	certificateGrid: 'grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3',
+	certificateCard: 'relative overflow-hidden',
+	certificateImageRatio: 'aspect-[3/4]',
+	certificateCaption: 'absolute inset-x-0 bottom-0 p-2 bg-gradient-to-t from-black/80 to-transparent',
+	certificateTitle: 'font-en-noto-xs-med text-[0.625rem] text-white/85',
+	certificateDesc: 'font-kr-xxs-reg text-white/95',
+	ceoSection: 'max-w-[80rem] mx-auto mt-28 grid grid-cols-1 lg:grid-cols-[22.5rem_1fr] gap-10 items-end',
+	ceoEnLabel: 'font-en-noto-xs-med tracking-[0.28em] text-white/80',
+	ceoTitle: 'font-en-xxl-r mt-2',
+	ceoBar: 'w-28 h-[0.1875rem] bg-white mt-4',
+	ceoNameWrap: 'font-kr-s-reg mt-5',
+	ceoNameText: 'bg-point px-2 py-1',
+	ceoDescription: 'font-kr-xs-reg text-white/80 mt-5 leading-[1.6] whitespace-pre-line',
+	ceoSocialWrap: 'flex gap-3 mt-8',
+	ceoSocialButton: 'w-9 h-9 rounded-full border border-white/60 font-en-noto-xs-med text-white/90',
+	ceoVisualWrap: 'w-full h-[26.25rem] sm:h-[35rem] overflow-hidden',
+	ceoVisual: 'w-full h-full object-cover',
+};
+
 export default function AboutUsPage() {
 	return (
-		<main className="bg-bg-dark text-white min-h-screen pt-[180px] pb-32 px-6 sm:px-10 md:px-20">
-			<section className="max-w-[1280px] mx-auto">
-				<div className="flex items-center gap-4 mb-8">
-					<h1 className="font-en-xl-r sm:font-en-xxl-r">ABOUT US<span className="text-point">*</span></h1>
-					<div className="h-[2px] bg-white/90 flex-1" />
+		<main className={STYLE.main}>
+			<section className={STYLE.sectionBase}>
+				<div className={STYLE.headerRow}>
+					<h1 className={STYLE.mainTitle}>ABOUT US<span className={STYLE.pointStar}>*</span></h1>
+					<div className={STYLE.titleLine} />
 				</div>
 
-				<div className="space-y-14">
+				<div className={STYLE.introList}>
 					{introRows.map((row, index) => (
 						<div
 							key={row.title}
-							className={`grid grid-cols-1 lg:grid-cols-2 gap-8 items-center ${row.reverse ? 'lg:[&>*:first-child]:order-2' : ''}`}
+							className={STYLE.introGrid(row.reverse)}
 						>
-							<div className="space-y-5">
-								<h2 className="font-kr-l-bold">
-									<span className="bg-point px-2 py-1 inline-block">{row.title}</span>
+							<div className={STYLE.introTextWrap}>
+								<h2 className={STYLE.introBadgeTitle}>
+									<span className={STYLE.introBadgeTitleText}>{row.title}</span>
 								</h2>
-								<p className="font-kr-l-med leading-[1.35]">
-									<span className="bg-white text-point px-2 py-1 inline-block">{row.accent}</span>
+								<p className={STYLE.introAccent}>
+									<span className={STYLE.introAccentText}>{row.accent}</span>
 								</p>
-								<p className="font-kr-xs-reg text-white/85 whitespace-pre-line max-w-[560px]">{row.body}</p>
+								<p className={STYLE.introBody}>{row.body}</p>
 							</div>
 
-							<div className="flex justify-center lg:justify-end">
-								<div
-									className={`w-[280px] h-[280px] sm:w-[360px] sm:h-[360px] overflow-hidden ${row.imageClass}`}
-								>
+							<div className={STYLE.introVisualWrap}>
+								<div className={STYLE.introVisual(row.imageClass)}>
 									<img
 										src="/images/main-bg.png"
 										alt="about visual"
-										className="w-full h-full object-cover saturate-150 contrast-110"
+										className={STYLE.introImage}
 									/>
 								</div>
 							</div>
 
 							{index === 1 && (
-								<div className="lg:col-span-2 pt-4">
-									<p className="font-playwrite text-[48px] sm:text-[64px] text-white/95 leading-none break-words">
+								<div className={STYLE.trustWrap}>
+									<p className={STYLE.trustText}>
 										Trust Integrity Reliability Transformation
 									</p>
 								</div>
@@ -86,70 +137,70 @@ export default function AboutUsPage() {
 				</div>
 			</section>
 
-			<section className="max-w-[1280px] mx-auto mt-28">
-				<div className="text-center mb-12">
-					<p className="font-en-noto-xs-med tracking-[0.32em] text-white/80">HISTORY</p>
-					<h3 className="font-kr-l-bold inline-block bg-point px-3 py-1 mt-2">히스토리</h3>
-					<p className="font-kr-xs-reg text-white/70 mt-3">미라클의 발자취를 연도별로 확인해보세요.</p>
+			<section className={`${STYLE.sectionBase} ${STYLE.sectionGapTop}`}>
+				<div className={STYLE.sectionHeading}>
+					<p className={STYLE.sectionHeadingEn}>HISTORY</p>
+					<h3 className={STYLE.sectionHeadingKr}>히스토리</h3>
+					<p className={STYLE.sectionHeadingDesc}>미라클의 발자취를 연도별로 확인해보세요.</p>
 				</div>
 
-				<div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+				<div className={STYLE.historyGrid}>
 					{historyItems.map((item) => (
-						<article key={`${item.year}-${item.date}`} className="relative">
-							<div className="w-full h-[260px] overflow-hidden">
-								<img src="/images/main-bg.png" alt={item.title} className="w-full h-full object-cover" />
+						<article key={`${item.year}-${item.date}`} className={STYLE.historyCard}>
+							<div className={STYLE.historyImageWrap}>
+								<img src="/images/main-bg.png" alt={item.title} className={STYLE.historyImage} />
 							</div>
-							<span className="absolute top-3 right-3 text-point bg-white/95 px-2 py-1 font-en-xl-r leading-none">
+							<span className={STYLE.historyYear}>
 								{item.year}
 							</span>
-							<div className="mt-3">
-								<p className="font-en-s-reg text-white/80">{item.date}</p>
-								<p className="font-kr-xs-bold">{item.title}</p>
+							<div className={STYLE.historyMetaWrap}>
+								<p className={STYLE.historyDate}>{item.date}</p>
+								<p className={STYLE.historyTitle}>{item.title}</p>
 							</div>
 						</article>
 					))}
 				</div>
 			</section>
 
-			<section className="max-w-[1280px] mx-auto mt-28">
-				<div className="text-center mb-12">
-					<p className="font-en-noto-xs-med tracking-[0.32em] text-white/80">CERTIFICATE</p>
-					<h3 className="font-kr-l-bold inline-block bg-point px-3 py-1 mt-2">인증서</h3>
-					<p className="font-kr-xs-reg text-white/70 mt-3">공식 인증 및 수상 내역입니다.</p>
+			<section className={`${STYLE.sectionBase} ${STYLE.sectionGapTop}`}>
+				<div className={STYLE.sectionHeading}>
+					<p className={STYLE.sectionHeadingEn}>CERTIFICATE</p>
+					<h3 className={STYLE.sectionHeadingKr}>인증서</h3>
+					<p className={STYLE.sectionHeadingDesc}>공식 인증 및 수상 내역입니다.</p>
 				</div>
 
-				<div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3">
+				<div className={STYLE.certificateGrid}>
 					{certificates.map((cert) => (
-						<article key={cert.id} className="relative overflow-hidden">
-							<div className="aspect-[3/4]">
-								<img src="/images/main-bg.png" alt={cert.title} className="w-full h-full object-cover" />
+						<article key={cert.id} className={STYLE.certificateCard}>
+							<div className={STYLE.certificateImageRatio}>
+								<img src="/images/main-bg.png" alt={cert.title} className={STYLE.historyImage} />
 							</div>
-							<div className="absolute inset-x-0 bottom-0 p-2 bg-gradient-to-t from-black/80 to-transparent">
-								<p className="font-en-noto-xs-med text-[10px] text-white/85">{cert.title}</p>
-								<p className="font-kr-xxs-reg text-white/95">{cert.desc}</p>
+							<div className={STYLE.certificateCaption}>
+								<p className={STYLE.certificateTitle}>{cert.title}</p>
+								<p className={STYLE.certificateDesc}>{cert.desc}</p>
 							</div>
 						</article>
 					))}
 				</div>
 			</section>
 
-			<section className="max-w-[1280px] mx-auto mt-28 grid grid-cols-1 lg:grid-cols-[360px_1fr] gap-10 items-end">
+			<section className={STYLE.ceoSection}>
 				<div>
-					<p className="font-en-noto-xs-med tracking-[0.28em] text-white/80">CHIEF EXECUTIVE OFFICER</p>
-					<h3 className="font-en-xxl-r mt-2">C.E.O</h3>
-					<div className="w-28 h-[3px] bg-white mt-4" />
-					<p className="font-kr-s-reg mt-5">
-						<span className="bg-point px-2 py-1">김미라 / MIRA KIM</span>
+					<p className={STYLE.ceoEnLabel}>CHIEF EXECUTIVE OFFICER</p>
+					<h3 className={STYLE.ceoTitle}>C.E.O</h3>
+					<div className={STYLE.ceoBar} />
+					<p className={STYLE.ceoNameWrap}>
+						<span className={STYLE.ceoNameText}>김미라 / MIRA KIM</span>
 					</p>
-					<p className="font-kr-xs-reg text-white/80 mt-5 leading-[1.6]">
-						브랜드 전략과 시각 설계를 연결하며,\n의미 있는 변화가 일어나는 디자인을 만듭니다.\nC.E.O로서 미라클의 방향성을 총괄합니다.
+					<p className={STYLE.ceoDescription}>
+						브랜드 전략과 시각 설계를 연결하며,{'\n'}의미 있는 변화가 일어나는 디자인을 만듭니다.{"\n"}C.E.O로서 미라클의 방향성을 총괄합니다.
 					</p>
 
-					<div className="flex gap-3 mt-8">
+					<div className={STYLE.ceoSocialWrap}>
 						{['IG', 'YT', 'X'].map((channel) => (
 							<button
 								key={channel}
-								className="w-9 h-9 rounded-full border border-white/60 font-en-noto-xs-med text-white/90"
+								className={STYLE.ceoSocialButton}
 							>
 								{channel}
 							</button>
@@ -157,8 +208,8 @@ export default function AboutUsPage() {
 					</div>
 				</div>
 
-				<div className="w-full h-[420px] sm:h-[560px] overflow-hidden">
-					<img src="/images/main-bg.png" alt="ceo" className="w-full h-full object-cover" />
+				<div className={STYLE.ceoVisualWrap}>
+					<img src="/images/main-bg.png" alt="ceo" className={STYLE.ceoVisual} />
 				</div>
 			</section>
 		</main>

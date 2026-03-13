@@ -1,12 +1,15 @@
 @import url("https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css");
-@import url('https://fonts.googleapis.com/css2?family=Crimson+Pro:ital,wght@0,200..900;1,200..900&family=Gilda+Display&family=Noto+Sans+KR:wght@100..900&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Playwrite+US+Trad&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Crimson+Pro:ital,wght@0,200..900;1,200..900&family=Gilda+Display&family=Noto+Sans+KR:wght@100..900&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Playwrite+US+Trad&display=swap");
 
 @import "tailwindcss";
 
 @theme {
   /* 폰트 등록 */
-  --font-pretendard: "Pretendard", BlinkMacSystemFont, system-ui, Roboto, "Helvetica Neue", "Segoe UI", "Apple SD Gothic Neo", "Noto Sans KR", "Malgun Gothic", "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", sans-serif;
+  --font-pretendard:
+    "Pretendard", BlinkMacSystemFont, system-ui, Roboto, "Helvetica Neue",
+    "Segoe UI", "Apple SD Gothic Neo", "Noto Sans KR", "Malgun Gothic",
+    "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", sans-serif;
   --font-crimson: "Crimson Pro", serif;
   --font-gilda: "Gilda Display", serif;
   --font-noto: "Noto Sans KR", sans-serif;
@@ -14,81 +17,57 @@
 
   /* 컬러 등록  */
   --color-bg-dark: #030303;
-  --color-bg-light: #D7D7D7;
-  --color-white: #FFFFFF;
+  --color-bg-light: #d7d7d7;
+  --color-white: #ffffff;
   --color-black: #0a0a0a;
-  --color-point: #4B2597;
-  --color-point-light: #BC9AFF;
-  --color-point-green: #77FF00;
+  --color-point: #4b2597;
+  --color-point-light: #bc9aff;
+  --color-point-green: #77ff00;
 }
 
 @layer base {
-
   button {
     cursor: pointer;
   }
 
+  /* globals.css */
+  html {
+    font-size: 62.5%; /* 1rem = 10px */
+
+    @media (max-width: 768px) {
+      font-size: 56.25%; /* 1rem = 9px */
+    }
+
+    @media (max-width: 480px) {
+      font-size: 50%; /* 1rem = 8px */
+    }
+  }
+
   body {
+    font-size: 1.6rem; /* 기본 폰트 크기 */
     font-family: var(--font-noto);
     background-color: var(--color-bg-dark);
     color: var(--color-white);
-    margin: 0;-webkit-font-smoothing: antialiased; /* 폰트를 더 매끄럽게 */
+    margin: 0;
+    -webkit-font-smoothing: antialiased; /* 폰트를 더 매끄럽게 */
   }
 }
 
 @layer utilities {
-  /* --- KOREAN (Noto Sans KR) --- */
-  .font-kr-xxl-bold { @apply font-noto text-[56px] font-bold tracking-[-0.04em] leading-[1.3]; }
-  .font-kr-xxl-reg  { @apply font-noto text-[56px] font-[400] tracking-[-0.03em] leading-[1.5]; }
-  
-  .font-kr-xl-reg   { @apply font-noto text-[56px] font-normal tracking-[-0.03em] leading-[1.5]; }
-  .font-kr-xl-bold  { @apply font-noto text-[48px] font-bold tracking-[-0.04em] leading-[1.3]; }
-
-  .font-kr-l-bold   { @apply font-noto text-[32px] font-bold tracking-[-0.05em] leading-[1.2]; }
-  .font-kr-l-med    { @apply font-noto text-[32px] font-medium tracking-[-0.05em] leading-[1.2]; }
-  .font-kr-l-reg    { @apply font-noto text-[32px] font-normal tracking-[-0.05em] leading-[1.2]; }
-
-  .font-kr-m-bold   { @apply font-noto text-[24px] font-bold tracking-[-0.05em] leading-[1.0]; }
-  .font-kr-m-semibold { @apply font-noto text-[24px] font-semibold tracking-[-0.05em] leading-[1.0]; }
-
-  .font-kr-m-med    { @apply font-noto text-[24px] font-medium tracking-[-0.05em] leading-[1.0]; }
-  .font-kr-m-reg    { @apply font-noto text-[24px] font-normal tracking-[-0.05em] leading-[1.0]; }
-
-  .font-kr-s-semibold { @apply font-noto text-[20px] font-semibold tracking-[-0.04em] leading-normal; }
-  .font-kr-s-reg      { @apply font-noto text-[20px] font-normal tracking-[-0.05em] leading-[1.5]; }
-  .font-kr-s-med      { @apply font-noto text-[20px] font-medium tracking-[-0.04em] leading-normal; }
-
-  .font-kr-xs-bold    { @apply font-noto text-[18px] font-bold tracking-[-0.05em] leading-[1.5]; }
-  .font-kr-xs-med     { @apply font-noto text-[18px] font-medium tracking-[-0.05em] leading-[1.5]; }
-  .font-kr-xs-reg     { @apply font-noto text-[18px] font-normal tracking-[-0.05em] leading-[1.5]; }
-  .font-kr-xs-semibold { @apply font-noto text-[18px] font-semibold tracking-[-0.05em] leading-[1.5]; }
-
-  .font-kr-xxs-reg    { @apply font-noto text-[16px] font-normal tracking-[-0.05em] leading-[1.5]; }
-  .font-kr-xxs-med    { @apply font-noto text-[16px] font-medium tracking-[-0.05em] leading-[1.3]; }
-
-  /* --- ENGLISH (Gilda Display / Crimson Text / Crimson Pro) --- */
-  /* Gilda Display */
-  .font-en-xxl-r      { @apply font-gilda text-[80px] font-normal tracking-[0em] leading-[1.0]; }
-  .font-en-xl-r       { @apply font-gilda text-[56px] font-normal tracking-[-0.05em] leading-[1.2]; }
-  .font-en-l-reg      { @apply font-gilda text-[36px] font-normal tracking-[-0.05em] leading-[1.2]; }
-  .font-en-l-bold     { @apply font-gilda text-[36px] font-bold tracking-[-0.05em] leading-[1.2]; }
-  .font-en-m-reg      { @apply font-gilda text-[24px] font-normal tracking-[-0.05em] leading-[1.2]; }
-  .font-en-m-bold     { @apply font-gilda text-[24px] font-bold tracking-[-0.05em] leading-[1.2]; }
-  .font-en-s-reg      { @apply font-gilda text-[18px] font-normal tracking-[-0.05em] leading-[1.2]; } 
-  .font-en-s-bold     { @apply font-gilda text-[18px] font-bold tracking-[-0.05em] leading-[1.2]; }
-
-  /* Crimson Text */
-  .font-en-m-bold     { @apply font-crimson text-[24px] font-bold tracking-[0em] leading-normal; }
-  .font-en-m-reg      { @apply font-crimson text-[24px] font-normal tracking-[0em] leading-normal; }
-  .font-en-s-bold     { @apply font-crimson text-[18px] font-bold tracking-[0em] leading-normal; }
-
-  /* Crimson Pro */
-  .font-en-crimson-pc { @apply font-crimson text-[60px] font-extralight tracking-[-0.03em] leading-normal; }
-  .font-en-crimson-mo { @apply font-crimson text-[32px] font-extralight tracking-[-0.03em] leading-normal; }
-
-  /* --- SPECIAL: UPPERCASE (Noto Sans KR with Spacing) --- */
-  .font-en-noto-l-med  { @apply font-noto text-[24px] font-medium tracking-[0.2em] leading-[1.3] uppercase; }
-  .font-en-noto-m-med  { @apply font-noto text-[22px] font-medium tracking-[0.2em] leading-[1.3] uppercase; }
-  .font-en-noto-s-med  { @apply font-noto text-[18px] font-medium tracking-[0.2em] leading-[1.3] uppercase; }
-  .font-en-noto-xs-med { @apply font-noto text-[12px] font-medium tracking-[0.2em] leading-[1.3] uppercase; }
+  /* --- TYPOGRAPHY TOKENS: FONT FAMILY --- */
+  .font-noto {
+    @apply font-noto;
+  }
+  .font-gilda {
+    @apply font-gilda;
+  }
+  .font-crimson {
+    @apply font-crimson;
+  }
+  .font-playwrite {
+    @apply font-playwrite;
+  }
+  .font-pretendard {
+    @apply font-pretendard;
+  }
 }

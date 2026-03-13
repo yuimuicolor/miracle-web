@@ -1,16 +1,25 @@
 'use client';
 
+const STYLE = {
+  section: 'h-screen flex flex-col justify-center px-20 bg-bg-light border-t border-white/5',
+  title: 'font-gilda text-[5rem] uppercase text-black mb-10',
+  contentWrap: 'max-w-3xl',
+  lead: 'font-pretendard text-2xl font-light leading-relaxed text-black/90',
+  leadAccent: 'font-crimson italic text-point-green',
+  body: 'font-pretendard mt-6 text-lg text-white/60',
+};
+
 export default function ProductsSection() {
   return (
-    <section className="h-screen flex flex-col justify-center px-20 bg-bg-light border-t border-white/5">
-      <h2 className="font-gilda text-[80px] uppercase text-black mb-10">Products</h2>
+    <section className={STYLE.section}>
+      <h2 className={STYLE.title}>Products</h2>
       
-      <div className="max-w-3xl">
-        <p className="font-pretendard text-2xl font-light leading-relaxed text-black/90">
+      <div className={STYLE.contentWrap}>
+        <p className={STYLE.lead}>
           우리는 단순한 디자인을 넘어, 브랜드의 기적을 만듭니다.<br />
-          <span className="font-crimson italic text-point-green">"Design is a silent ambassador of your brand."</span>
+          <span className={STYLE.leadAccent}>&quot;Design is a silent ambassador of your brand.&quot;</span>
         </p>
-        <p className="font-pretendard mt-6 text-lg text-white/60">
+        <p className={STYLE.body}>
           Miracle은 중소기업의 가치를 시각적으로 극대화하여 
           세상에 전달하는 브랜드 에이전시입니다.
         </p>
