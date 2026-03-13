@@ -2,6 +2,7 @@
 
 import React, { useState } from 'react';
 import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 
 const menuData = [
   {
@@ -27,9 +28,23 @@ const menuData = [
 ];
 
 export default function Header() {
+  const pathname = usePathname();
   const [isHovered, setIsHovered] = useState(false);
   const [hoveredMenu, setHoveredMenu] = useState<number | null>(null);
   const [isPC, setIsPC] = useState(false);
+  const [activatedMenu, setActivatedMenu] = useState('');
+
+  const getMenuFromPathname = (path: string) => {
+    if (path.startsWith('/aboutus')) return 'ABOUT US';
+    if (path.startsWith('/products')) return 'PRODUCTS';
+    if (path.startsWith('/gallery')) return 'GALLERY';
+    if (path.startsWith('/contact')) return 'CONTACT';
+    return '';
+  };
+
+  React.useEffect(() => {
+    setActivatedMenu(getMenuFromPathname(pathname));
+  }, [pathname]);
 
   React.useEffect(() => {
     const checkPC = () => setIsPC(window.innerWidth >= 1024);
@@ -54,7 +69,8 @@ export default function Header() {
           <div key={menu.title} className="relative" onMouseEnter={() => isPC && setHoveredMenu(index)} onMouseLeave={() => setHoveredMenu(null)}>
             <Link 
               href={menu.href}
-              className={`font-en-m-reg text-white/80 hover:text-white transition-colors h-[80px] sm:h-[120px] md:h-[150px] w-[200px] flex items-center justify-center ${hoveredMenu === index ? 'bg-point border-b border-white' : ''}`}
+              onClick={() => setActivatedMenu?.(menu.title)}
+              className={`${activatedMenu === menu.title ? 'font-kr-s-semibold' : 'font-kr-s-reg'} text-white/80 hover:text-white transition-colors h-[80px] sm:h-[120px] md:h-[150px] w-[200px] flex items-center justify-center ${hoveredMenu === index ? 'bg-point border-b border-white' : ''}`}
             >
               {menu.title}
             </Link>
