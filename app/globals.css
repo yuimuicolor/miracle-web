@@ -1,26 +1,32 @@
+/* src/app/globals.css */
 @import "tailwindcss";
+/* Pretendard */
+@import url("https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css");
+/* Crimson Pro & Gilda Display & Noto Sans KR */
+@import url('https://fonts.googleapis.com/css2?family=Crimson+Pro:ital,wght@0,200..900;1,200..900&family=Gilda+Display&family=Noto+Sans+KR:wght@100..900&display=swap');
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+@theme {
+  /* 폰트 등록 */
+  --font-pretendard: "Pretendard", BlinkMacSystemFont, system-ui, Roboto, "Helvetica Neue", "Segoe UI", "Apple SD Gothic Neo", "Noto Sans KR", "Malgun Gothic", "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", sans-serif;
+  --font-crimson: "Crimson Pro", serif;
+  --font-gilda: "Gilda Display", serif;
+  --font-noto: "Noto Sans KR", sans-serif;
+
+  /* 컬러 등록  */
+  --color-bg-dark: #030303;
+  --color-bg-light: #D7D7D7;
+  --color-white: #FFFFFF;
+  --color-black: #0a0a0a;
+  --color-point: #4B2597;
+  --color-point-light: #BC9AFF;
+  --color-point-green: #77FF00;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+@layer base {
+  body {
+    font-family: var(--font-noto);
+    background-color: var(--color-bg-dark);
+    color: var(--color-white);
+    margin: 0;-webkit-font-smoothing: antialiased; /* 폰트를 더 매끄럽게 */
   }
-}
-
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
 }
