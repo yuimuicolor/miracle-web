@@ -56,8 +56,8 @@ const STYLE = {
   text-[3.2rem] md:text-[4.8rem] lg:text-[5.6rem]`,
   leadLine: "whitespace-nowrap",
   leadHighlight: "px-[1rem] bg-point font-bold",
-  leadAccent: "px-[1rem] bg-white font-bold text-point-light",
-  desc: "text-[1.6rem] md:text-[1.8rem] lg:text-[2rem] leading-[1.5] tracking-[-0.05em] text-white/70",
+  leadAccent: "px-[1rem] bg-white font-bold text-point",
+  desc: "text-[1.6rem] md:text-[1.8rem] lg:text-[2rem] leading-[1.5] tracking-[-0.05em] text-white",
 };
 
 export default function AboutSection() {
