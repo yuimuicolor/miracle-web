@@ -3,15 +3,7 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-
-const UI_CONFIG = {
-  SUBMENU_HEIGHT_REM: 6,
-  HEADER_H_PC_REM: 15,
-  HEADER_H_TABLET_REM: 12,
-  HEADER_H_MOBILE_REM: 8,
-  DESKTOP_BREAKPOINT: 1024,
-  TABLET_BREAKPOINT: 768
-};
+import { HEADER_CONFIG, HEADER_HEIGHTS_CSS } from "@/lib/headerConfig";
 
 const menuData = [
   { title: "ABOUT US", href: "/aboutus", submenus: ["회사소개", "히스토리", "인증서", "CEO소개"] },
@@ -24,9 +16,7 @@ const STYLE = {
   headerPC: `
     fixed top-0 left-0 z-50 flex w-full items-center gap-[1.2rem] lg:gap-[2rem]
     backdrop-blur-[2px] transition-all duration-500 ease-in-out
-    px-[1.6rem] h-[8rem] 
-    md:px-[4rem] lg:h-[12rem] 
-    md:px-[8rem] lg:h-[15rem]
+    px-[1.6rem] md:px-[8rem]
   `,
   headerMobile: `
     fixed top-0 left-0 z-50 w-full backdrop-blur-[12px] transition-colors duration-300
@@ -89,26 +79,26 @@ export default function Header() {
   const isTablet = deviceType === "tablet";
   const canHoverMenu = isPC;
   const mobileHeaderHeight = isTablet
-    ? `${UI_CONFIG.HEADER_H_TABLET_REM}rem`
-    : `${UI_CONFIG.HEADER_H_MOBILE_REM}rem`;
+    ? HEADER_HEIGHTS_CSS.TABLET
+    : HEADER_HEIGHTS_CSS.MOBILE;
 
   const activeSubmenuHeight =
     canHoverMenu && isHovered && hoveredMenu !== null
-      ? menuData[hoveredMenu].submenus.length * UI_CONFIG.SUBMENU_HEIGHT_REM
+      ? menuData[hoveredMenu].submenus.length * HEADER_CONFIG.SUBMENU_HEIGHT_REM
       : 0;
 
-  const totalHeight = `${UI_CONFIG.HEADER_H_PC_REM + (isHovered ? activeSubmenuHeight : 0)}rem`;
+  const totalHeight = `calc(${HEADER_HEIGHTS_CSS.PC} + ${isHovered ? activeSubmenuHeight : 0}rem)`;
 
   useEffect(() => {
     const updateDeviceType = () => {
       const width = window.innerWidth;
 
-      if (width >= UI_CONFIG.DESKTOP_BREAKPOINT) {
+      if (width >= HEADER_CONFIG.BREAKPOINTS.DESKTOP) {
         setDeviceType("pc");
         return;
       }
 
-      if (width >= UI_CONFIG.TABLET_BREAKPOINT) {
+      if (width >= HEADER_CONFIG.BREAKPOINTS.TABLET) {
         setDeviceType("tablet");
         return;
       }
@@ -232,6 +222,7 @@ export default function Header() {
   return (
     <header
       className={STYLE.headerPC}
+      style={{ height: HEADER_HEIGHTS_CSS.PC }}
       onMouseEnter={() => canHoverMenu && setIsHovered(true)}
       onMouseLeave={() => { setIsHovered(false); setHoveredMenu(null); }}
     >

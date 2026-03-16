@@ -26,6 +26,21 @@
 }
 
 @layer base {
+  :root {
+    --header-height-mobile: 8rem;
+    --header-height-tablet: 12rem;
+    --header-height-desktop: 15rem;
+    --header-extra-offset: 2rem;
+    --page-bottom-padding-mobile: 8rem;
+    --page-bottom-padding-tablet: 10rem;
+    --page-bottom-padding-desktop: 16rem;
+    --header-height-current: var(--header-height-mobile);
+    --page-offset-top: calc(var(--header-height-current) + var(--header-extra-offset));
+    --page-bottom-padding-current: var(--page-bottom-padding-mobile);
+    --screen-minus-header: calc(100dvh - var(--header-height-current));
+    --screen-minus-page-offset: calc(100dvh - var(--page-offset-top));
+  }
+
   button {
     cursor: pointer;
   }
@@ -51,6 +66,20 @@
     margin: 0;
     -webkit-font-smoothing: antialiased; /* 폰트를 더 매끄럽게 */
   }
+
+  @media (min-width: 768px) {
+    :root {
+      --header-height-current: var(--header-height-tablet);
+      --page-bottom-padding-current: var(--page-bottom-padding-tablet);
+    }
+  }
+
+  @media (min-width: 1024px) {
+    :root {
+      --header-height-current: var(--header-height-desktop);
+      --page-bottom-padding-current: var(--page-bottom-padding-desktop);
+    }
+  }
 }
 
 @layer utilities {
@@ -69,5 +98,39 @@
   }
   .font-pretendard {
     @apply font-pretendard;
+  }
+
+  .page-content > :first-child {
+    box-sizing: border-box;
+    padding-top: var(--page-offset-top);
+  }
+
+  .page-content > :last-child {
+    padding-bottom: var(--page-bottom-padding-current);
+  }
+
+  .page-content > .no-header-offset:first-child {
+    padding-top: 0 !important;
+  }
+
+  .pt-header-offset {
+    box-sizing: border-box;
+    padding-top: var(--page-offset-top);
+  }
+
+  .h-screen-minus-header {
+    height: var(--screen-minus-header);
+  }
+
+  .min-h-screen-minus-header {
+    min-height: var(--screen-minus-header);
+  }
+
+  .h-screen-minus-header-offset {
+    height: var(--screen-minus-page-offset);
+  }
+
+  .min-h-screen-minus-header-offset {
+    min-height: var(--screen-minus-page-offset);
   }
 }

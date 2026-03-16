@@ -5,7 +5,7 @@ import ProductsSection from '@/components/sections/ProductsSection';
 import GallerySection from '@/components/sections/GallerySection';
 
 const STYLE = {
-  main: 'w-full bg-bg-dark',
+  main: 'no-header-offset w-full bg-bg-dark',
 };
 
 export default function Home() {
