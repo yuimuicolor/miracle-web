@@ -132,7 +132,7 @@ export default function Header() {
 
   if (!isPC) {
     return (
-      <header className={`${STYLE.headerMobile} ${isMenuOpen ? "h-screen overflow-y-auto bg-point" : "bg-black/85"}`}>
+      <header className={`${STYLE.headerMobile} ${isMenuOpen ? "h-screen overflow-y-auto bg-point" : "bg-linear-to-b from-[#767676] to-transparent"}`}>
         <div className={STYLE.mobileTopRow} style={{ height: mobileHeaderHeight }}>
           <Link href="/"><img src="/images/miracle-main-logo.png" alt="Logo" className={STYLE.logo} /></Link>
 
