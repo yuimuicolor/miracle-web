@@ -5,9 +5,9 @@ interface SectionTitleProps {
 
 const STYLE = {
 
-  wrapper: `w-full flex flex-col justify-center items-center text-center 
+  wrapper: `w-full flex flex-col justify-center items-start text-left
     gap-[0.8rem] md:gap-[2rem] lg:gap-[6rem]
-    md:flex-row md:text-left
+    md:flex-row md:items-center
   `,
     
   title: `

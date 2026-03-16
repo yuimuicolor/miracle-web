@@ -15,12 +15,11 @@ const menuData = [
 const STYLE = {
   headerPC: `
     fixed top-0 left-0 z-50 flex w-full items-center gap-[1.2rem] lg:gap-[2rem]
-    backdrop-blur-[2px] transition-all duration-500 ease-in-out
+    backdrop-blur-[2px]
     px-[1.6rem] md:px-[8rem]
   `,
   headerMobile: `
-    fixed top-0 left-0 z-50 w-full backdrop-blur-[12px] transition-colors duration-300
-    border-b border-white/10 px-[1.6rem] lg:px-[4rem]
+    fixed top-0 left-0 z-50 w-full backdrop-blur-[12px] px-[1.6rem] lg:px-[4rem]
   `,
   gradientBase: `
     pointer-events-none absolute inset-x-0 top-0 -z-10 transition-color duration-300 ease-in-out`,
@@ -29,7 +28,7 @@ const STYLE = {
 
   nav: "relative flex h-full flex-1 items-stretch justify-center",
   menuItem: (isActive: boolean, isHovered: boolean) => `
-    flex h-full w-full items-center justify-center transition-all
+    flex h-full w-full items-center justify-center transition-all transition-colors duration-300 ease-in-out
     whitespace-nowrap text-[1.8rem] lg:text-[2.4rem] font-noto leading-none tracking-normal text-white/80 hover:text-white
     ${isActive ? "font-semibold" : "font-normal"} 
     ${isHovered ? "bg-point border-b-[1px] border-white" : ""}

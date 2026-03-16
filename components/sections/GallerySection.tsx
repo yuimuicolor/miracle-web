@@ -3,12 +3,14 @@ import MoreButton from "../MoreButton";
 import SectionTitle from "./common/SectionTitle";
 
 const STYLE = {
-  section: `flex flex-col items-center py-[8rem] justify-center size-full lg:h-screen bg-[url('/images/gallery-bg.png')] bg-cover bg-center bg-no-repeat`,
-  content: `flex flex-col items-center justify-center size-full
-    px-[1.6em] md:px-[4rem] md:px-[6rem]
+  section: `relative flex flex-col items-center w-full overflow-hidden`,
+  bgImage: `absolute inset-0 bg-[url('/images/gallery-bg.png')] bg-cover bg-center bg-no-repeat`,
+  bgOverlay: `absolute inset-0 bg-black/70 backdrop-blur-[60px]`,
+  content: `relative z-10 flex w-full flex-col items-center justify-center
+    py-[8rem] px-[1.6em] md:px-[4rem] lg:px-[6rem]
     gap-[4rem] lg:gap-[6rem]
   `,
-  grid: ` mx-auto grid size-full max-w-[800px]
+  grid: `mx-auto grid w-full max-w-[800px]
     grid-cols-2 grid-rows-3 md:grid-cols-3 md:grid-rows-2
     gap-[1.6rem] md:gap-[2rem] lg:gap-[4rem]
   `,
@@ -19,6 +21,8 @@ const STYLE = {
 export default function GallerySection() {
   return (
     <section className={STYLE.section}>
+      <div className={STYLE.bgImage} />
+      <div className={STYLE.bgOverlay} />
       <div className={STYLE.content}>
         {/* 제목란 */}
         <SectionTitle title="Gallery" color="white" />

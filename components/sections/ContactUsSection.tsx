@@ -5,7 +5,7 @@ import { supabase } from "@/lib/supabase";
 import { ContactData } from "@/types/contact";
 
 const STYLE = {
-  section: 'h-screen px-20 flex flex-col justify-center bg-bg-dark border-t border-white/5',
+  section: 'h-screen px-20 flex flex-col justify-center bg-point border-t border-white/5',
   title: 'font-gilda text-[5rem] uppercase text-white',
   divider: 'w-full h-px bg-white mb-16',
   form: 'max-w-6xl w-full',
@@ -21,7 +21,7 @@ const STYLE = {
   submitButton: 'bg-point hover:bg-point-light text-white px-24 py-5 rounded-full font-pretendard font-bold text-xl transition-all hover:scale-105 active:scale-95',
 };
 
-export default function ContactSection() {
+export default function ContactUsSection() {
   const [formData, setFormData] = useState<ContactData>({
     name: "",
     phone: "",

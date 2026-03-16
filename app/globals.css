@@ -109,6 +109,10 @@
     padding-bottom: var(--page-bottom-padding-current);
   }
 
+ .page-content > .no-footer-offset:last-child {
+    padding-bottom: 0 !important;
+  }
+
   .page-content > .no-header-offset:first-child {
     padding-top: 0 !important;
   }
