@@ -54,7 +54,7 @@ const STYLE = {
   `,
   languageSeparatorMobile: "w-[1px] h-[1.2rem] bg-white/20",
   menuWrap: 'relative h-full flex-1 max-w-[20rem]',
-  logo: 'w-full h-[2.4rem] lg:h-[3.2rem]',
+  logo: 'w-full h-[2.4rem]',
   mobileTopRow: "flex w-full items-center justify-between",
   mobileRightControls: "flex items-center gap-[1rem]",
   menuToggleButton: "relative flex h-[3.6rem] w-[3.6rem] items-center justify-center rounded-full border border-white/40 transition-colors hover:bg-white/20",

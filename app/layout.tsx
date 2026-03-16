@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import "./globals.css";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
+import TopButton from "@/components/TopButton";
 import { HEADER_HEIGHTS_CSS } from "@/lib/headerConfig";
 
 export const metadata: Metadata = {
@@ -23,6 +24,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <Header />        
           <div className="page-content">{children}</div>
           <Footer />
+          <TopButton />
       </body>
     </html>
   );
