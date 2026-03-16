@@ -3,10 +3,13 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
+    "predev": "npm run images:about:webp",
     "dev": "next dev",
+    "prebuild": "npm run images:about:webp",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "images:about:webp": "node scripts/optimize-about-slider.mjs"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.99.1",
