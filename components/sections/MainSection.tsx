@@ -6,13 +6,13 @@ const STYLE = {
   section: 'relative h-screen w-full flex flex-col items-center justify-center overflow-hidden bg-bg-dark',
   background: "absolute inset-0 bg-[url('/images/main-bg.png')] bg-cover bg-center opacity-60",
   contentWrap: 'relative z-10 text-center flex flex-col gap-2 items-center',
-  title: 'font-noto text-[3.5rem] leading-normal tracking-[-0.03em] text-white relative',
-  titleStar: 'font-gilda text-[5rem] leading-20 tracking-[-0.05em] absolute -top-4 -right-8 text-point-light',
+  title: 'font-noto text-[5.6rem] leading-normal tracking-[-0.03em] text-white relative',
+  titleStar: 'font-gilda text-[8rem] leading-20 tracking-[-0.05em] absolute -top-4 -right-8 text-point-light',
   logoWrap: 'bg-white px-10 py-2',
-  logoText: 'font-playwrite text-[4.5rem] text-point leading-none',
-  subtitle: 'font-crimson font-100 text-[3.75rem] tracking-[-0.03em] text-white',
+  logoText: 'font-playwrite text-[7.2rem] text-point leading-none',
+  subtitle: 'font-crimson font-100 text-[6rem] tracking-[-0.03em] text-white',
   scrollGuideWrap: 'absolute bottom-10 flex flex-col items-center gap-2 opacity-40 animate-bounce',
-  scrollGuideText: 'text-center font-en-noto-xs-med text-white tracking-[0.3em]',
+  scrollGuideText: 'text-center font-noto text-[1.8] font-100 text-white tracking-[0.3em]',
   scrollGuideIcon: 'text-white',
 };
 

@@ -4,14 +4,19 @@ interface SectionTitleProps {
 }
 
 const STYLE = {
-  wrapper: 'flex flex-col md:flex-row justify-center items-center gap-2 md:gap-5 min-[1440px]:gap-15 w-full text-center md:text-left',
-  title: `
-    font-gilda text-[2.25rem] leading-[1.2] tracking-[-0.05em]
-    md:text-[3.5rem] md:leading-[1.2] md:tracking-[-0.05em]
-    min-[1440px]:text-[5rem] min-[1440px]:leading-[5rem] min-[1440px]:tracking-[0em]
-    font-normal uppercase
+
+  wrapper: `w-full flex flex-col justify-center items-center text-center gap-[0.8rem]
+   sm:flex-row sm:text-left
+   sm:gap-[2rem]  md:gap-[6rem]
   `,
-  line: 'w-full md:flex-1 h-0.5',
+    
+  title: `
+    font-gilda font-normal uppercase 
+    text-[3.6rem] leading-[3.6rem] tracking-[-0.05em]
+    sm:text-[5.6rem] sm:leading-[5.6rem] sm:tracking-[-0.05em]
+    md:text-[8rem] md:leading-[8rem] md:tracking-[0em]
+  `,
+  line: 'h-[0.1rem] sm:flex-1',
   textColor: (color: 'white' | 'black') => (color === 'black' ? 'text-black' : 'text-white'),
   lineColor: (color: 'white' | 'black') => (color === 'black' ? 'bg-black' : 'bg-white'),
   starColor: (color: 'white' | 'black') => (color === 'black' ? 'text-point' : 'text-point-light'),
