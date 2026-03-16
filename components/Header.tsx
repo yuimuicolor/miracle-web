@@ -9,8 +9,8 @@ const UI_CONFIG = {
   HEADER_H_PC_REM: 15,
   HEADER_H_TABLET_REM: 12,
   HEADER_H_MOBILE_REM: 8,
-  TABLET_BREAKPOINT: 768,
-  MOBILE_BREAKPOINT: 390
+  DESKTOP_BREAKPOINT: 1024,
+  TABLET_BREAKPOINT: 768
 };
 
 const menuData = [
@@ -103,12 +103,12 @@ export default function Header() {
     const updateDeviceType = () => {
       const width = window.innerWidth;
 
-      if (width >= UI_CONFIG.TABLET_BREAKPOINT) {
+      if (width >= UI_CONFIG.DESKTOP_BREAKPOINT) {
         setDeviceType("pc");
         return;
       }
 
-      if (width >= UI_CONFIG.MOBILE_BREAKPOINT) {
+      if (width >= UI_CONFIG.TABLET_BREAKPOINT) {
         setDeviceType("tablet");
         return;
       }

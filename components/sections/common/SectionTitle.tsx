@@ -5,18 +5,18 @@ interface SectionTitleProps {
 
 const STYLE = {
 
-  wrapper: `w-full flex flex-col justify-center items-center text-center gap-[0.8rem]
-   sm:flex-row sm:text-left
-   sm:gap-[2rem]  md:gap-[6rem]
+  wrapper: `w-full flex flex-col justify-center items-center text-center 
+    gap-[0.8rem] md:gap-[2rem] lg:gap-[6rem]
+    md:flex-row md:text-left
   `,
     
   title: `
     font-gilda font-normal uppercase 
     text-[3.6rem] leading-[3.6rem] tracking-[-0.05em]
-    sm:text-[5.6rem] sm:leading-[5.6rem] sm:tracking-[-0.05em]
-    md:text-[8rem] md:leading-[8rem] md:tracking-[0em]
+    md:text-[5.6rem] md:leading-[5.6rem] md:tracking-[-0.05em]
+    lg:text-[8rem] lg:leading-[8rem] lg:tracking-[0em]
   `,
-  line: 'h-[0.1rem] sm:flex-1',
+  line: 'w-full h-[0.1rem] md:flex-1',
   textColor: (color: 'white' | 'black') => (color === 'black' ? 'text-black' : 'text-white'),
   lineColor: (color: 'white' | 'black') => (color === 'black' ? 'bg-black' : 'bg-white'),
   starColor: (color: 'white' | 'black') => (color === 'black' ? 'text-point' : 'text-point-light'),
