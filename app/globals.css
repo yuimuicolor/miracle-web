@@ -4,6 +4,14 @@
 
 @import "tailwindcss";
 
+@utility no-scrollbar {
+  &::-webkit-scrollbar {
+    display: none;
+  }
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
 @theme {
   /* 폰트 등록 */
   --font-pretendard:
