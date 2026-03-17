@@ -28,7 +28,7 @@ const STYLE = {
     whitespace-nowrap font-noto leading-none tracking-normal text-white/80 hover:text-white
     text-[1.8rem] lg:text-[2.4rem]
     ${isActive ? "font-semibold" : "font-normal"} 
-    ${isHovered ? "bg-point border-b-[1px] border-white" : ""}
+    ${isHovered ? "bg-hover/70 border-b-[1px] border-white" : ""}
   `,
   submenu: `
     absolute top-full left-0 z-50 w-full text-center shadow-lg bg-point

@@ -25,11 +25,11 @@ const STYLE = {
   mode: {
     light: `
       border-white/40 text-white
-      hover:bg-point hover:text-white
+      hover:bg-hover/70 hover:text-white
     `,
     dark: `
       border-[#6E6E6E] text-[#6E6E6E]
-      hover:bg-point hover:border-black hover:text-black
+      hover:bg-hover/70 hover:border-black hover:text-black
     `,
   },
 };

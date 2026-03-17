@@ -7,7 +7,7 @@ interface ProductBoxProps {
 
 const STYLE = {
   card:
-    "relative h-[30rem] w-[30rem] overflow-hidden border border-black/10 bg-[#d6d6d6] shadow-[2px_2px_10px_rgba(0,0,0,0.2)]",
+    "relative h-[30rem] w-full overflow-hidden border border-black/10 bg-[#d6d6d6] shadow-[2px_2px_10px_rgba(0,0,0,0.2)]",
   image: "object-cover",
   overlay: "absolute inset-0 bg-linear-to-b from-transparent via-transparent to-black/45",
   textWrap: "absolute bottom-[1.8rem] left-[1.8rem] flex flex-col",
