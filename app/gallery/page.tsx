@@ -1,6 +1,6 @@
-import MoreButton from "@/components/MoreButton";
+import GalleryPageGrid from "../../components/gallery/GalleryPageGrid";
 import SectionTitle from "@/components/sections/common/SectionTitle";
-import Link from "next/link";
+import { getGalleryImages } from "../../lib/galleryData";
 
 const STYLE = {
   section: `relative flex w-full flex-col items-center overflow-hidden bg-bg-dark`,
@@ -10,36 +10,18 @@ const STYLE = {
     px-[1.6em] md:px-[4rem] lg:px-[6rem]
     gap-[4rem] lg:gap-[6rem]
   `,
-  grid: `mx-auto grid w-full max-w-[1200px]
-    grid-cols-2 grid-rows-5 md:grid-cols-3 md:grid-rows-3
-    gap-[1.6rem] md:gap-[2rem] lg:gap-[4rem]
-  `,
-  gridItem: "aspect-square bg-gray-500",
-  buttonWrap: "flex justify-center",
 };
 
 export default function GalleryPage() {
+  const galleryImages = getGalleryImages();
+
   return (
     <section className={STYLE.section}>
       <div className={STYLE.bgImage} />
       <div className={STYLE.bgOverlay} />
       <div className={STYLE.content}>
-        {/* 제목란 */}
         <SectionTitle title="Gallery" color="white" />
-
-        {/* 사진 그리드 레이아웃 */}
-        <div className={STYLE.grid}>
-          {Array.from({ length: 9 }).map((_, index) => (
-            <div key={index} className={STYLE.gridItem}></div>
-          ))}
-        </div>
-
-        {/* 버튼 */}
-        <div className={STYLE.buttonWrap}>
-          <Link href="/gallery">
-            <MoreButton text="전체보기" size="L" mode="light" />
-          </Link>
-        </div>
+        <GalleryPageGrid images={galleryImages} />
       </div>
     </section>
   );

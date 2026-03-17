@@ -5,7 +5,7 @@ import { supabase } from "@/lib/supabase";
 import { ContactData } from "@/types/contact";
 
 const STYLE = {
-  section: `w-full min-h-screen-minus-header-offset bg-point flex items-center
+  section: `w-full min-h-screen-minus-header-offset bg-point
   px-[1.6rem] md:px-[4rem] lg:px-[8rem]
   pt-[10rem] md:pt-[14rem] lg:pt-[17rem]
   pb-[8rem]`,

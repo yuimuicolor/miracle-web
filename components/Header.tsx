@@ -2,13 +2,13 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { HEADER_CONFIG, HEADER_HEIGHTS_CSS } from "@/lib/headerConfig";
 
 const menuData = [
   { title: "ABOUT US", href: "/aboutus", submenus: ["회사소개", "히스토리", "인증서", "CEO소개"] },
   { title: "PRODUCTS", href: "/products", submenus: ["제품1", "제품2", "제품3"] },
-  { title: "GALLERY", href: "/gallery", submenus: ["갤러리"] },
+  { title: "GALLERY", href: "/gallery", submenus: [] },
   { title: "CONTACT", href: "/contact", submenus: ["오시는길", "상담문의"] },
 ];
 
@@ -68,6 +68,7 @@ const STYLE = {
 
 export default function Header() {
   const pathname = usePathname();
+  const router = useRouter();
   const [isHovered, setIsHovered] = useState(false);
   const [hoveredMenu, setHoveredMenu] = useState<number | null>(null);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -130,6 +131,17 @@ export default function Header() {
     }
   }, [isMenuOpen]);
 
+  const handleHeaderLinkClick = (href: string) => {
+    setIsHovered(false);
+    setHoveredMenu(null);
+    setIsMenuOpen(false);
+    setExpandedMobileMenus([]);
+
+    if (pathname.startsWith(href)) {
+      router.refresh();
+    }
+  };
+
   if (!isPC) {
     return (
       <header className={`${STYLE.headerMobile} ${isMenuOpen ? "h-screen overflow-y-auto bg-point" : "bg-linear-to-b from-[#767676] to-transparent"}`}>
@@ -171,38 +183,50 @@ export default function Header() {
         {isMenuOpen && (
           <nav className={STYLE.mobileMenuPanel}>
             {menuData.map((menu, index) => {
-              const isExpanded = expandedMobileMenus.includes(index);
+              const hasSubmenus = menu.submenus.length > 0;
+              const isExpanded = hasSubmenus && expandedMobileMenus.includes(index);
 
               return (
                 <div key={menu.title}>
-                  <button
-                    type="button"
-                    className={STYLE.mobileMenuItemButton}
-                    aria-expanded={isExpanded}
-                    onClick={() =>
-                      setExpandedMobileMenus((prev) =>
-                        prev.includes(index)
-                          ? prev.filter((menuIndex) => menuIndex !== index)
-                          : [...prev, index]
-                      )
-                    }
-                  >
-                    <span>{menu.title}</span>
-                    <span
-                      className={STYLE.mobileMenuChevron}
-                      style={{ transform: isExpanded ? "rotate(180deg)" : "rotate(0deg)" }}
+                  {hasSubmenus ? (
+                    <button
+                      type="button"
+                      className={STYLE.mobileMenuItemButton}
+                      aria-expanded={isExpanded}
+                      onClick={() =>
+                        setExpandedMobileMenus((prev) =>
+                          prev.includes(index)
+                            ? prev.filter((menuIndex) => menuIndex !== index)
+                            : [...prev, index]
+                        )
+                      }
                     >
-                      ▼
-                    </span>
-                  </button>
+                      <span>{menu.title}</span>
+                      <span
+                        className={STYLE.mobileMenuChevron}
+                        style={{ transform: isExpanded ? "rotate(180deg)" : "rotate(0deg)" }}
+                      >
+                        ▼
+                      </span>
+                    </button>
+                  ) : (
+                    <Link
+                      href={menu.href}
+                      className={STYLE.mobileMenuItemButton}
+                      onClick={() => handleHeaderLinkClick(menu.href)}
+                    >
+                      <span>{menu.title}</span>
+                    </Link>
+                  )}
 
-                  {isExpanded && (
+                  {hasSubmenus && isExpanded && (
                     <div className={STYLE.mobileSubmenuWrap}>
                       {menu.submenus.map((sub) => (
                         <Link
                           key={sub}
                           href={`${menu.href}/${sub.replace(/\s+/g, "").toLowerCase()}`}
                           className={STYLE.mobileSubmenuItem}
+                          onClick={() => handleHeaderLinkClick(menu.href)}
                         >
                           {sub}
                         </Link>
@@ -237,23 +261,25 @@ export default function Header() {
           <div
             key={menu.title}
             className={STYLE.menuWrap}
-            onMouseEnter={() => canHoverMenu && setHoveredMenu(index)}
+            onMouseEnter={() => canHoverMenu && menu.submenus.length > 0 && setHoveredMenu(index)}
             onMouseLeave={() => setHoveredMenu(null)}
           >
             <Link
               href={menu.href}
               className={STYLE.menuItem(activatedMenu === menu.title, hoveredMenu === index)}
+              onClick={() => handleHeaderLinkClick(menu.href)}
             >
               {menu.title}
             </Link>
 
-            {hoveredMenu === index && isHovered && canHoverMenu && (
+            {menu.submenus.length > 0 && hoveredMenu === index && isHovered && canHoverMenu && (
               <div className={STYLE.submenu}>
                 {menu.submenus.map((sub) => (
                   <Link
                     key={sub}
                     href={`${menu.href}/${sub.replace(/\s+/g, "").toLowerCase()}`}
                     className={STYLE.submenuItem}
+                    onClick={() => handleHeaderLinkClick(menu.href)}
                   >
                     {sub}
                   </Link>

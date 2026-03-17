@@ -1,4 +1,6 @@
 import Link from "next/link";
+import ZoomablePhotoCard from "@/components/gallery/ZoomablePhotoCard";
+import { getGalleryImages, type GalleryImageItem } from "../../lib/galleryData";
 import MoreButton from "../MoreButton";
 import SectionTitle from "./common/SectionTitle";
 
@@ -11,30 +13,27 @@ const STYLE = {
   content: `z-10 flex w-full flex-col items-center justify-center
     gap-[4rem] lg:gap-[6rem]
   `,
-  grid: `mx-auto grid w-full max-w-[800px]
+  grid: `mx-auto grid w-full max-w-[80rem]
     grid-cols-2 grid-rows-3 md:grid-cols-3 md:grid-rows-2
     gap-[1.6rem] md:gap-[2rem] lg:gap-[4rem]
   `,
-  gridItem: "aspect-square bg-gray-500",
   buttonWrap: "flex justify-center",
 };
 
 export default function GallerySection() {
+  const galleryImages = getGalleryImages(6);
+
   return (
     <section className={STYLE.section}>
       <div className={STYLE.content}>
-        {/* 제목란 */}
         <SectionTitle title="Gallery" color="white" />
 
-        {/* 사진 그리드 레이아웃 */}
         <div className={STYLE.grid}>
-          {/* Placeholder for photos - 6 divs for 3x2 grid */}
-          {Array.from({ length: 6 }).map((_, index) => (
-            <div key={index} className={STYLE.gridItem}></div>
+          {galleryImages.map((image: GalleryImageItem) => (
+            <ZoomablePhotoCard key={image.src} src={image.src} alt={image.alt} />
           ))}
         </div>
 
-        {/* 버튼 */}
         <div className={STYLE.buttonWrap}>
           <Link href="/gallery">
             <MoreButton text="전체보기" size="L" mode="light" />

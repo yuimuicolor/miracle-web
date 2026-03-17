@@ -9,7 +9,8 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
-    "images:about:webp": "node scripts/optimize-about-slider.mjs"
+    "images:about:webp": "node scripts/optimize-about-slider.mjs",
+    "images:gallery:webp": "node scripts/optimize-gallery-images.mjs"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.99.1",
