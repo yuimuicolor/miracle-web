@@ -7,7 +7,7 @@ import MoreButton from "../MoreButton";
 import SectionTitle from "./common/SectionTitle";
 import { PRODUCTS } from "@/lib/productsData";
 
-const AUTO_SPEED = 0.5; // px per frame (~30px/s at 60fps)
+const AUTO_SPEED = 1.21;
 const BRAND_NAME = "MIRACLE";
 
 const STYLE = {
@@ -41,6 +41,7 @@ export default function ProductsSection() {
   const lastTimeRef = useRef(0);
   const modeRef = useRef<"auto" | "momentum">("auto");
   const momentumVRef = useRef(0);
+  const autoCarryRef = useRef(0);
 
   const calcHalf = (container: HTMLDivElement) => {
     const cards = container.querySelectorAll<HTMLElement>("[data-product-card='true']");
@@ -59,15 +60,21 @@ export default function ProductsSection() {
         const half = halfRef.current;
         if (half > 0) {
           if (modeRef.current === "momentum") {
-            momentumVRef.current *= 0.92;
-            if (Math.abs(momentumVRef.current) < 0.5) {
+            momentumVRef.current *= 0.86;
+            if (Math.abs(momentumVRef.current) < 0.8) {
               modeRef.current = "auto";
               momentumVRef.current = 0;
+              autoCarryRef.current = 0;
             } else {
               container.scrollLeft -= momentumVRef.current;
             }
           } else {
-            container.scrollLeft += AUTO_SPEED;
+            autoCarryRef.current += AUTO_SPEED;
+            const movePx = autoCarryRef.current >= 1 ? Math.floor(autoCarryRef.current) : 0;
+            if (movePx > 0) {
+              container.scrollLeft += movePx;
+              autoCarryRef.current -= movePx;
+            }
           }
           if (container.scrollLeft >= half) container.scrollLeft -= half;
           if (container.scrollLeft < 0) container.scrollLeft += half;
@@ -122,10 +129,10 @@ export default function ProductsSection() {
     const x = e.pageX - container.getBoundingClientRect().left;
     const now = Date.now();
     const dt = now - lastTimeRef.current;
-    if (dt > 0) velocityRef.current = ((e.pageX - lastXRef.current) / dt) * 22;
+    if (dt > 0) velocityRef.current = ((e.pageX - lastXRef.current) / dt) * 14;
     lastXRef.current = e.pageX;
     lastTimeRef.current = now;
-    let newLeft = dragScrollLeft.current - (x - dragStartX.current) * 2.5;
+    let newLeft = dragScrollLeft.current - (x - dragStartX.current) * 1.8;
     if (newLeft >= half) newLeft -= half;
     if (newLeft < 0) newLeft += half;
     container.scrollLeft = newLeft;

@@ -21,10 +21,12 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           ["--header-extra-offset" as string]: HEADER_HEIGHTS_CSS.EXTRA_OFFSET,
         }}
       >
-        <Header />        
+        <div className="site-shell">
+          <Header />
           <div className="page-content">{children}</div>
           <Footer />
           <TopButton />
+        </div>
       </body>
     </html>
   );

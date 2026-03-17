@@ -3,6 +3,7 @@ import AboutSection from '@/components/sections/AboutSection';
 import ContactUsSection from '@/components/sections/ContactUsSection';
 import ProductsSection from '@/components/sections/ProductsSection';
 import GallerySection from '@/components/sections/GallerySection';
+import InformationSection from '@/components/sections/InformationSection';
 
 const STYLE = {
   main: 'home-snap no-footer-offset w-full bg-bg-dark',
@@ -16,6 +17,7 @@ export default function Home() {
       <section className={STYLE.snapSection}><AboutSection /></section>
       <section className={STYLE.snapSection}><ProductsSection /></section>
       <section className={STYLE.snapSection}><GallerySection /></section>
+      <section className={STYLE.snapSection}><InformationSection /></section>
       <section className={STYLE.snapSection}><ContactUsSection /></section>
     </main>
   );

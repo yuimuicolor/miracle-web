@@ -121,6 +121,10 @@
     padding-top: var(--page-offset-top);
   }
 
+  .site-shell {
+    min-width: 310px;
+  }
+
   .page-content > :last-child {
     padding-bottom: var(--page-bottom-padding-current);
   }
