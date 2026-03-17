@@ -4,16 +4,39 @@ import { ChevronDown } from 'lucide-react';
 import { HOME_CONTENT } from '@/lib/siteData';
 
 const STYLE = {
-  section: 'relative h-screen w-full flex flex-col items-center justify-center overflow-hidden bg-bg-dark',
-  background: "absolute inset-0 bg-[url('/images/main-bg.png')] bg-cover bg-center opacity-60",
-  contentWrap: 'relative z-10 text-center flex flex-col gap-2 items-center',
-  title: 'font-noto text-[4.4rem] md:text-[5.6rem] leading-normal tracking-[-0.03em] text-white relative',
-  titleStar: 'font-gilda text-[6rem] md:text-[8rem] leading-20 tracking-[-0.05em] absolute -top-4 -right-8 text-point-light',
+  section:
+    'relative h-screen w-full flex flex-col items-center justify-center overflow-hidden bg-bg-dark',
+  background:
+    "absolute inset-0 bg-[url('/images/main-bg.png')] bg-cover bg-center opacity-60",
+  contentWrap: 'relative z-10 flex flex-col items-center gap-2 text-center',
+  title: `
+    relative font-noto leading-normal tracking-[-0.03em] text-white
+    text-[4.4rem]
+    md:text-[5.6rem]
+  `,
+  titleStar: `
+    absolute -top-4 -right-8 font-gilda leading-20 tracking-[-0.05em] text-point-light
+    text-[6rem]
+    md:text-[8rem]
+  `,
   logoWrap: 'bg-white px-10 py-2',
-  logoText: 'font-playwrite text-[5.6rem] md:text-[7.2rem] text-point leading-none',
-  subtitle: 'font-crimson font-100 text-[4.8rem] md:text-[6rem] tracking-[-0.03em] text-white',
-  scrollGuideWrap: 'absolute bottom-10 flex flex-col items-center gap-2 opacity-40 animate-bounce',
-  scrollGuideText: 'text-center font-noto text-[1.6rem] md:text-[1.8rem] font-100 text-white tracking-[0.3em]',
+  logoText: `
+    font-playwrite leading-none text-point
+    text-[5.6rem]
+    md:text-[7.2rem]
+  `,
+  subtitle: `
+    font-crimson font-100 tracking-[-0.03em] text-white
+    text-[4.8rem]
+    md:text-[6rem]
+  `,
+  scrollGuideWrap:
+    'absolute bottom-10 flex flex-col items-center gap-2 opacity-40 animate-bounce',
+  scrollGuideText: `
+    text-center font-noto font-100 tracking-[0.3em] text-white
+    text-[1.6rem]
+    md:text-[1.8rem]
+  `,
   scrollGuideIcon: 'text-white',
 };
 

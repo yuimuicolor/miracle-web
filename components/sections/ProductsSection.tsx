@@ -11,16 +11,21 @@ import { BRAND_DATA, HOME_CONTENT } from "@/lib/siteData";
 const AUTO_SPEED = 1.21;
 
 const STYLE = {
-  section: `w-full min-h-screen bg-bg-light
-    px-[1.6rem] md:px-[4rem] lg:px-[8rem]
-    pt-[10rem] md:pt-[14rem] lg:pt-[17rem]
-    pb-[8rem] md:pb-[12rem] lg:pb-[8rem]
+  section: `
+    w-full min-h-screen bg-bg-light
+    px-[1.6rem] pt-[10rem] pb-[8rem]
+    md:px-[4rem] md:pt-[14rem] md:pb-[12rem]
+    lg:px-[8rem] lg:pt-[17rem] lg:pb-[8rem]
   `,
   content: "mx-auto flex w-full flex-col gap-[6rem]",
   titleWrap: "flex flex-col gap-[0.8rem] md:gap-[0rem] lg:gap-[2rem]",
   subText: "font-noto text-[1.6rem] md:text-[1.8rem] lg:text-[2rem] text-black",
   sliderArea: "flex items-center gap-[1.6rem]",
-  track: "no-scrollbar flex flex-1 gap-[1.6rem] overflow-x-auto py-[1.5rem] md:gap-[2rem]",
+  track: `
+    no-scrollbar flex flex-1 overflow-x-auto py-[1.5rem]
+    gap-[1.6rem]
+    md:gap-[2rem]
+  `,
   cardWrap: "w-[30rem] shrink-0",
   arrowButton:
     "shrink-0 text-[6rem] leading-none text-black/20 transition-colors hover:text-black/45",

@@ -6,26 +6,63 @@ import { ContactData } from "@/types/contact";
 import { HOME_CONTENT } from "@/lib/siteData";
 
 const STYLE = {
-  section: `w-full min-h-screen-minus-header-offset bg-point
-  px-[1.6rem] md:px-[4rem] lg:px-[8rem]
-  pt-[10rem] md:pt-[14rem] lg:pt-[17rem]
-  pb-[8rem]`,
+  section: `
+    w-full min-h-screen-minus-header-offset bg-point
+    px-[1.6rem] pt-[10rem] pb-[8rem]
+    md:px-[4rem] md:pt-[14rem]
+    lg:px-[8rem] lg:pt-[17rem]
+  `,
   inner: 'w-full mx-auto',
-  title: 'font-gilda text-[3.6rem] md:text-[5.6rem] lg:text-[8rem] uppercase text-white leading-none',
+  title: `
+    font-gilda uppercase leading-none text-white
+    text-[3.6rem]
+    md:text-[5.6rem]
+    lg:text-[8rem]
+  `,
   titleStar: 'text-point-light',
-  divider: 'w-full h-px bg-white mt-[1rem] md:mt-[2rem] lg:mt-[3rem] mb-[2rem] md:mb-[4rem] lg:mb-[6rem]',
+  divider: `
+    w-full h-px bg-white
+    mt-[1rem] mb-[2rem]
+    md:mt-[2rem] md:mb-[4rem]
+    lg:mt-[3rem] lg:mb-[6rem]
+  `,
   form: 'w-full',
-  formGrid: 'grid grid-cols-1 lg:grid-cols-2 gap-x-[4rem] lg:gap-x-[4rem] gap-y-[0.8rem] md:gap-y-[2rem] lg:gap-y-[4rem]',
+  formGrid: `
+    grid grid-cols-1 gap-x-[4rem] gap-y-[0.8rem]
+    md:gap-y-[2rem]
+    lg:grid-cols-2 lg:gap-x-[4rem] lg:gap-y-[4rem]
+  `,
   fieldBlock: 'flex flex-col gap-[0.6rem] lg:flex-row lg:items-center lg:gap-[2rem]',
   fieldBlockMessage: 'lg:col-span-2 flex flex-col gap-[0.6rem] lg:flex-row lg:items-start lg:gap-[2rem]',
-  label: 'font-normal flex gap-[0.4rem] text-[1.8rem] md:text-[2rem] lg:text-[2.4rem] tracking-[-0.01em] lg:w-[10rem] lg:shrink-0',
+  label: `
+    flex gap-[0.4rem] font-normal tracking-[-0.01em]
+    text-[1.8rem]
+    md:text-[2rem]
+    lg:w-[10rem] lg:shrink-0 lg:text-[2.4rem]
+  `,
   required: 'text-point-green',
-  input: 'w-full h-[4.8rem] md:h-[6rem] lg:h-[7.2rem] bg-white/50 focus:bg-white px-[1.2rem] md:px-[1.6rem] text-[1.8rem] md:text-[2rem] lg:text-[2.4rem] text-black outline-none transition-colors duration-500',
-  textarea: 'w-full h-[15rem] md:h-[18rem] bg-white/50 focus:bg-white px-[1.2rem] md:px-[1.6rem] py-[1.2rem] text-[1.8rem] md:text-[2rem] lg:text-[2.4rem] text-black outline-none resize-none transition-colors duration-500',
+  input: `
+    w-full bg-white/50 text-black outline-none transition-colors duration-500 focus:bg-white
+    h-[4.8rem] px-[1.2rem] text-[1.8rem]
+    md:h-[6rem] md:px-[1.6rem] md:text-[2rem]
+    lg:h-[7.2rem] lg:text-[2.4rem]
+  `,
+  textarea: `
+    w-full resize-none bg-white/50 text-black outline-none transition-colors duration-500 focus:bg-white
+    h-[15rem] px-[1.2rem] py-[1.2rem] text-[1.8rem]
+    md:h-[18rem] md:px-[1.6rem] md:text-[2rem]
+    lg:text-[2.4rem]
+  `,
   submitWrap: 'mt-[1.2rem] flex w-full flex-col gap-[4rem]',
-  consentLabel: 'flex items-center gap-[0.8rem] w-full text-[1.6rem] md:text-[1.8rem] lg:ml-[12rem] tracking-[-0.05rem] lg:w-[calc(100%-12rem)]',
+  consentLabel: `
+    flex w-full items-center gap-[0.8rem] tracking-[-0.05rem]
+    text-[1.6rem]
+    md:text-[1.8rem]
+    lg:ml-[12rem] lg:w-[calc(100%-12rem)]
+  `,
   checkbox: 'h-[1.8rem] w-[1.8rem] accent-white',
-  submitButton: 'self-center w-[28rem] h-[8rem] rounded-full bg-white text-point text-[3.2rem] font-pretendard font-bold hover:bg-white transition-colors',
+  submitButton:
+    'self-center h-[8rem] w-[28rem] rounded-full bg-white text-[3.2rem] font-bold text-point font-pretendard transition-colors hover:bg-white',
 };
 
 export default function ContactUsSection() {

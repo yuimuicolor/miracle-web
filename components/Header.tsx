@@ -8,12 +8,14 @@ import { BRAND_DATA, NAVIGATION_MENU } from "@/lib/siteData";
 
 const STYLE = {
   headerPC: `
-    fixed top-0 left-0 z-50 flex w-full items-center gap-[1.2rem] lg:gap-[2rem]
-    backdrop-blur-[2px]
-    px-[1.6rem] md:px-[8rem]
+    fixed top-0 left-0 z-50 flex w-full items-center
+    gap-[1.2rem] px-[1.6rem] backdrop-blur-[2px]
+    md:px-[8rem]
+    lg:gap-[2rem]
   `,
   headerMobile: `
-    fixed top-0 left-0 z-50 w-full backdrop-blur-[12px] px-[1.6rem] lg:px-[4rem]
+    fixed top-0 left-0 z-50 w-full px-[1.6rem] backdrop-blur-[12px]
+    lg:px-[4rem]
   `,
   gradientBase: `
     pointer-events-none absolute inset-x-0 top-0 -z-10 transition-color duration-300 ease-in-out`,
@@ -23,7 +25,8 @@ const STYLE = {
   nav: "relative flex h-full flex-1 items-stretch justify-center",
   menuItem: (isActive: boolean, isHovered: boolean) => `
     flex h-full w-full items-center justify-center transition-all transition-colors duration-300 ease-in-out
-    whitespace-nowrap text-[1.8rem] lg:text-[2.4rem] font-noto leading-none tracking-normal text-white/80 hover:text-white
+    whitespace-nowrap font-noto leading-none tracking-normal text-white/80 hover:text-white
+    text-[1.8rem] lg:text-[2.4rem]
     ${isActive ? "font-semibold" : "font-normal"} 
     ${isHovered ? "bg-point border-b-[1px] border-white" : ""}
   `,
@@ -35,7 +38,11 @@ const STYLE = {
     font-noto text-[2rem] text-white transition-colors
     hover:font-semibold hover:bg-white/10
   `,
-  languageSelector: "relative z-10 flex items-center gap-[0.8rem] lg:gap-[1.2rem] text-white/50 font-noto text-[1.2rem] lg:text-[1.8rem]",
+  languageSelector: `
+    relative z-10 flex items-center gap-[0.8rem] font-noto text-white/50
+    text-[1.2rem]
+    lg:gap-[1.2rem] lg:text-[1.8rem]
+  `,
   languageButton: `
     text-white border border-white/40 rounded-full px-[0.8rem] lg:px-[1.2rem] py-0
     hover:bg-white/20 hover:border-white/60 transition-colors
@@ -54,7 +61,10 @@ const STYLE = {
   menuToggleButton: "relative flex h-[4rem] w-[4rem] items-center justify-center transition-colors hover:bg-white/20",
   menuToggleLine: "absolute h-[2px] w-[3rem] bg-white transition-all duration-300 ease-in-out",
   mobileMenuPanel: "w-full border-t border-white/10 py-[1.2rem]",
-  mobileMenuItemButton: "flex w-full items-center justify-center gap-[1rem] py-[1.2rem] text-center text-[2rem] font-noto text-white/90 transition-colors hover:text-white",
+  mobileMenuItemButton: `
+    flex w-full items-center justify-center gap-[1rem] py-[1.2rem] text-center
+    font-noto text-[2rem] text-white/90 transition-colors hover:text-white
+  `,
   mobileMenuChevron: "text-[1.4rem] text-white/70 transition-transform duration-300",
   mobileSubmenuWrap: "mb-[0.6rem] w-full border-l border-white/20",
   mobileSubmenuItem: "block w-full py-[0.8rem] text-center text-[1.6rem] font-noto text-white/70 transition-colors hover:text-white"

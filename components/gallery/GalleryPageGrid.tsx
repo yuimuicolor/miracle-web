@@ -19,8 +19,9 @@ const PAGE_SIZE = 6;
 
 const STYLE = {
   grid: `mx-auto grid w-full max-w-[1200px]
-    grid-cols-2 md:grid-cols-3
-    gap-[1.6rem] md:gap-[2rem] lg:gap-[4rem]
+    grid-cols-2 gap-[1.6rem]
+    md:grid-cols-3 md:gap-[2rem]
+    lg:gap-[4rem]
   `,
   buttonWrap: "flex justify-center",
 };

@@ -1,15 +1,23 @@
 import { ABOUT_PAGE_CONTENT } from "@/lib/aboutPageData";
 
 const STYLE = {
-	main: 'bg-bg-dark text-white min-h-screen pt-[11.25rem] pb-32 px-6 sm:px-10 md:px-20',
+	main: `
+		min-h-screen bg-bg-dark text-white
+		px-6 pt-[11.25rem] pb-32
+		sm:px-10
+		md:px-20
+	`,
 	sectionBase: 'max-w-[80rem] mx-auto',
 	headerRow: 'flex items-center gap-4 mb-8',
 	mainTitle: 'font-en-xl-r sm:font-en-xxl-r',
 	pointStar: 'text-point',
 	titleLine: 'h-[0.125rem] bg-white/90 flex-1',
 	introList: 'space-y-14',
-	introGrid: (reverse: boolean) =>
-		`grid grid-cols-1 lg:grid-cols-2 gap-8 items-center ${reverse ? 'lg:[&>*:first-child]:order-2' : ''}`,
+	introGrid: (reverse: boolean) => `
+		grid grid-cols-1 items-center gap-8
+		lg:grid-cols-2
+		${reverse ? 'lg:[&>*:first-child]:order-2' : ''}
+	`,
 	introTextWrap: 'space-y-5',
 	introBadgeTitle: 'font-kr-l-bold',
 	introBadgeTitleText: 'bg-point px-2 py-1 inline-block',
@@ -21,16 +29,24 @@ const STYLE = {
 	introBodyPoint: 'text-point font-kr-xs-bold',
 	introBodyInverse: 'bg-white text-point px-1',
 	introVisualWrap: 'flex justify-center lg:justify-end',
-	introVisual: (imageClass: string) => `w-[17.5rem] h-[17.5rem] sm:w-[22.5rem] sm:h-[22.5rem] overflow-hidden ${imageClass}`,
+	introVisual: (imageClass: string) => `
+		h-[17.5rem] w-[17.5rem] overflow-hidden
+		sm:h-[22.5rem] sm:w-[22.5rem]
+		${imageClass}
+	`,
 	introImage: 'w-full h-full object-cover saturate-150 contrast-110',
 	trustWrap: 'lg:col-span-2 pt-4',
-	trustText: 'font-playwrite text-[3rem] sm:text-[4rem] text-white/95 leading-none break-words',
+	trustText: `
+		font-playwrite leading-none break-words text-white/95
+		text-[3rem]
+		sm:text-[4rem]
+	`,
 	sectionGapTop: 'mt-28',
 	sectionHeading: 'text-center mb-12',
 	sectionHeadingEn: 'font-en-noto-xs-med tracking-[0.32em] text-white/80',
 	sectionHeadingKr: 'font-kr-l-bold inline-block bg-point px-3 py-1 mt-2',
 	sectionHeadingDesc: 'font-kr-xs-reg text-white/70 mt-3',
-	historyGrid: 'grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8',
+	historyGrid: 'grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3',
 	historyCard: 'relative',
 	historyImageWrap: 'w-full h-[16.25rem] overflow-hidden',
 	historyImage: 'w-full h-full object-cover',
@@ -38,22 +54,25 @@ const STYLE = {
 	historyMetaWrap: 'mt-3',
 	historyDate: 'font-en-s-reg text-white/80',
 	historyTitle: 'font-kr-xs-bold',
-	certificateGrid: 'grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3',
+	certificateGrid: 'grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-5',
 	certificateCard: 'relative overflow-hidden',
 	certificateImageRatio: 'aspect-[3/4]',
 	certificateCaption: 'absolute inset-x-0 bottom-0 p-2 bg-gradient-to-t from-black/80 to-transparent',
 	certificateTitle: 'font-en-noto-xs-med text-[0.625rem] text-white/85',
 	certificateDesc: 'font-kr-xxs-reg text-white/95',
-	ceoSection: 'max-w-[80rem] mx-auto mt-28 grid grid-cols-1 lg:grid-cols-[22.5rem_1fr] gap-10 items-end',
+	ceoSection: `
+		mx-auto mt-28 grid max-w-[80rem] grid-cols-1 items-end gap-10
+		lg:grid-cols-[22.5rem_1fr]
+	`,
 	ceoEnLabel: 'font-en-noto-xs-med tracking-[0.28em] text-white/80',
 	ceoTitle: 'font-en-xxl-r mt-2',
 	ceoBar: 'w-28 h-[0.1875rem] bg-white mt-4',
 	ceoNameWrap: 'font-kr-s-reg mt-5',
 	ceoNameText: 'bg-point px-2 py-1',
-	ceoDescription: 'font-kr-xs-reg text-white/80 mt-5 leading-[1.6] whitespace-pre-line',
+	ceoDescription: 'mt-5 font-kr-xs-reg leading-[1.6] text-white/80 whitespace-pre-line',
 	ceoSocialWrap: 'flex gap-3 mt-8',
 	ceoSocialButton: 'w-9 h-9 rounded-full border border-white/60 font-en-noto-xs-med text-white/90',
-	ceoVisualWrap: 'w-full h-[26.25rem] sm:h-[35rem] overflow-hidden',
+	ceoVisualWrap: 'h-[26.25rem] w-full overflow-hidden sm:h-[35rem]',
 	ceoVisual: 'w-full h-full object-cover',
 };
 

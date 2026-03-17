@@ -4,12 +4,15 @@ import { getGalleryImages } from "../../lib/galleryData";
 import { HOME_CONTENT } from "@/lib/siteData";
 
 const STYLE = {
-  section: `relative flex w-full flex-col items-center overflow-hidden bg-bg-dark`,
+  section: `
+    relative flex w-full flex-col items-center overflow-hidden bg-bg-dark
+  `,
   bgImage: `absolute inset-0 bg-[url('/images/gallery-bg.png')] bg-cover bg-center bg-no-repeat`,
   bgOverlay: `absolute inset-0 bg-black/70 backdrop-blur-[60px]`,
   content: `relative z-10 flex w-full flex-col items-center justify-center
-    px-[1.6em] md:px-[4rem] lg:px-[6rem]
-    gap-[4rem] lg:gap-[6rem]
+    px-[1.6em] gap-[4rem]
+    md:px-[4rem]
+    lg:px-[6rem] lg:gap-[6rem]
   `,
 };
 

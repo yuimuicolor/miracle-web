@@ -6,24 +6,36 @@ import { HOME_CONTENT, STORE_DATA } from "@/lib/siteData";
 
 const STYLE = {
   section: "w-full bg-point",
-  panel: `w-full min-h-screen bg-bg-dark
-		rounded-b-[12rem] md:rounded-b-[20rem] lg:rounded-b-[30rem]
-		px-[4rem] md:px-[12rem] lg:px-[16rem]
-		pt-[10rem] md:pt-[14rem] lg:pt-[17rem]
-        pb-[8rem] md:pb-[12rem]`,
-  content:
-    "mx-auto flex w-full max-w-[1200px] flex-col gap-[4rem] px-[1.6rem] md:gap-[5rem] md:px-[4rem] lg:gap-[6rem] lg:px-0",
-  titleRow:
-    `flex flex-col items-center w-[calc(100%+8rem)] -mx-[4rem] 
-	md:w-[calc(100%+24rem)] md:-mx-[12rem]
-	lg:w-[calc(100%+32rem)] lg:-mx-[16rem] lg:gap-[2rem]`,
+  panel: `
+    w-full min-h-screen bg-bg-dark
+    rounded-b-[12rem] px-[4rem] pt-[10rem] pb-[8rem]
+    md:rounded-b-[20rem] md:px-[12rem] md:pt-[14rem] md:pb-[12rem]
+    lg:rounded-b-[30rem] lg:px-[16rem] lg:pt-[17rem]
+  `,
+  content: `
+    mx-auto flex w-full max-w-[1200px] flex-col
+    gap-[4rem] px-[1.6rem]
+    md:gap-[5rem] md:px-[4rem]
+    lg:gap-[6rem] lg:px-0
+  `,
+  titleRow: `
+    flex w-[calc(100%+8rem)] -mx-[4rem] flex-col items-center
+    md:w-[calc(100%+24rem)] md:-mx-[12rem]
+    lg:w-[calc(100%+32rem)] lg:-mx-[16rem] lg:gap-[2rem]
+  `,
   titleHead: "flex w-full items-center gap-[0.8rem] md:gap-[2rem] lg:gap-[4rem]",
   titleLine: "h-px flex-1 bg-white/60",
-  title:
-    "font-gilda text-[4.4rem] leading-[1] text-white md:text-[5.4rem] lg:text-[6.4rem]",
-  stars:
-    `font-gilda text-[5.6rem] text-point-light leading-[1.2] tracking-[-0.05em]
-	lg:text-8rem lg:mb-[3rem]`,
+  title: `
+    font-gilda leading-[1] text-white
+    text-[4.4rem]
+    md:text-[5.4rem]
+    lg:text-[6.4rem]
+  `,
+  stars: `
+    font-gilda leading-[1.2] tracking-[-0.05em] text-point-light
+    text-[5.6rem]
+    lg:mb-[3rem] lg:text-8rem
+  `,
   body: "flex flex-col items-center gap-[4rem] lg:items-start lg:grid lg:grid-cols-[1.1fr_1fr] lg:gap-[6rem]",
   mapWrap: "w-full overflow-hidden rounded-[1.6rem] bg-white/8",
   mapFrame: "h-[26rem] w-full border-0 md:h-[30rem] lg:h-[36rem]",
@@ -37,12 +49,20 @@ const STYLE = {
     "font-noto text-[1.6rem] leading-[1.35] text-white/90 transition-colors duration-200 group-hover:text-white md:text-[1.8rem] lg:text-[2.0rem]",
   extIcon:
     "mt-[0.2rem] h-[1.6rem] w-[1.6rem] md:h-[1.8rem] md:w-[1.8rem] lg:h-[2rem] lg:w-[2rem] text-white/55 transition-all duration-200 group-hover:text-white/90 group-hover:translate-x-[0.1rem]",
-  chip: "inline-flex w-fit flex-col gap-[0.4rem] rounded-[0.8rem] bg-point px-[1.2rem] py-[1rem] text-white mt-[0.8rem] md:mt-[0.8rem] lg:mt-[0.4rem]",
+  chip: `
+    mt-[0.8rem] inline-flex w-fit flex-col gap-[0.4rem] rounded-[0.8rem] bg-point px-[1.2rem] py-[1rem] text-white
+    md:mt-[0.8rem]
+    lg:mt-[0.4rem]
+  `,
   chipTitle:
     "font-noto font-bold text-[1.6rem] leading-[1.2] md:text-[1.8rem] lg:text-[2.0rem]",
   chipBody:
     "font-noto text-[1.6rem] leading-[1.3] md:text-[1.8rem] lg:text-[2.0rem]",
-  snsRow: "mt-[2rem] flex items-center gap-[2rem] md:gap-[4rem] lg:mt-[2.4rem] lg:gap-[4rem]",
+  snsRow: `
+    mt-[2rem] flex items-center gap-[2rem]
+    md:gap-[4rem]
+    lg:mt-[2.4rem] lg:gap-[4rem]
+  `,
   snsLink:
     "inline-flex h-[6rem] w-[6rem] items-center justify-center text-white transition-transform duration-200 hover:scale-[1.04]",
   snsIconWrap: "relative h-[6rem] w-[6rem]",

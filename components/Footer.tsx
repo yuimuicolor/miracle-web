@@ -15,8 +15,17 @@ const getDesktopRows = () =>
   );
 
 const STYLE = {
-  root: "w-full border-t border-white/10 bg-[#4a4a4a] text-white/90 min-h-[43rem] md:h-[40rem] lg:h-[45rem]",
-  inner: "flex min-h-[43rem] w-full flex-col justify-center gap-[3.2rem] px-[1.6rem] py-[3.2rem] md:h-full md:px-[4rem] md:py-0 lg:gap-[4rem] lg:px-[8rem]",
+  root: `
+    w-full min-h-[43rem] border-t border-white/10 bg-[#4a4a4a] text-white/90
+    md:h-[40rem]
+    lg:h-[45rem]
+  `,
+  inner: `
+    flex min-h-[43rem] w-full flex-col justify-center gap-[3.2rem]
+    px-[1.6rem] py-[3.2rem]
+    md:h-full md:px-[4rem] md:py-0
+    lg:gap-[4rem] lg:px-[8rem]
+  `,
   logo: 'h-[2.4rem]',
   desktopInfoWrap: "hidden flex-col gap-[1.2rem] text-[1.6rem] md:flex",
   desktopRow: "flex flex-wrap items-center gap-x-[3rem]",

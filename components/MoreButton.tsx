@@ -12,15 +12,15 @@ interface ButtonProps {
 
 const STYLE = {
   base: `
-    relative flex items-center justify-between px-[3rem]
-    border rounded-full transition-all duration-300 ease-in-out
-    group uppercase
+    relative group flex items-center justify-between uppercase
+    rounded-full border px-[3rem]
+    transition-all duration-300 ease-in-out
   `,
   text: 'shrink-0',
   icon: 'shrink-0 transition-transform duration-500 group-hover:rotate-90',
   size: {
-    L: 'w-[28rem] h-[7.2rem] font-noto font-normal text-[2.2rem] leading-[1.3] tracking-[0.2em]',
-    S: 'w-[20rem] h-[6rem] font-noto font-normal text-[1.8rem] leading-[1.3] tracking-[0.2em]',
+    L: 'h-[7.2rem] w-[28rem] font-noto text-[2.2rem] font-normal leading-[1.3] tracking-[0.2em]',
+    S: 'h-[6rem] w-[20rem] font-noto text-[1.8rem] font-normal leading-[1.3] tracking-[0.2em]',
   },
   mode: {
     light: `

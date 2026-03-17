@@ -41,8 +41,12 @@ const STYLE = {
     "pointer-events-none absolute right-[2rem] top-[2rem] z-[10] flex h-[4rem] w-[4rem] items-center justify-center rounded-full bg-white/12 opacity-0 backdrop-blur-[10px] transition-opacity duration-150 ease-out group-hover:opacity-100",
   textWrap:
     "absolute bottom-[1.2rem] left-[1.2rem] z-[2] flex w-[calc(100%-2.4rem)] flex-col gap-[0.4rem] text-left text-white",
-  subtitle:
-    "font-noto text-[1.2rem] uppercase tracking-[0.2em] leading-[1.3] text-white drop-shadow-[0_1px_4px_rgba(0,0,0,0.35)] md:text-[1.2rem] lg:text-[1.8rem]",
+  subtitle: `
+    font-noto uppercase leading-[1.3] tracking-[0.2em] text-white drop-shadow-[0_1px_4px_rgba(0,0,0,0.35)]
+    text-[1.2rem]
+    md:text-[1.2rem]
+    lg:text-[1.8rem]
+  `,
   mainTitle:
     `font-noto text-[2.4rem] tracking-[-0.05em] leading-[1.3]
     md:text-[2.0rem] md:leading-[1.5] xl:text-[3.2rem] lg:leading-[1.25]

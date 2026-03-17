@@ -4,12 +4,13 @@ interface SectionTitleProps {
 }
 
 const STYLE = {
-
   wrapper: `w-full flex flex-col justify-center items-start text-left
-    gap-[0.8rem] md:gap-[2rem] lg:gap-[6rem]
+    gap-[0.8rem]
     md:flex-row md:items-center
+    md:gap-[2rem]
+    lg:gap-[6rem]
   `,
-    
+
   title: `
     font-gilda font-normal uppercase antialiased [text-rendering:geometricPrecision] [-webkit-font-smoothing:antialiased]
     text-[3.4rem] leading-[1.08] tracking-[-0.01em]

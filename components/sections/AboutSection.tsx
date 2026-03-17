@@ -42,25 +42,46 @@ const getAboutSlides = () => {
 };
 
 const STYLE = {
-  section: `w-full h-full min-h-screen xl:h-screen bg-bg-dark
-    px-[1.6rem] md:px-[4rem] lg:px-[8rem]
-    pt-[10rem] md:pt-[14rem] lg:pt-[17rem]
-    pb-[8rem] md:pb-[12rem] xl:pb-[8rem]
+  section: `
+    w-full h-full min-h-screen bg-bg-dark
+    px-[1.6rem] pt-[10rem] pb-[8rem]
+    md:px-[4rem] md:pt-[14rem] md:pb-[12rem]
+    lg:px-[8rem] lg:pt-[17rem]
+    xl:h-screen xl:pb-[8rem]
   `,
-  content:
-    "mx-auto flex w-full flex-col gap-[2rem] md:gap-[4rem] xl:justify-between xl:gap-[6rem]",
-  body: "flex flex-col gap-[3rem] md:gap-[4rem] xl:flex-row xl:justify-between",
+  content: `
+    mx-auto flex w-full flex-col gap-[2rem]
+    md:gap-[4rem]
+    xl:justify-between xl:gap-[6rem]
+  `,
+  body: `
+    flex flex-col gap-[3rem]
+    md:gap-[4rem]
+    xl:flex-row xl:justify-between
+  `,
   textWrap: "flex flex-col items-start gap-[2rem] lg:gap-[2.8rem]",
   sliderWrap: "w-full lg:max-w-[600px] xl:max-w-[700px]",
-  lead: `flex flex-col gap-[0.8rem] lg:gap-[2rem]
-  font-noto tracking-[-0.03em] text-white
-  text-[3.2rem] md:text-[4.8rem] lg:text-[5.6rem]`,
+  lead: `
+    flex flex-col gap-[0.8rem] font-noto tracking-[-0.03em] text-white
+    text-[3.2rem]
+    md:text-[4.8rem]
+    lg:gap-[2rem] lg:text-[5.6rem]
+  `,
   leadLine: "leading-[1.5] lg:leading-[1.3]",
-  leadSegmentPoint:
-    "inline px-[0.8rem] font-bold text-white [box-decoration-break:clone] [-webkit-box-decoration-break:clone] bg-point",
-  leadSegmentInverse:
-    "inline px-[0.8rem] font-bold text-point [box-decoration-break:clone] [-webkit-box-decoration-break:clone] bg-white",
-  desc: "text-[1.6rem] md:text-[1.8rem] lg:text-[2rem] leading-[1.5] tracking-[-0.05em] text-white",
+  leadSegmentPoint: `
+    inline bg-point px-[0.8rem] font-bold text-white
+    [box-decoration-break:clone] [-webkit-box-decoration-break:clone]
+  `,
+  leadSegmentInverse: `
+    inline bg-white px-[0.8rem] font-bold text-point
+    [box-decoration-break:clone] [-webkit-box-decoration-break:clone]
+  `,
+  desc: `
+    leading-[1.5] tracking-[-0.05em] text-white
+    text-[1.6rem]
+    md:text-[1.8rem]
+    lg:text-[2rem]
+  `,
 };
 
 export default function AboutSection() {
