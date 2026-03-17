@@ -54,7 +54,7 @@ export default function GalleryPageGrid({ images }: GalleryPageGridProps) {
       {hasMore ? (
         <div className={STYLE.buttonWrap}>
           <MoreButton
-            text="더보기"
+            text="MORE"
             size="L"
             mode="light"
             onClick={() => setVisibleCount((prev) => prev + PAGE_SIZE)}

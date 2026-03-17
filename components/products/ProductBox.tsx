@@ -6,15 +6,22 @@ interface ProductBoxProps {
 }
 
 const STYLE = {
-  card:
-    "relative h-[30rem] w-full overflow-hidden border border-black/10 bg-[#d6d6d6] shadow-[2px_2px_10px_rgba(0,0,0,0.2)]",
+  card: `
+    relative h-[30rem] w-full overflow-hidden
+    border border-black/10 bg-[#d6d6d6]
+    shadow-[2px_2px_10px_rgba(0,0,0,0.2)]
+  `,
   image: "object-cover",
   overlay: "absolute inset-0 bg-linear-to-b from-transparent via-transparent to-black/45",
   textWrap: "absolute bottom-[1.8rem] left-[1.8rem] flex flex-col",
-  category:
-    "font-noto text-[1.6rem] uppercase tracking-[0.13em] leading-[1.3] text-white drop-shadow-[0_2px_12px_rgba(0,0,0,0.85)]",
-  name:
-    "font-noto text-[4.0rem] tracking-[-0.03em] leading-[1.3] text-white drop-shadow-[0_2px_12px_rgba(0,0,0,0.85)]",
+  category: `
+    font-noto text-[1.6rem] uppercase leading-[1.3] tracking-[0.13em] text-white
+    drop-shadow-[0_2px_12px_rgba(0,0,0,0.85)]
+  `,
+  name: `
+    font-noto text-[4.0rem] leading-[1.3] tracking-[-0.03em] text-white
+    drop-shadow-[0_2px_12px_rgba(0,0,0,0.85)]
+  `,
 };
 
 const TWO_LINE_CLAMP_STYLE = {
@@ -31,6 +38,7 @@ export default function ProductBox({ item }: ProductBoxProps) {
         src={item.image}
         alt={item.brandKo}
         fill
+        draggable={false}
         sizes="(max-width: 767px) 75vw, (max-width: 1023px) 40vw, 24vw"
         className={STYLE.image}
       />

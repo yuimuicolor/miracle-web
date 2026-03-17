@@ -6,6 +6,25 @@ export interface ProductItem {
   desc: string;
 }
 
+const PRODUCT_ID_REGEX = /^product-(\d+)$/;
+
+export const toProductPathId = (id: string) => {
+  const match = id.match(PRODUCT_ID_REGEX);
+  if (!match) return id;
+  return `product-${Number(match[1])}`;
+};
+
+export const fromProductPathId = (pathId: string) => {
+  const match = pathId.match(PRODUCT_ID_REGEX);
+  if (!match) return pathId;
+  return `product-${match[1].padStart(2, "0")}`;
+};
+
+export const getProductByPathId = (pathId: string) => {
+  const normalizedId = fromProductPathId(pathId);
+  return PRODUCTS.find((product) => product.id === normalizedId) ?? null;
+};
+
 export const PRODUCTS: ProductItem[] = [
   {
     id: "product-01",

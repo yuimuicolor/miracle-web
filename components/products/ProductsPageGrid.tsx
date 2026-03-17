@@ -13,8 +13,7 @@ const PAGE_SIZE = 6;
 
 const STYLE = {
   grid: `
-    grid w-full grid-cols-1
-    gap-y-[4rem]
+    grid w-full grid-cols-1 gap-y-[4rem]
     md:grid-cols-2 md:gap-x-[1.6rem] md:gap-y-[4rem]
     lg:grid-cols-3 lg:gap-x-[6rem] lg:gap-y-[4rem]
   `,

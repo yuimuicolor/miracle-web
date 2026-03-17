@@ -5,10 +5,10 @@ import { useEffect, useRef, useState } from "react";
 import ProductBox from "@/components/products/ProductBox";
 import MoreButton from "../MoreButton";
 import SectionTitle from "./common/SectionTitle";
-import { PRODUCTS } from "@/lib/productsData";
+import { PRODUCTS, toProductPathId } from "@/lib/productsData";
 import { BRAND_DATA, HOME_CONTENT } from "@/lib/siteData";
 
-const AUTO_SPEED = 1.21;
+const AUTO_SPEED = 1;
 
 const STYLE = {
   section: `
@@ -27,6 +27,7 @@ const STYLE = {
     md:gap-[2rem]
   `,
   cardWrap: "w-[30rem] shrink-0",
+  cardLink: "block",
   arrowButton:
     "shrink-0 text-[6rem] leading-none text-black/20 transition-colors hover:text-black/45",
   buttonWrap: "flex justify-center",
@@ -48,6 +49,14 @@ export default function ProductsSection() {
   const modeRef = useRef<"auto" | "momentum">("auto");
   const momentumVRef = useRef(0);
   const autoCarryRef = useRef(0);
+  const dragMovedRef = useRef(false);
+  const isTrackHoveredRef = useRef(false);
+  const isHoverPauseRef = useRef(false);
+
+  const normalizeScroll = (value: number, half: number) => {
+    if (half <= 0) return value;
+    return ((value % half) + half) % half;
+  };
 
   const calcHalf = (container: HTMLDivElement) => {
     const cards = container.querySelectorAll<HTMLElement>("[data-product-card='true']");
@@ -62,7 +71,7 @@ export default function ProductsSection() {
     ro.observe(container);
 
     const loop = () => {
-      if (!isDragging.current) {
+      if (!isDragging.current && !isHoverPauseRef.current) {
         const half = halfRef.current;
         if (half > 0) {
           if (modeRef.current === "momentum") {
@@ -72,18 +81,22 @@ export default function ProductsSection() {
               momentumVRef.current = 0;
               autoCarryRef.current = 0;
             } else {
-              container.scrollLeft -= momentumVRef.current;
+              container.scrollLeft = normalizeScroll(
+                container.scrollLeft - momentumVRef.current,
+                half,
+              );
             }
           } else {
             autoCarryRef.current += AUTO_SPEED;
             const movePx = autoCarryRef.current >= 1 ? Math.floor(autoCarryRef.current) : 0;
             if (movePx > 0) {
-              container.scrollLeft += movePx;
+              container.scrollLeft = normalizeScroll(
+                container.scrollLeft + movePx,
+                half,
+              );
               autoCarryRef.current -= movePx;
             }
           }
-          if (container.scrollLeft >= half) container.scrollLeft -= half;
-          if (container.scrollLeft < 0) container.scrollLeft += half;
         }
       }
       rafRef.current = requestAnimationFrame(loop);
@@ -107,18 +120,21 @@ export default function ProductsSection() {
     if (!container) return;
     const firstCard = container.querySelector<HTMLElement>("[data-product-card='true']");
     if (!firstCard) return;
-    const step = firstCard.offsetWidth + 16;
+
+    const gap = Number.parseFloat(getComputedStyle(container).columnGap || "0") || 0;
+    const step = firstCard.offsetWidth + gap;
     const half = halfRef.current;
-    let target = container.scrollLeft + (direction === "next" ? step : -step);
-    if (target >= half) target -= half;
-    if (target < 0) target += half;
-    container.scrollLeft = target;
+
+    const target = container.scrollLeft + (direction === "next" ? step : -step);
+    container.scrollLeft = normalizeScroll(target, half);
   };
 
   const handleMouseDown = (e: React.MouseEvent<HTMLDivElement>) => {
     const container = trackRef.current;
     if (!container) return;
     isDragging.current = true;
+    isHoverPauseRef.current = false;
+    dragMovedRef.current = false;
     setGrabbing(true);
     dragStartX.current = e.pageX - container.getBoundingClientRect().left;
     dragScrollLeft.current = container.scrollLeft;
@@ -138,18 +154,45 @@ export default function ProductsSection() {
     if (dt > 0) velocityRef.current = ((e.pageX - lastXRef.current) / dt) * 14;
     lastXRef.current = e.pageX;
     lastTimeRef.current = now;
-    let newLeft = dragScrollLeft.current - (x - dragStartX.current) * 1.8;
-    if (newLeft >= half) newLeft -= half;
-    if (newLeft < 0) newLeft += half;
-    container.scrollLeft = newLeft;
+
+    if (Math.abs(x - dragStartX.current) > 6) {
+      dragMovedRef.current = true;
+    }
+
+    const newLeft = dragScrollLeft.current - (x - dragStartX.current) * 1.8;
+    container.scrollLeft = normalizeScroll(newLeft, half);
+  };
+
+  const handleCardClick = (event: React.MouseEvent<HTMLAnchorElement>) => {
+    if (!dragMovedRef.current) return;
+    event.preventDefault();
+    dragMovedRef.current = false;
+  };
+
+  const handleNativeDragStart = (event: React.DragEvent<HTMLElement>) => {
+    event.preventDefault();
   };
 
   const stopDrag = () => {
     if (!isDragging.current) return;
     isDragging.current = false;
     setGrabbing(false);
+    isHoverPauseRef.current = isTrackHoveredRef.current;
     momentumVRef.current = velocityRef.current;
     modeRef.current = "momentum";
+  };
+
+  const handleTrackMouseEnter = () => {
+    isTrackHoveredRef.current = true;
+    if (!isDragging.current) {
+      isHoverPauseRef.current = true;
+    }
+  };
+
+  const handleTrackMouseLeave = () => {
+    isTrackHoveredRef.current = false;
+    isHoverPauseRef.current = false;
+    stopDrag();
   };
 
   return (
@@ -175,14 +218,24 @@ export default function ProductsSection() {
           <div
             ref={trackRef}
             className={`${STYLE.track} ${grabbing ? "cursor-grabbing select-none" : "cursor-grab"}`}
+            onMouseEnter={handleTrackMouseEnter}
             onMouseDown={handleMouseDown}
             onMouseMove={handleMouseMove}
             onMouseUp={stopDrag}
-            onMouseLeave={stopDrag}
+            onMouseLeave={handleTrackMouseLeave}
           >
             {[...PRODUCTS, ...PRODUCTS].map((item, index) => (
               <div key={index} data-product-card="true" className={STYLE.cardWrap}>
-                <ProductBox item={item} />
+                <Link
+                  href={`/products/${toProductPathId(item.id)}`}
+                  className={STYLE.cardLink}
+                  aria-label={`${item.brandKo} 상세페이지 이동`}
+                  draggable={false}
+                  onClick={handleCardClick}
+                  onDragStart={handleNativeDragStart}
+                >
+                  <ProductBox item={item} />
+                </Link>
               </div>
             ))}
           </div>
