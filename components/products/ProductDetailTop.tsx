@@ -41,8 +41,6 @@ const STYLE = {
   dotActive: "bg-point",
   detailImages: "flex flex-col  max-w-[70rem] ",
   detailImageWrap: "w-full",
-  detailImageButton: "group relative block w-full overflow-hidden",
-  detailImage: "transition-transform duration-150 ease-out group-hover:scale-[1.01]",
 
   modal: "fixed inset-0 z-[120] flex items-center justify-center bg-black/82 px-[2rem] py-[2rem]",
   modalInner: "relative flex items-start justify-center",
@@ -233,29 +231,15 @@ export default function ProductDetailTop({ product }: ProductDetailTopProps) {
         <div className={STYLE.detailImages}>
           {detailImages.map((src, index) => (
             <div key={`${src}-${index}`} className={STYLE.detailImageWrap}>
-              <button
-                type="button"
-                className={STYLE.detailImageButton}
-                aria-label={`${product.brandKo} 상세 이미지 ${index + 1} 확대 보기`}
-                onClick={() =>
-                  openZoomModal(src, `${product.brandKo} 상세 이미지 ${index + 1}`)
-                }
-              >
-                <Image
-                  src={src}
-                  alt={`${product.brandKo} 상세 이미지 ${index + 1}`}
-                  width={0}
-                  height={0}
-                  sizes="50vw"
-                  draggable={false}
-                  className={STYLE.detailImage}
-                  style={{ width: "100%", height: "auto" }}
-                />
-                <div className={STYLE.imageHoverShade} />
-                <div className={STYLE.imageExpandBadge}>
-                  <ExpandIcon />
-                </div>
-              </button>
+              <Image
+                src={src}
+                alt={`${product.brandKo} 상세 이미지 ${index + 1}`}
+                width={0}
+                height={0}
+                sizes="50vw"
+                draggable={false}
+                style={{ width: "100%", height: "auto" }}
+              />
             </div>
           ))}
         </div>
