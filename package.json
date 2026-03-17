@@ -10,7 +10,8 @@
     "start": "next start",
     "lint": "eslint",
     "images:about:webp": "node scripts/optimize-about-slider.mjs",
-    "images:gallery:webp": "node scripts/optimize-gallery-images.mjs"
+    "images:gallery:webp": "node scripts/optimize-gallery-images.mjs",
+    "images:products:organize": "node scripts/organize-product-images.mjs"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.99.1",

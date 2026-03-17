@@ -2,7 +2,8 @@
 
 import Image from "next/image";
 import { ChevronLeft, ChevronRight, ExternalLink } from "lucide-react";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
+import { createPortal } from "react-dom";
 import type { ProductItem } from "@/lib/productsData";
 
 interface ProductDetailTopProps {
@@ -21,10 +22,16 @@ const STYLE = {
   `,
   thumbnailWrap: "flex w-full max-w-[70rem]  flex-col items-center gap-[1.6rem]",
   thumbnailMain:
-    "relative w-full aspect-[1/1] overflow-hidden bg-black/5",
+    "group relative w-full aspect-[1/1] overflow-hidden bg-black/5",
   thumbnailImage: "object-cover",
+  imageHoverShade:
+    "pointer-events-none absolute inset-0 z-[4] backdrop-blur-[4px] bg-black/50 opacity-0 transition-opacity duration-300 ease-out group-hover:opacity-100",
+  imageExpandBadge:
+    "pointer-events-none absolute right-[2rem] top-[2rem] z-[8] flex h-[4rem] w-[4rem] items-center justify-center rounded-full bg-white/12 opacity-0 backdrop-blur-[10px] transition-opacity duration-150 ease-out group-hover:opacity-100",
+  imageExpandButton:
+    "absolute right-[2rem] top-[2rem] z-[9] flex h-[4rem] w-[4rem] items-center justify-center rounded-full",
   arrowButton: `
-    absolute top-1/2 z-[3] flex h-[6rem] w-[6rem] -translate-y-1/2 items-center justify-center
+    absolute top-1/2 z-[7] flex h-[6rem] w-[6rem] -translate-y-1/2 items-center justify-center
     text-white/90 transition-colors duration-200 hover:text-white
   `,
   arrowLeft: "left-[1.2rem]",
@@ -34,6 +41,15 @@ const STYLE = {
   dotActive: "bg-point",
   detailImages: "flex flex-col  max-w-[70rem] ",
   detailImageWrap: "w-full",
+  detailImageButton: "group relative block w-full overflow-hidden",
+  detailImage: "transition-transform duration-150 ease-out group-hover:scale-[1.01]",
+
+  modal: "fixed inset-0 z-[120] flex items-center justify-center bg-black/82 px-[2rem] py-[2rem]",
+  modalInner: "relative flex items-start justify-center",
+  modalImage:
+    "block h-auto w-auto max-h-[calc(100vh-8rem)] max-w-[calc(100vw-10rem)] object-contain",
+  modalClose:
+    "absolute right-[2rem] top-[2rem] z-10 flex h-[4rem] w-[4rem] items-center justify-center rounded-full border border-white/20 bg-black/55 text-[2.4rem] leading-none text-white transition-colors duration-150 hover:bg-black/75",
 
   rightCol: `
     max-w-[70rem] h-full overflow-hidden
@@ -61,8 +77,27 @@ const STYLE = {
   `,
 };
 
+function ExpandIcon() {
+  return (
+    <svg viewBox="0 0 24 24" aria-hidden="true" className="h-[2.4rem] w-[2.4rem] text-white">
+      <path
+        d="M13 4h7v7h-2.8V8.78l-5.96 5.96-1.98-1.98 5.96-5.96H13V4Z"
+        fill="currentColor"
+      />
+      <path
+        d="M11 20H4v-7h2.8v2.22l5.96-5.96 1.98 1.98-5.96 5.96H11V20Z"
+        fill="currentColor"
+      />
+    </svg>
+  );
+}
+
 export default function ProductDetailTop({ product }: ProductDetailTopProps) {
   const [activeIndex, setActiveIndex] = useState(0);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [modalSrc, setModalSrc] = useState("");
+  const [modalAlt, setModalAlt] = useState("");
+  const [isMounted, setIsMounted] = useState(false);
   const dragStartXRef = useRef<number | null>(null);
 
   const thumbnails =
@@ -72,6 +107,37 @@ export default function ProductDetailTop({ product }: ProductDetailTopProps) {
 
   const detailImages =
     product.detailImages.length > 0 ? product.detailImages : [product.image];
+
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
+
+  useEffect(() => {
+    if (!isModalOpen) {
+      return;
+    }
+
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") {
+        setIsModalOpen(false);
+      }
+    };
+
+    const originalOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    window.addEventListener("keydown", handleKeyDown);
+
+    return () => {
+      document.body.style.overflow = originalOverflow;
+      window.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [isModalOpen]);
+
+  const openZoomModal = (src: string, alt: string) => {
+    setModalSrc(src);
+    setModalAlt(alt);
+    setIsModalOpen(true);
+  };
 
   const moveSlide = (direction: "prev" | "next") => {
     const total = thumbnails.length;
@@ -116,6 +182,22 @@ export default function ProductDetailTop({ product }: ProductDetailTopProps) {
               className={STYLE.thumbnailImage}
             />
 
+            <div className={STYLE.imageHoverShade} />
+            <div className={STYLE.imageExpandBadge}>
+              <ExpandIcon />
+            </div>
+            <button
+              type="button"
+              className={STYLE.imageExpandButton}
+              aria-label="썸네일 확대 보기"
+              onClick={() =>
+                openZoomModal(
+                  thumbnails[activeIndex],
+                  `${product.brandKo} 썸네일 ${activeIndex + 1}`,
+                )
+              }
+            />
+
             <button
               type="button"
               className={`${STYLE.arrowButton} ${STYLE.arrowLeft}`}
@@ -151,15 +233,29 @@ export default function ProductDetailTop({ product }: ProductDetailTopProps) {
         <div className={STYLE.detailImages}>
           {detailImages.map((src, index) => (
             <div key={`${src}-${index}`} className={STYLE.detailImageWrap}>
-              <Image
-                src={src}
-                alt={`${product.brandKo} 상세 이미지 ${index + 1}`}
-                width={0}
-                height={0}
-                sizes="50vw"
-                draggable={false}
-                style={{ width: "100%", height: "auto" }}
-              />
+              <button
+                type="button"
+                className={STYLE.detailImageButton}
+                aria-label={`${product.brandKo} 상세 이미지 ${index + 1} 확대 보기`}
+                onClick={() =>
+                  openZoomModal(src, `${product.brandKo} 상세 이미지 ${index + 1}`)
+                }
+              >
+                <Image
+                  src={src}
+                  alt={`${product.brandKo} 상세 이미지 ${index + 1}`}
+                  width={0}
+                  height={0}
+                  sizes="50vw"
+                  draggable={false}
+                  className={STYLE.detailImage}
+                  style={{ width: "100%", height: "auto" }}
+                />
+                <div className={STYLE.imageHoverShade} />
+                <div className={STYLE.imageExpandBadge}>
+                  <ExpandIcon />
+                </div>
+              </button>
             </div>
           ))}
         </div>
@@ -203,6 +299,30 @@ export default function ProductDetailTop({ product }: ProductDetailTopProps) {
           </span>
         </a>
       </div>
+
+      {isMounted && isModalOpen
+        ? createPortal(
+            <div
+              className={STYLE.modal}
+              onClick={() => setIsModalOpen(false)}
+              role="dialog"
+              aria-modal="true"
+            >
+              <div className={STYLE.modalInner} onClick={(event) => event.stopPropagation()}>
+                <img src={modalSrc} alt={modalAlt} className={STYLE.modalImage} />
+                <button
+                  type="button"
+                  className={STYLE.modalClose}
+                  onClick={() => setIsModalOpen(false)}
+                  aria-label="상세 이미지 닫기"
+                >
+                  ×
+                </button>
+              </div>
+            </div>,
+            document.body,
+          )
+        : null}
     </div>
   );
 }
