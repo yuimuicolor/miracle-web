@@ -4,10 +4,11 @@ import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import TopButton from "@/components/TopButton";
 import { HEADER_HEIGHTS_CSS } from "@/lib/headerConfig";
+import { SITE_METADATA } from "@/lib/siteData";
 
 export const metadata: Metadata = {
-  title: "Miracle",
-  description: "miracle web demo site",
+  title: SITE_METADATA.title,
+  description: SITE_METADATA.description,
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

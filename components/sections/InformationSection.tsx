@@ -2,22 +2,7 @@
 
 import { ExternalLink } from "lucide-react";
 import Image from "next/image";
-
-const INFO = {
-  businessName: "자연도소금빵 성수점",
-  address: "대한민국 서울특별시 성동구 연무장길 56-1",
-  phone: "010-2555-2555",
-  email: "miracle@email.com",
-  businessHours: "월-금 09시-18시 (공휴일/주말 휴무)",
-  mapQuery: "자연도소금빵 성수점 대한민국 서울특별시 성동구 연무장길 56-1",
-  mapLink:
-    "https://www.google.com/maps/place/%EC%9E%90%EC%97%B0%EB%8F%84%EC%86%8C%EA%B8%88%EB%B9%B5+%EC%84%B1%EC%88%98%EC%A0%90/@37.5423025,127.0553657,21z/data=!4m6!3m5!1s0x357ca58daad46ea9:0x4922f006043fcb1e!8m2!3d37.5423017!4d127.0554582!16s%2Fg%2F11vctr0f09",
-  sns: {
-    instagram: "https://www.instagram.com/",
-    youtube: "https://www.youtube.com/",
-    x: "https://x.com/",
-  },
-};
+import { HOME_CONTENT, STORE_DATA } from "@/lib/siteData";
 
 const STYLE = {
   section: "w-full bg-point",
@@ -64,16 +49,18 @@ const STYLE = {
   snsIconBase:
     "absolute h-[6rem] w-[6rem] transition-opacity duration-300 ease-out group-hover:opacity-0",
   snsIconHover:
-    "absolute  h-[6rem] w-[6rem] opacity-0 transition-opacity duration-300 ease-out group-hover:opacity-100",
+    "absolute h-[6rem] w-[6rem] opacity-0 transition-opacity duration-300 ease-out group-hover:opacity-100",
 };
 
 const toDialNumber = (phone: string) => phone.replace(/[^\d+]/g, "");
 
 export default function InformationSection() {
-  const encodedMapQuery = encodeURIComponent(INFO.mapQuery);
+  const { informationSection } = HOME_CONTENT;
+  const encodedMapQuery = encodeURIComponent(STORE_DATA.mapQuery);
+  const snsEntries = Object.values(STORE_DATA.sns);
 
   const openDirections = () => {
-    window.open(INFO.mapLink, "_blank", "noopener,noreferrer");
+    window.open(STORE_DATA.mapLink, "_blank", "noopener,noreferrer");
   };
 
   const mapEmbedUrl = `https://maps.google.com/maps?hl=ko&q=${encodedMapQuery}&t=m&z=18&ie=UTF8&iwloc=B&output=embed`;
@@ -84,17 +71,17 @@ export default function InformationSection() {
         <div className={STYLE.titleRow}>
           <div className={STYLE.titleHead}>
             <span className={STYLE.titleLine} />
-            <h2 className={STYLE.title}>INFORMATION</h2>
+            <h2 className={STYLE.title}>{informationSection.sectionTitle}</h2>
             <span className={STYLE.titleLine} />
           </div>
-          <p className={STYLE.stars}>***</p>
+          <p className={STYLE.stars}>{informationSection.starsText}</p>
         </div>
 
         <div className={STYLE.content}>
           <div className={STYLE.body}>
             <div className={STYLE.mapWrap}>
               <iframe
-                title="MIRACLE 위치 지도"
+                title={informationSection.mapTitle}
                 className={STYLE.mapFrame}
                 loading="lazy"
                 referrerPolicy="no-referrer-when-downgrade"
@@ -109,127 +96,82 @@ export default function InformationSection() {
                 onClick={openDirections}
               >
                 <Image
-                  src="/images/icon/icon_location.png"
-                  alt="위치"
+                  src={STORE_DATA.infoIcons.location}
+                  alt={informationSection.locationIconAlt}
                   width={40}
                   height={40}
                   className={STYLE.mainIcon}
                 />
                 <div className={STYLE.infoTextWrap}>
-                  <span className={STYLE.infoText}>{INFO.address}</span>
+                  <span className={STYLE.infoText}>{STORE_DATA.address}</span>
                   <ExternalLink className={STYLE.extIcon} />
                 </div>
               </button>
 
               <a
-                href={`tel:${toDialNumber(INFO.phone)}`}
+                href={`tel:${toDialNumber(STORE_DATA.phone)}`}
                 className={STYLE.infoLink}
               >
                 <Image
-                  src="/images/icon/icon_phone.png"
-                  alt="전화"
+                  src={STORE_DATA.infoIcons.phone}
+                  alt={informationSection.phoneIconAlt}
                   width={40}
                   height={40}
                   className={STYLE.mainIcon}
                 />
                 <div className={STYLE.infoTextWrap}>
-                  <span className={STYLE.infoText}>{INFO.phone}</span>
+                  <span className={STYLE.infoText}>{STORE_DATA.phone}</span>
                   <ExternalLink className={STYLE.extIcon} />
                 </div>
               </a>
 
-              <a href={`mailto:${INFO.email}`} className={STYLE.infoLink}>
+              <a href={`mailto:${STORE_DATA.email}`} className={STYLE.infoLink}>
                 <Image
-                  src="/images/icon/icon_round-mail.png"
-                  alt="이메일"
+                  src={STORE_DATA.infoIcons.email}
+                  alt={informationSection.emailIconAlt}
                   width={40}
                   height={40}
                   className={STYLE.mainIcon}
                 />
                 <div className={STYLE.infoTextWrap}>
-                  <span className={STYLE.infoText}>{INFO.email}</span>
+                  <span className={STYLE.infoText}>{STORE_DATA.email}</span>
                   <ExternalLink className={STYLE.extIcon} />
                 </div>
               </a>
 
               <div className={STYLE.chip}>
-                <p className={STYLE.chipTitle}>영업시간</p>
-                <p className={STYLE.chipBody}>{INFO.businessHours}</p>
+                <p className={STYLE.chipTitle}>{informationSection.businessHoursLabel}</p>
+                <p className={STYLE.chipBody}>{STORE_DATA.businessHours}</p>
               </div>
 
               <div className={STYLE.snsRow}>
-                <a
-                  href={INFO.sns.instagram}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className={`${STYLE.snsLink} group`}
-                  aria-label="Instagram"
-                >
-                  <span className={STYLE.snsIconWrap}>
-                    <Image
-                      src="/images/icon/icon-sns-instagram.png"
-                      alt="Instagram"
-                      width={60}
-                      height={60}
-                      className={STYLE.snsIconBase}
-                    />
-                    <Image
-                      src="/images/icon/icon-sns-instagram-hover.png"
-                      alt="Instagram"
-                      width={60}
-                      height={60}
-                      className={STYLE.snsIconHover}
-                    />
-                  </span>
-                </a>
-                <a
-                  href={INFO.sns.youtube}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className={`${STYLE.snsLink} group`}
-                  aria-label="YouTube"
-                >
-                  <span className={STYLE.snsIconWrap}>
-                    <Image
-                      src="/images/icon/icon-sns-youtube.png"
-                      alt="YouTube"
-                      width={60}
-                      height={60}
-                      className={STYLE.snsIconBase}
-                    />
-                    <Image
-                      src="/images/icon/icon-sns-youtube-hover.png"
-                      alt="YouTube"
-                      width={60}
-                      height={60}
-                      className={STYLE.snsIconHover}
-                    />
-                  </span>
-                </a>
-                <a
-                  href={INFO.sns.x}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className={`${STYLE.snsLink} group`}
-                  aria-label="X"
-                >
-                  <span className={STYLE.snsIconWrap}>
-                    <Image
-                      src="/images/icon/icon-sns-x.png"
-                      alt="X"
-                      width={60}
-                      height={60}
-                      className={STYLE.snsIconBase}
-                    />
-                    <Image
-                      src="/images/icon/icon-sns-x-hover.png"
-                      alt="X"
-                      width={60}
-                      height={60}
-                      className={STYLE.snsIconHover}
-                    />
-                  </span>
-                </a>
+                {snsEntries.map((snsItem) => (
+                  <a
+                    key={snsItem.label}
+                    href={snsItem.href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className={`${STYLE.snsLink} group`}
+                    aria-label={snsItem.label}
+                  >
+                    <span className={STYLE.snsIconWrap}>
+                      <Image
+                        src={snsItem.iconSrc}
+                        alt={snsItem.label}
+                        width={60}
+                        height={60}
+                        className={STYLE.snsIconBase}
+                      />
+                      <Image
+                        src={snsItem.hoverIconSrc}
+                        alt={snsItem.label}
+                        width={60}
+                        height={60}
+                        className={STYLE.snsIconHover}
+                      />
+                    </span>
+                  </a>
+                ))}
               </div>
             </div>
           </div>

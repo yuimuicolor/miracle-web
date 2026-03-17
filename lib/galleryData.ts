@@ -1,5 +1,6 @@
 import path from "node:path";
 import { readdirSync } from "node:fs";
+import { BRAND_DATA } from "@/lib/siteData";
 
 export interface GalleryImageItem {
   src: string;
@@ -62,7 +63,7 @@ const formatAltFromFileName = (fileName: string) => {
     .replace(/\s+/g, " ")
     .trim();
 
-  return `MIRACLE gallery ${cleaned}`;
+  return `${BRAND_DATA.uppercaseName} gallery ${cleaned}`;
 };
 
 const formatFallbackTitle = (fileName: string) => {
@@ -90,7 +91,7 @@ export const getGalleryImages = (limit?: number): GalleryImageItem[] => {
     return selectedFiles.map((fileName) => {
       const baseName = fileName.replace(/\.[^.]+$/, "");
       return {
-        subtitle: GALLERY_TITLE_MAP[baseName]?.subtitle ?? "MIRACLE ARCHIVE",
+        subtitle: GALLERY_TITLE_MAP[baseName]?.subtitle ?? `${BRAND_DATA.uppercaseName} ARCHIVE`,
         mainTitle: GALLERY_TITLE_MAP[baseName]?.mainTitle ?? formatFallbackTitle(fileName),
         src: `/images/gallery/${fileName}`,
         alt: formatAltFromFileName(fileName),

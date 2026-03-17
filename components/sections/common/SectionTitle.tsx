@@ -11,8 +11,8 @@ const STYLE = {
   `,
     
   title: `
-    font-gilda font-normal uppercase 
-    text-[3.6rem] leading-[3.6rem] tracking-[-0.05em]
+    font-gilda font-normal uppercase antialiased [text-rendering:geometricPrecision] [-webkit-font-smoothing:antialiased]
+    text-[3.4rem] leading-[1.08] tracking-[-0.01em]
     md:text-[5.6rem] md:leading-[5.6rem] md:tracking-[-0.05em]
     lg:text-[8rem] lg:leading-[8rem] lg:tracking-[0em]
   `,

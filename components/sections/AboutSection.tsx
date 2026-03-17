@@ -4,6 +4,7 @@ import { readdirSync } from "node:fs";
 import MoreButton from "../MoreButton";
 import AboutSlider from "./AboutSlider";
 import SectionTitle from "./common/SectionTitle";
+import { HOME_CONTENT } from "@/lib/siteData";
 
 const ABOUT_SLIDER_DIR = path.join(
   process.cwd(),
@@ -54,38 +55,38 @@ const STYLE = {
   lead: `flex flex-col gap-[0.8rem] lg:gap-[2rem]
   font-noto tracking-[-0.03em] text-white
   text-[3.2rem] md:text-[4.8rem] lg:text-[5.6rem]`,
-  leadLine: "whitespace-nowrap",
-  leadHighlight: "px-[1rem] bg-point font-bold",
-  leadAccent: "px-[1rem] bg-white font-bold text-point",
+  leadLine: "leading-[1.5] lg:leading-[1.3]",
+  leadSegmentPoint:
+    "inline px-[0.8rem] font-bold text-white [box-decoration-break:clone] [-webkit-box-decoration-break:clone] bg-point",
+  leadSegmentInverse:
+    "inline px-[0.8rem] font-bold text-point [box-decoration-break:clone] [-webkit-box-decoration-break:clone] bg-white",
   desc: "text-[1.6rem] md:text-[1.8rem] lg:text-[2rem] leading-[1.5] tracking-[-0.05em] text-white",
 };
 
 export default function AboutSection() {
   const slides = getAboutSlides();
+  const { aboutSection } = HOME_CONTENT;
 
   return (
     <section className={STYLE.section}>
       <div className={STYLE.content}>
-        <SectionTitle title="About Us" color="white" />
+        <SectionTitle title={aboutSection.sectionTitle} color="white" />
         <div className={STYLE.body}>
           <div className={STYLE.textWrap}>
             <p className={STYLE.lead}>
               <span className={STYLE.leadLine}>
-                <span className={STYLE.leadHighlight}>독창적인 발상</span>으로
+                <span className={STYLE.leadSegmentPoint}>독창적인 발상</span>
+                으로
               </span>
               <span className={STYLE.leadLine}>
-                일상에 <span className={STYLE.leadAccent}>기적 같은 변화</span>
-                를.
+                일상에 <span className={STYLE.leadSegmentInverse}>기적 같은 변화</span>를.
               </span>
             </p>
 
-            <p className={STYLE.desc}>
-              MIRACLE은 남들과는 다른 상상력으로 당신의 일상에서 <br />
-              기적과 같은 변화를 함께 만들어 가는 친구가 되기를 꿈꿉니다.
-            </p>
+            <p className={`${STYLE.desc} whitespace-pre-line`}>{aboutSection.description}</p>
 
             <Link href="/aboutus">
-              <MoreButton text="MORE" size="S" mode="light" />
+              <MoreButton text={aboutSection.moreButtonText} size="S" mode="light" />
             </Link>
           </div>
 

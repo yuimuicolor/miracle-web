@@ -1,41 +1,4 @@
-const introRows = [
-	{
-		title: '독창적인 발상 으로',
-		accent: '일상에 기적 같은 변화 를.',
-		body: '미라클은 브랜드의 본질을 깊게 해석하고, 감각적인 시각 언어로 재구성합니다.\n작은 차이가 큰 인상을 만든다는 믿음으로 한 장면씩 완성합니다.',
-		imageClass: 'rounded-full',
-		reverse: false,
-	},
-	{
-		title: 'MING: 기적',
-		accent: '보이지 않는 가치를 보이게.',
-		body: '전략적 사고와 크리에이티브의 접점에서 고객의 문제를 해결합니다.\n단순히 예쁜 디자인을 넘어 성과를 만드는 브랜드 경험을 만듭니다.',
-		imageClass: 'rounded-[120px]',
-		reverse: true,
-	},
-	{
-		title: '고양이는 귀엽습니다',
-		accent: '디테일은 결국 설득력이 됩니다.',
-		body: '우리는 문장, 그리드, 여백, 타이포그래피 같은 기본 요소를 집요하게 다룹니다.\n브랜드가 오래 기억되도록 감정의 밀도를 디자인합니다.',
-		imageClass: 'rounded-[120px]',
-		reverse: false,
-	},
-];
-
-const historyItems = [
-	{ year: '2016', date: '01-03', title: '브랜드 스튜디오 설립' },
-	{ year: '2017', date: '04-05', title: 'MIRACLE 리브랜딩 공개' },
-	{ year: '2018', date: '05-06', title: '디지털 캠페인 전개' },
-	{ year: '2019', date: '11-16', title: '브랜드 전략팀 확장' },
-	{ year: '2022', date: '04-01', title: '크리에이티브 랩 론칭' },
-	{ year: '2025', date: '11-11', title: 'K-브랜드 글로벌 진출' },
-];
-
-const certificates = Array.from({ length: 10 }).map((_, index) => ({
-	id: index + 1,
-	title: `TITLE | ${index + 1}호`,
-	desc: '브랜드 디자인 최우수상',
-}));
+import { ABOUT_PAGE_CONTENT } from "@/lib/aboutPageData";
 
 const STYLE = {
 	main: 'bg-bg-dark text-white min-h-screen pt-[11.25rem] pb-32 px-6 sm:px-10 md:px-20',
@@ -50,9 +13,13 @@ const STYLE = {
 	introTextWrap: 'space-y-5',
 	introBadgeTitle: 'font-kr-l-bold',
 	introBadgeTitleText: 'bg-point px-2 py-1 inline-block',
+	introBadgeTitlePlain: 'px-1 py-1 inline-block',
 	introAccent: 'font-kr-l-med leading-[1.35]',
 	introAccentText: 'bg-white text-point px-2 py-1 inline-block',
+	introAccentPlain: 'px-1 py-1 inline-block',
 	introBody: 'font-kr-xs-reg text-white/85 whitespace-pre-line max-w-[35rem]',
+	introBodyPoint: 'text-point font-kr-xs-bold',
+	introBodyInverse: 'bg-white text-point px-1',
 	introVisualWrap: 'flex justify-center lg:justify-end',
 	introVisual: (imageClass: string) => `w-[17.5rem] h-[17.5rem] sm:w-[22.5rem] sm:h-[22.5rem] overflow-hidden ${imageClass}`,
 	introImage: 'w-full h-full object-cover saturate-150 contrast-110',
@@ -91,35 +58,115 @@ const STYLE = {
 };
 
 export default function AboutUsPage() {
+	const { pageTitle, pageTitleStar, introRows, trustText, history, certificates, ceo } = ABOUT_PAGE_CONTENT;
+
+	const renderIntroCopy = (index: number) => {
+		switch (index) {
+			case 0:
+				return {
+					title: (
+						<>
+							<span className={STYLE.introBadgeTitleText}>독창적인 발상</span>
+							<span className={STYLE.introBadgeTitlePlain}>으로</span>
+						</>
+					),
+					accent: (
+						<>
+							<span className={STYLE.introAccentPlain}>일상에 </span>
+							<span className={STYLE.introAccentText}>기적 같은 변화</span>
+							<span className={STYLE.introAccentPlain}>를.</span>
+						</>
+					),
+					body: (
+						<>
+							미라클은 브랜드의 본질을 깊게 해석하고, 감각적인 시각 언어로 재구성합니다.
+							<br />
+							작은 차이가 <span className={STYLE.introBodyPoint}>큰 인상</span>을 만든다는 믿음으로
+							 한 장면씩 완성합니다.
+						</>
+					),
+				};
+			case 1:
+				return {
+					title: (
+						<>
+							<span className={STYLE.introBadgeTitlePlain}>MING:</span>
+							<span className={STYLE.introBadgeTitleText}>기적</span>
+						</>
+					),
+					accent: (
+						<>
+							<span className={STYLE.introAccentText}>보이지 않는 가치</span>
+							<span className={STYLE.introAccentPlain}>를 보이게.</span>
+						</>
+					),
+					body: (
+						<>
+							전략적 사고와 크리에이티브의 접점에서 고객의 문제를 해결합니다.
+							<br />
+							단순히 예쁜 디자인을 넘어
+							 <span className={STYLE.introBodyInverse}>성과를 만드는 브랜드 경험</span>을 만듭니다.
+						</>
+					),
+				};
+			default:
+				return {
+					title: (
+						<>
+							<span className={STYLE.introBadgeTitleText}>고양이</span>
+							는 귀엽습니다
+						</>
+					),
+					accent: (
+						<>
+							디테일은 결국 <span className={STYLE.introAccentText}>설득력</span>이 됩니다.
+						</>
+					),
+					body: (
+						<>
+							우리는 문장, 그리드, 여백, 타이포그래피 같은 기본 요소를 집요하게 다룹니다.
+							<br />
+							브랜드가 오래 기억되도록
+							 <span className={STYLE.introBodyPoint}>감정의 밀도</span>를 디자인합니다.
+						</>
+					),
+				};
+		}
+	};
+
 	return (
 		<main className={STYLE.main}>
 			<section className={STYLE.sectionBase}>
 				<div className={STYLE.headerRow}>
-					<h1 className={STYLE.mainTitle}>ABOUT US<span className={STYLE.pointStar}>*</span></h1>
+					<h1 className={STYLE.mainTitle}>{pageTitle}<span className={STYLE.pointStar}>{pageTitleStar}</span></h1>
 					<div className={STYLE.titleLine} />
 				</div>
 
 				<div className={STYLE.introList}>
 					{introRows.map((row, index) => (
+						(() => {
+							const copy = renderIntroCopy(index);
+
+							return (
 						<div
-							key={row.title}
+							key={`intro-row-${index}`}
 							className={STYLE.introGrid(row.reverse)}
 						>
 							<div className={STYLE.introTextWrap}>
 								<h2 className={STYLE.introBadgeTitle}>
-									<span className={STYLE.introBadgeTitleText}>{row.title}</span>
+									{copy.title}
 								</h2>
 								<p className={STYLE.introAccent}>
-									<span className={STYLE.introAccentText}>{row.accent}</span>
+									{copy.accent}
 								</p>
-								<p className={STYLE.introBody}>{row.body}</p>
+								<p className={STYLE.introBody}>{copy.body}</p>
 							</div>
 
 							<div className={STYLE.introVisualWrap}>
 								<div className={STYLE.introVisual(row.imageClass)}>
 									<img
 										src="/images/main-bg.png"
-										alt="about visual"
+										alt={`about-intro-${index + 1}`}
 										className={STYLE.introImage}
 									/>
 								</div>
@@ -128,24 +175,26 @@ export default function AboutUsPage() {
 							{index === 1 && (
 								<div className={STYLE.trustWrap}>
 									<p className={STYLE.trustText}>
-										Trust Integrity Reliability Transformation
+										{trustText}
 									</p>
 								</div>
 							)}
 						</div>
+							);
+						})()
 					))}
 				</div>
 			</section>
 
 			<section className={`${STYLE.sectionBase} ${STYLE.sectionGapTop}`}>
 				<div className={STYLE.sectionHeading}>
-					<p className={STYLE.sectionHeadingEn}>HISTORY</p>
-					<h3 className={STYLE.sectionHeadingKr}>히스토리</h3>
-					<p className={STYLE.sectionHeadingDesc}>미라클의 발자취를 연도별로 확인해보세요.</p>
+					<p className={STYLE.sectionHeadingEn}>{history.headingEn}</p>
+					<h3 className={STYLE.sectionHeadingKr}>{history.headingKo}</h3>
+					<p className={STYLE.sectionHeadingDesc}>{history.description}</p>
 				</div>
 
 				<div className={STYLE.historyGrid}>
-					{historyItems.map((item) => (
+					{history.items.map((item) => (
 						<article key={`${item.year}-${item.date}`} className={STYLE.historyCard}>
 							<div className={STYLE.historyImageWrap}>
 								<img src="/images/main-bg.png" alt={item.title} className={STYLE.historyImage} />
@@ -164,13 +213,13 @@ export default function AboutUsPage() {
 
 			<section className={`${STYLE.sectionBase} ${STYLE.sectionGapTop}`}>
 				<div className={STYLE.sectionHeading}>
-					<p className={STYLE.sectionHeadingEn}>CERTIFICATE</p>
-					<h3 className={STYLE.sectionHeadingKr}>인증서</h3>
-					<p className={STYLE.sectionHeadingDesc}>공식 인증 및 수상 내역입니다.</p>
+					<p className={STYLE.sectionHeadingEn}>{certificates.headingEn}</p>
+					<h3 className={STYLE.sectionHeadingKr}>{certificates.headingKo}</h3>
+					<p className={STYLE.sectionHeadingDesc}>{certificates.description}</p>
 				</div>
 
 				<div className={STYLE.certificateGrid}>
-					{certificates.map((cert) => (
+					{certificates.items.map((cert) => (
 						<article key={cert.id} className={STYLE.certificateCard}>
 							<div className={STYLE.certificateImageRatio}>
 								<img src="/images/main-bg.png" alt={cert.title} className={STYLE.historyImage} />
@@ -186,18 +235,16 @@ export default function AboutUsPage() {
 
 			<section className={STYLE.ceoSection}>
 				<div>
-					<p className={STYLE.ceoEnLabel}>CHIEF EXECUTIVE OFFICER</p>
-					<h3 className={STYLE.ceoTitle}>C.E.O</h3>
+					<p className={STYLE.ceoEnLabel}>{ceo.label}</p>
+					<h3 className={STYLE.ceoTitle}>{ceo.title}</h3>
 					<div className={STYLE.ceoBar} />
 					<p className={STYLE.ceoNameWrap}>
-						<span className={STYLE.ceoNameText}>김미라 / MIRA KIM</span>
+						<span className={STYLE.ceoNameText}>{ceo.name}</span>
 					</p>
-					<p className={STYLE.ceoDescription}>
-						브랜드 전략과 시각 설계를 연결하며,{'\n'}의미 있는 변화가 일어나는 디자인을 만듭니다.{"\n"}C.E.O로서 미라클의 방향성을 총괄합니다.
-					</p>
+					<p className={STYLE.ceoDescription}>{ceo.description}</p>
 
 					<div className={STYLE.ceoSocialWrap}>
-						{['IG', 'YT', 'X'].map((channel) => (
+						{ceo.socialChannels.map((channel) => (
 							<button
 								key={channel}
 								className={STYLE.ceoSocialButton}
@@ -209,7 +256,7 @@ export default function AboutUsPage() {
 				</div>
 
 				<div className={STYLE.ceoVisualWrap}>
-					<img src="/images/main-bg.png" alt="ceo" className={STYLE.ceoVisual} />
+					<img src="/images/main-bg.png" alt={ceo.imageAlt} className={STYLE.ceoVisual} />
 				</div>
 			</section>
 		</main>

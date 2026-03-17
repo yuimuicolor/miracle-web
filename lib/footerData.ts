@@ -1,3 +1,5 @@
+import { BRAND_DATA, STORE_DATA } from "@/lib/siteData";
+
 export interface FooterItem {
   label: string;
   value: string;
@@ -5,18 +7,20 @@ export interface FooterItem {
 
 export interface FooterData {
   logoSrc: string;
+  logoAlt: string;
   items: FooterItem[];
   policyText: string;
 }
 
 export const FOOTER_DATA: FooterData = {
-  logoSrc: "/images/miracle-main-logo.png",
+  logoSrc: BRAND_DATA.logoSrc,
+  logoAlt: BRAND_DATA.logoAlt,
   items: [
-    { label: "대표이사", value: "고재우" },
-    { label: "사업자등록번호", value: "555-555-5555" },
-    { label: "주소", value: "서울시 성동구 성수이로 123, 4F" },
-    { label: "전화", value: "1555-5555" },
-    { label: "메일", value: "miracle@miracle.com" },
+    { label: "대표이사", value: STORE_DATA.ownerName },
+    { label: "사업자등록번호", value: STORE_DATA.businessRegistrationNumber },
+    { label: "주소", value: STORE_DATA.footerAddress },
+    { label: "전화", value: STORE_DATA.footerPhone },
+    { label: "메일", value: STORE_DATA.footerEmail },
   ],
-  policyText: "개인정보처리방침",
+  policyText: STORE_DATA.privacyPolicyText,
 };

@@ -3,6 +3,7 @@
 import { useState, ChangeEvent, FormEvent } from "react";
 import { supabase } from "@/lib/supabase";
 import { ContactData } from "@/types/contact";
+import { HOME_CONTENT } from "@/lib/siteData";
 
 const STYLE = {
   section: `w-full min-h-screen-minus-header-offset bg-point
@@ -28,6 +29,7 @@ const STYLE = {
 };
 
 export default function ContactUsSection() {
+  const { contactSection } = HOME_CONTENT;
   const [formData, setFormData] = useState<ContactData>({
     name: "",
     phone: "",
@@ -52,90 +54,59 @@ export default function ContactUsSection() {
     <section className={STYLE.section}>
       <div className={STYLE.inner}>
         <h1 className={STYLE.title}>
-          CONTACT US<span className={STYLE.titleStar}>*</span>
+          {contactSection.title}<span className={STYLE.titleStar}>{contactSection.titleStar}</span>
         </h1>
         <div className={STYLE.divider} />
 
         <form onSubmit={handleSubmit} className={STYLE.form}>
           <div className={STYLE.formGrid}>
-            <div className={STYLE.fieldBlock}>
-              <label className={STYLE.label}>
-                이름<span className={STYLE.required}>*</span>
-              </label>
-              <input
-                name="name"
-                required
-                value={formData.name}
-                onChange={handleChange}
-                className={STYLE.input}
-              />
-            </div>
+            {contactSection.fields.map((field) => {
+              const isTextarea = field.inputType === "textarea";
 
-            <div className={STYLE.fieldBlock}>
-              <label className={STYLE.label}>
-                연락처<span className={STYLE.required}>*</span>
-              </label>
-              <input
-                name="phone"
-                required
-                value={formData.phone}
-                onChange={handleChange}
-                className={STYLE.input}
-              />
-            </div>
-
-            <div className={STYLE.fieldBlock}>
-              <label className={STYLE.label}>
-                이메일<span className={STYLE.required}>*</span>
-              </label>
-              <input
-                name="email"
-                type="email"
-                required
-                value={formData.email}
-                onChange={handleChange}
-                className={STYLE.input}
-              />
-            </div>
-
-            <div className={STYLE.fieldBlock}>
-              <label className={STYLE.label}>
-                회사명
-              </label>
-              <input
-                name="company"
-                value={formData.company}
-                onChange={handleChange}
-                className={STYLE.input}
-              />
-            </div>
-
-            <div className={STYLE.fieldBlockMessage}>
-              <label className={STYLE.label}>
-                내용<span className={STYLE.required}>*</span>
-              </label>
-              <textarea
-                name="message"
-                required
-                rows={4}
-                value={formData.message}
-                onChange={handleChange}
-                className={STYLE.textarea}
-              />
-            </div>
+              return (
+                <div
+                  key={field.name}
+                  className={isTextarea ? STYLE.fieldBlockMessage : STYLE.fieldBlock}
+                >
+                  <label className={STYLE.label}>
+                    {field.label}
+                    {field.required ? <span className={STYLE.required}>*</span> : null}
+                  </label>
+                  {isTextarea ? (
+                    <textarea
+                      name={field.name}
+                      required={field.required}
+                      rows={field.rows ?? 4}
+                      value={formData[field.name]}
+                      onChange={handleChange}
+                      className={STYLE.textarea}
+                    />
+                  ) : (
+                    <input
+                      name={field.name}
+                      type={field.type ?? "text"}
+                      required={field.required}
+                      value={formData[field.name]}
+                      onChange={handleChange}
+                      className={STYLE.input}
+                    />
+                  )}
+                </div>
+              );
+            })}
           </div>
 
           <div className={STYLE.submitWrap}>
             <label className={STYLE.consentLabel}>
               <input type="checkbox" required className={STYLE.checkbox} />
-              <span>(필수) 아래 개인정보 이용 정책에 동의합니다. <span className="font-bold">[전문보기]</span></span>
+              <span>{contactSection.consentText} <span className="font-bold">{contactSection.consentLinkLabel}</span></span>
             </label>
 
             <button
               type="submit"
               className={STYLE.submitButton}
             >
-              제출
+              {contactSection.submitButtonText}
             </button>
           </div>
         </form>

@@ -3,6 +3,7 @@ import ZoomablePhotoCard from "@/components/gallery/ZoomablePhotoCard";
 import { getGalleryImages, type GalleryImageItem } from "../../lib/galleryData";
 import MoreButton from "../MoreButton";
 import SectionTitle from "./common/SectionTitle";
+import { HOME_CONTENT } from "@/lib/siteData";
 
 const STYLE = {
   section: `w-full flex flex-col items-center
@@ -21,12 +22,13 @@ const STYLE = {
 };
 
 export default function GallerySection() {
+  const { gallerySection } = HOME_CONTENT;
   const galleryImages = getGalleryImages(6);
 
   return (
     <section className={STYLE.section}>
       <div className={STYLE.content}>
-        <SectionTitle title="Gallery" color="white" />
+        <SectionTitle title={gallerySection.sectionTitle} color="white" />
 
         <div className={STYLE.grid}>
           {galleryImages.map((image: GalleryImageItem) => (
@@ -36,7 +38,7 @@ export default function GallerySection() {
 
         <div className={STYLE.buttonWrap}>
           <Link href="/gallery">
-            <MoreButton text="전체보기" size="L" mode="light" />
+            <MoreButton text={gallerySection.moreButtonText} size="L" mode="light" />
           </Link>
         </div>
       </div>

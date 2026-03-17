@@ -6,9 +6,9 @@ import ProductBox from "@/components/products/ProductBox";
 import MoreButton from "../MoreButton";
 import SectionTitle from "./common/SectionTitle";
 import { PRODUCTS } from "@/lib/productsData";
+import { BRAND_DATA, HOME_CONTENT } from "@/lib/siteData";
 
 const AUTO_SPEED = 1.21;
-const BRAND_NAME = "MIRACLE";
 
 const STYLE = {
   section: `w-full min-h-screen bg-bg-light
@@ -28,6 +28,7 @@ const STYLE = {
 };
 
 export default function ProductsSection() {
+  const { productsSection } = HOME_CONTENT;
   const trackRef = useRef<HTMLDivElement | null>(null);
   const [grabbing, setGrabbing] = useState(false);
 
@@ -150,9 +151,9 @@ export default function ProductsSection() {
     <section className={STYLE.section}>
       <div className={STYLE.content}>
         <div className={STYLE.titleWrap}>
-          <SectionTitle title="Products" color="black" />
+          <SectionTitle title={productsSection.sectionTitle} color="black" />
           <p className={STYLE.subText}>
-            <strong className="font-bold">{BRAND_NAME}</strong>이 자랑하는 대표 제품들을 소개합니다.
+            <strong className="font-bold">{BRAND_DATA.uppercaseName}</strong>{productsSection.description}
           </p>
         </div>
 
@@ -160,7 +161,7 @@ export default function ProductsSection() {
           <button
             type="button"
             className={`${STYLE.arrowButton}`}
-            aria-label="이전 제품 보기"
+            aria-label={productsSection.previousAriaLabel}
             onClick={() => scrollByCard("prev")}
           >
             ‹
@@ -184,7 +185,7 @@ export default function ProductsSection() {
           <button
             type="button"
             className={`${STYLE.arrowButton}`}
-            aria-label="다음 제품 보기"
+            aria-label={productsSection.nextAriaLabel}
             onClick={() => scrollByCard("next")}
           >
             ›
@@ -193,7 +194,7 @@ export default function ProductsSection() {
 
         <div className={STYLE.buttonWrap}>
           <Link href="/products">
-            <MoreButton text="전체보기" size="L" mode="dark" />
+            <MoreButton text={productsSection.moreButtonText} size="L" mode="dark" />
           </Link>
         </div>
       </div>

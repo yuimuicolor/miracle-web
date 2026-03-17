@@ -46,7 +46,7 @@ export default function Footer() {
         <div>
           <img
           src={FOOTER_DATA.logoSrc}
-          alt="Miracle"
+          alt={FOOTER_DATA.logoAlt}
           className={STYLE.logo}
         />
         </div>

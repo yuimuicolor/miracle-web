@@ -1,6 +1,7 @@
 import GalleryPageGrid from "../../components/gallery/GalleryPageGrid";
 import SectionTitle from "@/components/sections/common/SectionTitle";
 import { getGalleryImages } from "../../lib/galleryData";
+import { HOME_CONTENT } from "@/lib/siteData";
 
 const STYLE = {
   section: `relative flex w-full flex-col items-center overflow-hidden bg-bg-dark`,
@@ -13,6 +14,7 @@ const STYLE = {
 };
 
 export default function GalleryPage() {
+  const { gallerySection } = HOME_CONTENT;
   const galleryImages = getGalleryImages();
 
   return (
@@ -20,7 +22,7 @@ export default function GalleryPage() {
       <div className={STYLE.bgImage} />
       <div className={STYLE.bgOverlay} />
       <div className={STYLE.content}>
-        <SectionTitle title="Gallery" color="white" />
+        <SectionTitle title={gallerySection.sectionTitle} color="white" />
         <GalleryPageGrid images={galleryImages} />
       </div>
     </section>

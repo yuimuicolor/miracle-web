@@ -4,13 +4,7 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { HEADER_CONFIG, HEADER_HEIGHTS_CSS } from "@/lib/headerConfig";
-
-const menuData = [
-  { title: "ABOUT US", href: "/aboutus", submenus: ["회사소개", "히스토리", "인증서", "CEO소개"] },
-  { title: "PRODUCTS", href: "/products", submenus: ["제품1", "제품2", "제품3"] },
-  { title: "GALLERY", href: "/gallery", submenus: [] },
-  { title: "CONTACT", href: "/contact", submenus: ["오시는길", "상담문의"] },
-];
+import { BRAND_DATA, NAVIGATION_MENU } from "@/lib/siteData";
 
 const STYLE = {
   headerPC: `
@@ -74,7 +68,7 @@ export default function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [expandedMobileMenus, setExpandedMobileMenus] = useState<number[]>([]);
   const [deviceType, setDeviceType] = useState<"pc" | "tablet" | "mobile">("mobile");
-  const activatedMenu = menuData.find((menu) => pathname.startsWith(menu.href))?.title ?? "";
+  const activatedMenu = NAVIGATION_MENU.find((menu) => pathname.startsWith(menu.href))?.title ?? "";
   const isPC = deviceType === "pc";
   const isTablet = deviceType === "tablet";
   const canHoverMenu = isPC;
@@ -84,7 +78,7 @@ export default function Header() {
 
   const activeSubmenuHeight =
     canHoverMenu && isHovered && hoveredMenu !== null
-      ? menuData[hoveredMenu].submenus.length * HEADER_CONFIG.SUBMENU_HEIGHT_REM
+      ? NAVIGATION_MENU[hoveredMenu].submenus.length * HEADER_CONFIG.SUBMENU_HEIGHT_REM
       : 0;
 
   const totalHeight = `calc(${HEADER_HEIGHTS_CSS.PC} + ${isHovered ? activeSubmenuHeight : 0}rem)`;
@@ -146,7 +140,7 @@ export default function Header() {
     return (
       <header className={`${STYLE.headerMobile} ${isMenuOpen ? "h-screen overflow-y-auto bg-point" : "bg-linear-to-b from-[#767676] to-transparent"}`}>
         <div className={STYLE.mobileTopRow} style={{ height: mobileHeaderHeight }}>
-          <Link href="/"><img src="/images/miracle-main-logo.png" alt="Logo" className={STYLE.logo} /></Link>
+          <Link href="/"><img src={BRAND_DATA.logoSrc} alt={BRAND_DATA.logoAlt} className={STYLE.logo} /></Link>
 
           <div className={STYLE.mobileRightControls}>
             {isMenuOpen && (
@@ -182,7 +176,7 @@ export default function Header() {
 
         {isMenuOpen && (
           <nav className={STYLE.mobileMenuPanel}>
-            {menuData.map((menu, index) => {
+            {NAVIGATION_MENU.map((menu, index) => {
               const hasSubmenus = menu.submenus.length > 0;
               const isExpanded = hasSubmenus && expandedMobileMenus.includes(index);
 
@@ -223,12 +217,12 @@ export default function Header() {
                     <div className={STYLE.mobileSubmenuWrap}>
                       {menu.submenus.map((sub) => (
                         <Link
-                          key={sub}
-                          href={`${menu.href}/${sub.replace(/\s+/g, "").toLowerCase()}`}
+                          key={sub.href}
+                          href={sub.href}
                           className={STYLE.mobileSubmenuItem}
                           onClick={() => handleHeaderLinkClick(menu.href)}
                         >
-                          {sub}
+                          {sub.label}
                         </Link>
                       ))}
                     </div>
@@ -254,10 +248,10 @@ export default function Header() {
         style={{ height: totalHeight }}
       />
 
-      <Link href="/"><img src="/images/miracle-main-logo.png" alt="Logo" className={STYLE.logo} /></Link>
+      <Link href="/"><img src={BRAND_DATA.logoSrc} alt={BRAND_DATA.logoAlt} className={STYLE.logo} /></Link>
 
       <nav className={STYLE.nav}>
-        {menuData.map((menu, index) => (
+        {NAVIGATION_MENU.map((menu, index) => (
           <div
             key={menu.title}
             className={STYLE.menuWrap}
@@ -276,12 +270,12 @@ export default function Header() {
               <div className={STYLE.submenu}>
                 {menu.submenus.map((sub) => (
                   <Link
-                    key={sub}
-                    href={`${menu.href}/${sub.replace(/\s+/g, "").toLowerCase()}`}
+                    key={sub.href}
+                    href={sub.href}
                     className={STYLE.submenuItem}
                     onClick={() => handleHeaderLinkClick(menu.href)}
                   >
-                    {sub}
+                    {sub.label}
                   </Link>
                 ))}
               </div>
