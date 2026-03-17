@@ -19,7 +19,7 @@ const STYLE = {
   imageWrap: "relative aspect-[3/2] w-full overflow-hidden rounded-[0.8rem]",
   image: "object-cover",
   hoverOverlay: `
-    pointer-events-none absolute inset-0 bg-hover/70
+    pointer-events-none absolute inset-0 bg-hover/70 backdrop-blur-[4px]
     opacity-0 transition-opacity duration-300
     group-hover:opacity-100
   `,
