@@ -12,13 +12,22 @@ const STYLE = {
     pt-[8rem] md:pt-[10rem] lg:pt-[12rem]
   `,
   content: "mx-auto flex w-full flex-col gap-[4rem] md:gap-[5rem]",
-  titleWrap: "flex items-center gap-[2rem]",
+  titleWrap: `
+    flex gap-[2rem]
+    flex-col
+    md:flex-row md:items-center
+  `,
   title: `
-    shrink-0 font-gilda text-[5.6rem] font-normal uppercase
+    shrink-0 font-gilda font-normal uppercase
     leading-[1.2] tracking-[-0.05em] text-black
+    text-[2.4rem] md:text-[3.6rem] lg:text-[5.6rem]
   `,
   star: "leading-[1.2] text-point pl-[0.2em]",
-  divider: "h-[0.1rem] w-full flex-1 bg-black",
+  divider: `
+    h-[0.1rem] bg-black
+    w-full
+    md:flex-1
+  `,
   sliderArea: "flex items-center gap-[1.2rem] md:gap-[1.6rem]",
   track: `
     no-scrollbar flex flex-1 overflow-x-auto py-[1.5rem]

@@ -14,13 +14,16 @@ const DRAG_THRESHOLD = 28;
 
 const STYLE = {
   topContainer: `
-    grid h-screen-minus-header-offset grid-cols-2 gap-[6rem] overflow-hidden
+    flex flex-col overflow-hidden items-center
+    gap-[4rem]
+    md:gap-[6rem]
+    xl:grid xl:h-screen-minus-header-offset xl:grid-cols-2 xl:gap-[6rem] xl:items-stretch
   `,
   leftCol: `
-    no-scrollbar flex size-full flex-col items-end overflow-y-auto
-    gap-[3rem]
+    contents no-scrollbar
+    xl:flex xl:size-full xl:flex-col xl:items-end xl:overflow-y-auto xl:gap-[3rem]
   `,
-  thumbnailWrap: "flex w-full max-w-[70rem]  flex-col items-center gap-[1.6rem]",
+  thumbnailWrap: "order-1 xl:order-none flex w-full max-w-[70rem] flex-col items-center gap-[1.6rem]",
   thumbnailMain:
     "group relative w-full aspect-[1/1] overflow-hidden bg-black/5",
   thumbnailImage: "object-cover",
@@ -39,7 +42,7 @@ const STYLE = {
   dotRow: "flex items-center justify-center gap-[0.8rem]",
   dot: "h-[0.8rem] w-[0.8rem] rounded-full bg-black/30 transition-colors duration-200",
   dotActive: "bg-point",
-  detailImages: "flex flex-col  max-w-[70rem] ",
+  detailImages: "order-3 flex flex-col max-w-[70rem] w-full xl:order-none",
   detailImageWrap: "w-full",
 
   modal: "fixed inset-0 z-[120] flex items-center justify-center bg-black/82 px-[2rem] py-[2rem]",
@@ -50,28 +53,56 @@ const STYLE = {
     "absolute right-[2rem] top-[2rem] z-10 flex h-[4rem] w-[4rem] items-center justify-center rounded-full border border-white/20 bg-black/55 text-[2.4rem] leading-none text-white transition-colors duration-150 hover:bg-black/75",
 
   rightCol: `
-    max-w-[70rem] h-full overflow-hidden
-    flex flex-col gap-[3.2rem] items-start justify-start
+    order-2 max-w-[70rem] w-full
+    flex flex-col items-start justify-start
+    gap-[1.2rem] md:gap-[2.4rem] lg:gap-[3.2rem]
+    xl:order-none xl:h-full xl:overflow-hidden
   `,
-  category:
-    "font-noto text-[1.8rem] leading-[150%] tracking-[-0.05em] text-black/60",
+  category: `
+    font-noto text-black/60
+    text-[1.6rem] leading-[130%] tracking-[-0.05em]
+    lg:text-[1.8rem] lg:leading-[150%]
+  `,
 
   brandCol: "flex flex-col gap-[0.8rem]",
-  brandEn:
-    "font-noto font-medium text-[2.2rem] leading-[130%] tracking-[0.2em] text-black uppercase",
+  brandEn: `
+    font-noto font-medium uppercase text-black tracking-[0.2em] leading-[130%]
+    text-[1.2rem]
+    md:text-[1.8rem]
+    lg:text-[2.2rem]
+  `,
   brandKoWrap: "relative overflow-hidden",
-  brandKo:
-    "font-noto font-bold text-[5.6rem] leading-[130%] tracking-[-0.04em] text-black",
+  brandKo: `
+    font-noto font-bold text-black
+    text-[3.2rem] leading-[120%] tracking-[-0.05em]
+    md:text-[4.8rem] md:leading-[130%] md:tracking-[-0.04em]
+    lg:text-[5.6rem]
+  `,
   brandKoHighlight: "inline bg-point-light px-[1rem]",
-  divider: "h-[0.6rem] w-[10rem] bg-black rounded-full",
+  divider: `
+    bg-black rounded-full
+    w-[8rem] h-[0.2rem]
+    md:w-[10rem] md:h-[0.4rem]
+    lg:w-[10rem] lg:h-[0.6rem]
+  `,
   optionRow: "flex flex-wrap items-center gap-[1.2rem]",
-  optionChip:
-    "border border-black px-[1.2rem] py-[0.4rem] font-noto text-[1.8rem] font-medium leading-[150%] tracking-[-0.05em] text-black",
-  desc: " font-noto text-[1.8rem] font-medium leading-[150%] tracking-[-0.05em] text-black",
-  buyButton: `flex h-[7.2rem] w-[30rem] items-center justify-center rounded-full
+  optionChip: `
+    border border-black px-[1.2rem] py-[0.4rem] font-noto font-medium text-black
+    text-[1.6rem] leading-[130%] tracking-[-0.05em]
+    lg:text-[1.8rem] lg:leading-[150%]
+  `,
+  desc: `
+    font-noto font-medium text-black
+    text-[1.6rem] leading-[150%] tracking-[-0.05em]
+    lg:text-[1.8rem]
+  `,
+  buyButton: `
+    flex h-[7.2rem] items-center justify-center rounded-full
     border border-point text-point bg-white
     font-noto font-bold text-[2.4rem] leading-[100%] tracking-[-0.05em]
     transition-colors duration-200 hover:bg-point hover:text-white
+    w-full
+    md:w-[30rem]
   `,
 };
 
