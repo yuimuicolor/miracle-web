@@ -1,11 +1,12 @@
 "use client";
 
-import { Plus } from "lucide-react";
+import { ChevronRight, Plus } from "lucide-react";
 
 interface ButtonProps {
   text: string;
   size?: "L" | "S";
   mode?: "light" | "dark";
+  icon?: "plus" | "chevron-right";
   className?: string;
   onClick?: () => void;
 }
@@ -38,9 +39,12 @@ export default function MoreButton({
   text,
   size = "L",
   mode = "light",
+  icon = "plus",
   className = "",
   onClick,
 }: ButtonProps) {
+  const iconSize = size === "L" ? 24 : 20;
+
   return (
     <button
       onClick={onClick}
@@ -52,10 +56,11 @@ export default function MoreButton({
       `}
     >
       <span className={STYLE.text}>{text}</span>
-      <Plus
-        size={size === "L" ? 24 : 20}
-        className={STYLE.icon}
-      />
+      {icon === "chevron-right" ? (
+        <ChevronRight size={iconSize} className={STYLE.icon} />
+      ) : (
+        <Plus size={iconSize} className={STYLE.icon} />
+      )}
     </button>
   );
 }

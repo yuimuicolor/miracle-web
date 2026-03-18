@@ -1,5 +1,6 @@
 import { notFound } from "next/navigation";
 import ProductDetailTop from "@/components/products/ProductDetailTop";
+import OtherProductsSlider from "@/components/products/OtherProductsSlider";
 import {
   PRODUCTS,
   getProductByPathId,
@@ -36,6 +37,7 @@ export default async function ProductDetailPage({ params }: ProductDetailPagePro
   return (
     <section className={STYLE.section}>
       <ProductDetailTop product={product} />
+      <OtherProductsSlider currentProductId={product.id} />
     </section>
   );
 }

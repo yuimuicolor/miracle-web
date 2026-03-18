@@ -1,61 +1,58 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useRef, useState } from "react";
-import ProductBox from "@/components/products/ProductBox";
-import MoreButton from "../MoreButton";
-import SectionTitle from "./common/SectionTitle";
+import { useEffect, useMemo, useRef, useState } from "react";
+import MoreButton from "@/components/MoreButton";
 import { PRODUCTS, toProductPathId } from "@/lib/productsData";
-import { BRAND_DATA, HOME_CONTENT } from "@/lib/siteData";
-
-const AUTO_SPEED = 1;
+import ProductBox from "./ProductBox";
 
 const STYLE = {
   section: `
-    w-full min-h-screen bg-bg-light
-    px-[1.6rem] pt-[10rem] pb-[8rem]
-    md:px-[4rem] md:pt-[14rem] md:pb-[12rem]
-    lg:px-[8rem] lg:pt-[17rem] lg:pb-[8rem]
+    w-full bg-bg-light
+    pt-[8rem] md:pt-[10rem] lg:pt-[12rem]
   `,
-  content: "mx-auto flex w-full flex-col gap-[6rem]",
-  titleWrap: "flex flex-col gap-[0.8rem] md:gap-[0rem] lg:gap-[2rem]",
-  subText: "font-noto text-[1.6rem] md:text-[1.8rem] lg:text-[2rem] text-black",
-  sliderArea: "flex items-center gap-[1.6rem]",
+  content: "mx-auto flex w-full flex-col gap-[4rem] md:gap-[5rem]",
+  titleWrap: "flex items-center gap-[2rem]",
+  title: `
+    shrink-0 font-gilda text-[5.6rem] font-normal uppercase
+    leading-[1.2] tracking-[-0.05em] text-black
+  `,
+  star: "leading-[1.2] text-point pl-[0.2em]",
+  divider: "h-[0.1rem] w-full flex-1 bg-black",
+  sliderArea: "flex items-center gap-[1.2rem] md:gap-[1.6rem]",
   track: `
     no-scrollbar flex flex-1 overflow-x-auto py-[1.5rem]
-    gap-[1.6rem]
+    gap-[1.2rem]
     md:gap-[2rem]
   `,
-  cardWrap: "w-[30rem] shrink-0",
+  cardWrap: "w-[24rem] shrink-0 md:w-[30rem]",
   cardLink: "block",
   arrowButton:
-    "shrink-0 text-[6rem] leading-none text-black/20 transition-colors hover:text-black/45",
-  buttonWrap: "flex justify-center",
+    "shrink-0 text-[5rem] leading-none text-black/20 transition-colors hover:text-black/45 md:text-[6rem]",
+  buttonWrap: "flex justify-center pt-[1rem]",
 };
 
-export default function ProductsSection() {
+interface OtherProductsSliderProps {
+  currentProductId: string;
+}
+
+export default function OtherProductsSlider({ currentProductId }: OtherProductsSliderProps) {
   const ARROW_SCROLL_DURATION = 420;
 
-  const { productsSection } = HOME_CONTENT;
+  const products = useMemo(
+    () => PRODUCTS.filter((item) => item.id !== currentProductId),
+    [currentProductId],
+  );
+
   const trackRef = useRef<HTMLDivElement | null>(null);
   const [grabbing, setGrabbing] = useState(false);
 
-  const rafRef = useRef<number>(0);
   const halfRef = useRef(0);
   const isDragging = useRef(false);
   const dragStartX = useRef(0);
   const dragScrollLeft = useRef(0);
-  const velocityRef = useRef(0);
-  const lastXRef = useRef(0);
-  const lastTimeRef = useRef(0);
-  const modeRef = useRef<"auto" | "momentum">("auto");
-  const momentumVRef = useRef(0);
-  const autoCarryRef = useRef(0);
   const dragMovedRef = useRef(false);
-  const isTrackHoveredRef = useRef(false);
-  const isHoverPauseRef = useRef(false);
   const arrowAnimRef = useRef<number>(0);
-  const autoScrollEnabledRef = useRef(true);
 
   const normalizeScroll = (value: number, half: number) => {
     if (half <= 0) return value;
@@ -64,63 +61,25 @@ export default function ProductsSection() {
 
   const calcHalf = (container: HTMLDivElement) => {
     const cards = container.querySelectorAll<HTMLElement>("[data-product-card='true']");
-    halfRef.current = cards[PRODUCTS.length]?.offsetLeft ?? container.scrollWidth / 2;
+    halfRef.current = cards[products.length]?.offsetLeft ?? container.scrollWidth / 2;
   };
 
   useEffect(() => {
     const container = trackRef.current;
-    if (!container) return;
+    if (!container || products.length === 0) return;
 
     const ro = new ResizeObserver(() => calcHalf(container));
     ro.observe(container);
 
-    const loop = () => {
-      if (!isDragging.current && !isHoverPauseRef.current) {
-        const half = halfRef.current;
-        if (half > 0) {
-          if (modeRef.current === "momentum") {
-            momentumVRef.current *= 0.86;
-            if (Math.abs(momentumVRef.current) < 0.8) {
-              modeRef.current = "auto";
-              momentumVRef.current = 0;
-              autoCarryRef.current = 0;
-            } else {
-              container.scrollLeft = normalizeScroll(
-                container.scrollLeft - momentumVRef.current,
-                half,
-              );
-            }
-          } else if (autoScrollEnabledRef.current) {
-            autoCarryRef.current += AUTO_SPEED;
-            const movePx = autoCarryRef.current >= 1 ? Math.floor(autoCarryRef.current) : 0;
-            if (movePx > 0) {
-              container.scrollLeft = normalizeScroll(
-                container.scrollLeft + movePx,
-                half,
-              );
-              autoCarryRef.current -= movePx;
-            }
-          }
-        }
-      }
-      rafRef.current = requestAnimationFrame(loop);
-    };
-
-    // 레이아웃 완료 후 half 계산 뒤 루프 시작
-    requestAnimationFrame(() => {
-      calcHalf(container);
-      rafRef.current = requestAnimationFrame(loop);
-    });
+    requestAnimationFrame(() => calcHalf(container));
 
     return () => {
       if (arrowAnimRef.current) {
         cancelAnimationFrame(arrowAnimRef.current);
       }
-      cancelAnimationFrame(rafRef.current);
       ro.disconnect();
     };
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [products]);
 
   const stopArrowAnimation = () => {
     if (!arrowAnimRef.current) return;
@@ -156,18 +115,12 @@ export default function ProductsSection() {
   const scrollByCard = (direction: "prev" | "next") => {
     const container = trackRef.current;
     if (!container) return;
+
     const firstCard = container.querySelector<HTMLElement>("[data-product-card='true']");
     if (!firstCard) return;
 
     const gap = Number.parseFloat(getComputedStyle(container).columnGap || "0") || 0;
     const step = firstCard.offsetWidth + gap;
-
-    // 화살표를 누른 뒤에는 자동 흐름을 멈추고 수동 인터랙션 중심으로 전환한다.
-    autoScrollEnabledRef.current = false;
-    modeRef.current = "auto";
-    momentumVRef.current = 0;
-    autoCarryRef.current = 0;
-
     animateScrollBy(direction === "next" ? step : -step);
   };
 
@@ -176,14 +129,10 @@ export default function ProductsSection() {
     if (!container) return;
     stopArrowAnimation();
     isDragging.current = true;
-    isHoverPauseRef.current = false;
     dragMovedRef.current = false;
     setGrabbing(true);
     dragStartX.current = e.pageX - container.getBoundingClientRect().left;
     dragScrollLeft.current = container.scrollLeft;
-    lastXRef.current = e.pageX;
-    lastTimeRef.current = Date.now();
-    velocityRef.current = 0;
   };
 
   const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
@@ -192,11 +141,6 @@ export default function ProductsSection() {
     if (!container) return;
     const half = halfRef.current;
     const x = e.pageX - container.getBoundingClientRect().left;
-    const now = Date.now();
-    const dt = now - lastTimeRef.current;
-    if (dt > 0) velocityRef.current = ((e.pageX - lastXRef.current) / dt) * 14;
-    lastXRef.current = e.pageX;
-    lastTimeRef.current = now;
 
     if (Math.abs(x - dragStartX.current) > 6) {
       dragMovedRef.current = true;
@@ -220,39 +164,31 @@ export default function ProductsSection() {
     if (!isDragging.current) return;
     isDragging.current = false;
     setGrabbing(false);
-    isHoverPauseRef.current = isTrackHoveredRef.current;
-    momentumVRef.current = velocityRef.current;
-    modeRef.current = "momentum";
-  };
-
-  const handleTrackMouseEnter = () => {
-    isTrackHoveredRef.current = true;
-    if (!isDragging.current) {
-      isHoverPauseRef.current = true;
-    }
   };
 
   const handleTrackMouseLeave = () => {
-    isTrackHoveredRef.current = false;
-    isHoverPauseRef.current = false;
     stopDrag();
   };
+
+  if (products.length === 0) {
+    return null;
+  }
 
   return (
     <section className={STYLE.section}>
       <div className={STYLE.content}>
         <div className={STYLE.titleWrap}>
-          <SectionTitle title={productsSection.sectionTitle} color="black" />
-          <p className={STYLE.subText}>
-            <strong className="font-bold">{BRAND_DATA.uppercaseName}</strong>{productsSection.description}
-          </p>
+          <h3 className={STYLE.title}>
+            OTHER PRODUCTS<span className={STYLE.star}>*</span>
+          </h3>
+          <div className={STYLE.divider} />
         </div>
 
         <div className={STYLE.sliderArea}>
           <button
             type="button"
-            className={`${STYLE.arrowButton}`}
-            aria-label={productsSection.previousAriaLabel}
+            className={STYLE.arrowButton}
+            aria-label="이전 제품 보기"
             onClick={() => scrollByCard("prev")}
           >
             ‹
@@ -261,14 +197,13 @@ export default function ProductsSection() {
           <div
             ref={trackRef}
             className={`${STYLE.track} ${grabbing ? "cursor-grabbing select-none" : "cursor-grab"}`}
-            onMouseEnter={handleTrackMouseEnter}
             onMouseDown={handleMouseDown}
             onMouseMove={handleMouseMove}
             onMouseUp={stopDrag}
             onMouseLeave={handleTrackMouseLeave}
           >
-            {[...PRODUCTS, ...PRODUCTS].map((item, index) => (
-              <div key={index} data-product-card="true" className={STYLE.cardWrap}>
+            {[...products, ...products].map((item, index) => (
+              <div key={`${item.id}-${index}`} data-product-card="true" className={STYLE.cardWrap}>
                 <Link
                   href={`/products/${toProductPathId(item.id)}`}
                   className={STYLE.cardLink}
@@ -285,8 +220,8 @@ export default function ProductsSection() {
 
           <button
             type="button"
-            className={`${STYLE.arrowButton}`}
-            aria-label={productsSection.nextAriaLabel}
+            className={STYLE.arrowButton}
+            aria-label="다음 제품 보기"
             onClick={() => scrollByCard("next")}
           >
             ›
@@ -295,7 +230,7 @@ export default function ProductsSection() {
 
         <div className={STYLE.buttonWrap}>
           <Link href="/products">
-            <MoreButton text={productsSection.moreButtonText} size="L" mode="dark" />
+            <MoreButton text="목록으로" size="L" mode="dark" icon="chevron-right" />
           </Link>
         </div>
       </div>

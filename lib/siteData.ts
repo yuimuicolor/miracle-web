@@ -91,9 +91,7 @@ export const NAVIGATION_MENU: NavigationMenuItem[] = [
     title: "PRODUCTS",
     href: "/products",
     submenus: [
-      { label: "제품1", href: "/products/product1" },
-      { label: "제품2", href: "/products/product2" },
-      { label: "제품3", href: "/products/product3" },
+      { label: "전체제품", href: "/products" },
     ],
   },
   {
