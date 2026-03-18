@@ -1,4 +1,5 @@
 import { FOOTER_DATA } from "@/lib/footerData";
+import Image from "next/image";
 
 // 데스크탑/태블릿에서는 5개 항목을 3줄로 나눠서 보여주기 위한 인덱스 배열
 const DESKTOP_ROW_INDEXES = [
@@ -53,11 +54,7 @@ export default function Footer() {
     <footer className={STYLE.root}>
       <div className={STYLE.inner}>
         <div>
-          <img
-          src={FOOTER_DATA.logoSrc}
-          alt={FOOTER_DATA.logoAlt}
-          className={STYLE.logo}
-        />
+          <Image src="/images/logo-white.png" alt="Miracle Logo" className={STYLE.logo} />
         </div>
 
         <div className={STYLE.desktopInfoWrap}>

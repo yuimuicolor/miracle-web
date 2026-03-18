@@ -324,7 +324,7 @@ export default function ProductDetailTop({ product }: ProductDetailTopProps) {
               aria-modal="true"
             >
               <div className={STYLE.modalInner} onClick={(event) => event.stopPropagation()}>
-                <img src={modalSrc} alt={modalAlt} className={STYLE.modalImage} />
+                <Image src={modalSrc} alt={modalAlt} className={STYLE.modalImage} />
                 <button
                   type="button"
                   className={STYLE.modalClose}

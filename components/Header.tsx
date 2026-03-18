@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { usePathname, useRouter } from "next/navigation";
 import { HEADER_CONFIG, HEADER_HEIGHTS_CSS } from "@/lib/headerConfig";
 import { BRAND_DATA, NAVIGATION_MENU } from "@/lib/siteData";
@@ -163,11 +164,11 @@ export default function Header() {
     });
   }, [router]);
 
-useEffect(() => {
+  useEffect(() => {
     if (isMenuOpen) {
       document.body.style.overflow = "hidden";
     } else {
-      setExpandedMobileMenus([]); 
+      setExpandedMobileMenus([]);
       document.body.style.overflow = "unset";
     }
     // 컴포넌트 언마운트 시(페이지 이동 등) 스크롤 복구
@@ -175,7 +176,6 @@ useEffect(() => {
       document.body.style.overflow = "unset";
     };
   }, [isMenuOpen]);
-
 
   const scrollToHashWithOffset = (hash: string) => {
     const target = document.getElementById(hash);
@@ -259,7 +259,7 @@ useEffect(() => {
             style={{ height: mobileHeaderHeight }}
           >
             <Link href="/" onClick={() => setIsMenuOpen(false)}>
-              <img
+              <Image
                 src={BRAND_DATA.logoSrc}
                 alt={BRAND_DATA.logoAlt}
                 className={STYLE.logo}
@@ -394,7 +394,7 @@ useEffect(() => {
         />
 
         <Link href="/">
-          <img
+          <Image
             src={BRAND_DATA.logoSrc}
             alt={BRAND_DATA.logoAlt}
             className={STYLE.logo}
