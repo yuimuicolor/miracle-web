@@ -87,9 +87,11 @@ export default function AboutCeoSection() {
         rootMargin={SECTION_REVEAL.rootMargin}
         {...SECTION_REVEAL_EFFECT}
       >
-        <img
+        <Image
           src="/images/about-us/ceo-photo.webp"
           alt={ceo.imageAlt}
+          fill
+          sizes="(max-width: 1023px) 100vw, 70rem"
           className={ABOUT_PAGE_STYLE.ceoPhoto}
         />
       </ScrollReveal>

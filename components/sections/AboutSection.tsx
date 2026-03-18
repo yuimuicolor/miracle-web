@@ -43,6 +43,8 @@ const getAboutSlides = () => {
   }
 };
 
+const ABOUT_SLIDES = getAboutSlides();
+
 const STYLE = {
   section: `
     flex w-full h-full min-h-screen bg-bg-dark
@@ -87,7 +89,6 @@ const STYLE = {
 };
 
 export default function AboutSection() {
-  const slides = getAboutSlides();
   const { aboutSection } = HOME_CONTENT;
 
   return (
@@ -116,7 +117,7 @@ export default function AboutSection() {
           </ScrollReveal>
 
           <ScrollReveal className={STYLE.sliderWrap} delayMs={180} {...HOME_REVEAL.mediaBlock}>
-            <AboutSlider slides={slides} />
+            <AboutSlider slides={ABOUT_SLIDES} />
           </ScrollReveal>
         </div>
       </div>

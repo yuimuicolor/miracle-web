@@ -76,6 +76,7 @@ export default function Header() {
   const [isHovered, setIsHovered] = useState(false);
   const [hoveredMenu, setHoveredMenu] = useState<number | null>(null);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isRouteNavigating, setIsRouteNavigating] = useState(false);
   const [expandedMobileMenus, setExpandedMobileMenus] = useState<number[]>([]);
   const [deviceType, setDeviceType] = useState<"pc" | "tablet" | "mobile">("mobile");
   const toPathOnly = (href: string) => href.split("#")[0];
@@ -128,7 +129,27 @@ export default function Header() {
 
   useEffect(() => {
     setIsMenuOpen(false);
+    setIsRouteNavigating(false);
+
+    // Keep hash destinations as-is, otherwise reset scroll to top after route transition.
+    if (!window.location.hash) {
+      window.scrollTo({ top: 0, behavior: "auto" });
+    }
   }, [pathname]);
+
+  useEffect(() => {
+    const uniqueRoutes = Array.from(
+      new Set(
+        NAVIGATION_MENU.map((menu) => toPathOnly(menu.href)).filter(
+          (route) => route.length > 0,
+        ),
+      ),
+    );
+
+    uniqueRoutes.forEach((route) => {
+      router.prefetch(route);
+    });
+  }, [router]);
 
   useEffect(() => {
     if (!isMenuOpen) {
@@ -176,6 +197,7 @@ export default function Header() {
     const pathOnly = toPathOnly(href);
     const hasHash = href.includes("#");
     const hash = hasHash ? href.split("#")[1] : null;
+    const isSamePath = pathname.startsWith(pathOnly);
 
     if (hasHash && pathname.startsWith(pathOnly) && hash) {
       // 같은 페이지 내 hash 이동: 메뉴가 닫힌 뒤 수동 스크롤
@@ -185,164 +207,180 @@ export default function Header() {
       return;
     }
 
+    if (!isSamePath) {
+      setIsRouteNavigating(true);
+    }
+
     if (!hasHash && pathname.startsWith(pathOnly)) {
       router.refresh();
     }
   };
 
+  const routeLoadingOverlay = isRouteNavigating ? (
+    <div className="pointer-events-none fixed inset-0 z-120 flex items-center justify-center bg-black/25 backdrop-blur-[2px]">
+      <div className="h-[4.2rem] w-[4.2rem] animate-spin rounded-full border-[0.35rem] border-white/25 border-t-point-light" />
+    </div>
+  ) : null;
+
   if (!isPC) {
     return (
-      <header className={`${STYLE.headerMobile} ${isMenuOpen ? "h-screen overflow-y-auto bg-point" : "bg-linear-to-b from-[#767676] to-transparent"}`}>
-        <div className={STYLE.mobileTopRow} style={{ height: mobileHeaderHeight }}>
-          <Link href="/"><img src={BRAND_DATA.logoSrc} alt={BRAND_DATA.logoAlt} className={STYLE.logo} /></Link>
+      <>
+        <header className={`${STYLE.headerMobile} ${isMenuOpen ? "h-screen overflow-y-auto bg-point" : "bg-linear-to-b from-[#767676] to-transparent"}`}>
+          <div className={STYLE.mobileTopRow} style={{ height: mobileHeaderHeight }}>
+            <Link href="/"><img src={BRAND_DATA.logoSrc} alt={BRAND_DATA.logoAlt} className={STYLE.logo} /></Link>
 
-          <div className={STYLE.mobileRightControls}>
-            {isMenuOpen && (
-              <div className={STYLE.languageSelectorMobile}>
-                <button className={STYLE.languageButtonMobile}>KR</button>
-                <span className={STYLE.languageSeparatorMobile} />
-                <button className={STYLE.languageButtonMobile}>EN</button>
-              </div>
-            )}
-
-            <button
-              type="button"
-              className={STYLE.menuToggleButton}
-              aria-label={isMenuOpen ? "메뉴 닫기" : "메뉴 열기"}
-              aria-expanded={isMenuOpen}
-              onClick={() => setIsMenuOpen((prev) => !prev)}
-            >
-              <span
-                className={STYLE.menuToggleLine}
-                style={{ transform: isMenuOpen ? "rotate(45deg)" : "translateY(-6px)" }}
-              />
-              <span
-                className={STYLE.menuToggleLine}
-                style={{ opacity: isMenuOpen ? 0 : 1 }}
-              />
-              <span
-                className={STYLE.menuToggleLine}
-                style={{ transform: isMenuOpen ? "rotate(-45deg)" : "translateY(6px)" }}
-              />
-            </button>
-          </div>
-        </div>
-
-        {isMenuOpen && (
-          <nav className={STYLE.mobileMenuPanel}>
-            {NAVIGATION_MENU.map((menu, index) => {
-              const hasSubmenus = menu.submenus.length > 0;
-              const isExpanded = hasSubmenus && expandedMobileMenus.includes(index);
-
-              return (
-                <div key={menu.title}>
-                  {hasSubmenus ? (
-                    <button
-                      type="button"
-                      className={STYLE.mobileMenuItemButton}
-                      aria-expanded={isExpanded}
-                      onClick={() =>
-                        setExpandedMobileMenus((prev) =>
-                          prev.includes(index)
-                            ? prev.filter((menuIndex) => menuIndex !== index)
-                            : [...prev, index]
-                        )
-                      }
-                    >
-                      <span>{menu.title}</span>
-                      <span
-                        className={STYLE.mobileMenuChevron}
-                        style={{ transform: isExpanded ? "rotate(180deg)" : "rotate(0deg)" }}
-                      >
-                        ▼
-                      </span>
-                    </button>
-                  ) : (
-                    <Link
-                      href={menu.href}
-                      className={STYLE.mobileMenuItemButton}
-                      onClick={() => handleHeaderLinkClick(menu.href)}
-                    >
-                      <span>{menu.title}</span>
-                    </Link>
-                  )}
-
-                  {hasSubmenus && isExpanded && (
-                    <div className={STYLE.mobileSubmenuWrap}>
-                      {menu.submenus.map((sub) => (
-                        <Link
-                          key={sub.href}
-                          href={sub.href}
-                          className={STYLE.mobileSubmenuItem}
-                          onClick={() => handleHeaderLinkClick(sub.href)}
-                        >
-                          {sub.label}
-                        </Link>
-                      ))}
-                    </div>
-                  )}
+            <div className={STYLE.mobileRightControls}>
+              {isMenuOpen && (
+                <div className={STYLE.languageSelectorMobile}>
+                  <button className={STYLE.languageButtonMobile}>KR</button>
+                  <span className={STYLE.languageSeparatorMobile} />
+                  <button className={STYLE.languageButtonMobile}>EN</button>
                 </div>
-              );
-            })}
-          </nav>
-        )}
-      </header>
+              )}
+
+              <button
+                type="button"
+                className={STYLE.menuToggleButton}
+                aria-label={isMenuOpen ? "메뉴 닫기" : "메뉴 열기"}
+                aria-expanded={isMenuOpen}
+                onClick={() => setIsMenuOpen((prev) => !prev)}
+              >
+                <span
+                  className={STYLE.menuToggleLine}
+                  style={{ transform: isMenuOpen ? "rotate(45deg)" : "translateY(-6px)" }}
+                />
+                <span
+                  className={STYLE.menuToggleLine}
+                  style={{ opacity: isMenuOpen ? 0 : 1 }}
+                />
+                <span
+                  className={STYLE.menuToggleLine}
+                  style={{ transform: isMenuOpen ? "rotate(-45deg)" : "translateY(6px)" }}
+                />
+              </button>
+            </div>
+          </div>
+
+          {isMenuOpen && (
+            <nav className={STYLE.mobileMenuPanel}>
+              {NAVIGATION_MENU.map((menu, index) => {
+                const hasSubmenus = menu.submenus.length > 0;
+                const isExpanded = hasSubmenus && expandedMobileMenus.includes(index);
+
+                return (
+                  <div key={menu.title}>
+                    {hasSubmenus ? (
+                      <button
+                        type="button"
+                        className={STYLE.mobileMenuItemButton}
+                        aria-expanded={isExpanded}
+                        onClick={() =>
+                          setExpandedMobileMenus((prev) =>
+                            prev.includes(index)
+                              ? prev.filter((menuIndex) => menuIndex !== index)
+                              : [...prev, index]
+                          )
+                        }
+                      >
+                        <span>{menu.title}</span>
+                        <span
+                          className={STYLE.mobileMenuChevron}
+                          style={{ transform: isExpanded ? "rotate(180deg)" : "rotate(0deg)" }}
+                        >
+                          ▼
+                        </span>
+                      </button>
+                    ) : (
+                      <Link
+                        href={menu.href}
+                        className={STYLE.mobileMenuItemButton}
+                        onClick={() => handleHeaderLinkClick(menu.href)}
+                      >
+                        <span>{menu.title}</span>
+                      </Link>
+                    )}
+
+                    {hasSubmenus && isExpanded && (
+                      <div className={STYLE.mobileSubmenuWrap}>
+                        {menu.submenus.map((sub) => (
+                          <Link
+                            key={sub.href}
+                            href={sub.href}
+                            className={STYLE.mobileSubmenuItem}
+                            onClick={() => handleHeaderLinkClick(sub.href)}
+                          >
+                            {sub.label}
+                          </Link>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                );
+              })}
+            </nav>
+          )}
+        </header>
+        {routeLoadingOverlay}
+      </>
     );
   }
 
   return (
-    <header
-      className={STYLE.headerPC}
-      style={{ height: HEADER_HEIGHTS_CSS.PC }}
-      onMouseEnter={() => canHoverMenu && setIsHovered(true)}
-      onMouseLeave={() => { setIsHovered(false); setHoveredMenu(null); }}
-    >
-      <div
-        className={`${STYLE.gradientBase} ${STYLE.gradientColor(isHovered && canHoverMenu)}`}
-        style={{ height: totalHeight }}
-      />
+    <>
+      <header
+        className={STYLE.headerPC}
+        style={{ height: HEADER_HEIGHTS_CSS.PC }}
+        onMouseEnter={() => canHoverMenu && setIsHovered(true)}
+        onMouseLeave={() => { setIsHovered(false); setHoveredMenu(null); }}
+      >
+        <div
+          className={`${STYLE.gradientBase} ${STYLE.gradientColor(isHovered && canHoverMenu)}`}
+          style={{ height: totalHeight }}
+        />
 
-      <Link href="/"><img src={BRAND_DATA.logoSrc} alt={BRAND_DATA.logoAlt} className={STYLE.logo} /></Link>
+        <Link href="/"><img src={BRAND_DATA.logoSrc} alt={BRAND_DATA.logoAlt} className={STYLE.logo} /></Link>
 
-      <nav className={STYLE.nav}>
-        {NAVIGATION_MENU.map((menu, index) => (
-          <div
-            key={menu.title}
-            className={STYLE.menuWrap}
-            onMouseEnter={() => canHoverMenu && menu.submenus.length > 0 && setHoveredMenu(index)}
-            onMouseLeave={() => setHoveredMenu(null)}
-          >
-            <Link
-              href={menu.href}
-              className={STYLE.menuItem(activatedMenu === menu.title, hoveredMenu === index)}
-              onClick={() => handleHeaderLinkClick(menu.href)}
+        <nav className={STYLE.nav}>
+          {NAVIGATION_MENU.map((menu, index) => (
+            <div
+              key={menu.title}
+              className={STYLE.menuWrap}
+              onMouseEnter={() => canHoverMenu && menu.submenus.length > 0 && setHoveredMenu(index)}
+              onMouseLeave={() => setHoveredMenu(null)}
             >
-              {menu.title}
-            </Link>
+              <Link
+                href={menu.href}
+                className={STYLE.menuItem(activatedMenu === menu.title, hoveredMenu === index)}
+                onClick={() => handleHeaderLinkClick(menu.href)}
+              >
+                {menu.title}
+              </Link>
 
-            {menu.submenus.length > 0 && hoveredMenu === index && isHovered && canHoverMenu && (
-              <div className={STYLE.submenu}>
-                {menu.submenus.map((sub) => (
-                  <Link
-                    key={sub.href}
-                    href={sub.href}
-                    className={STYLE.submenuItem}
-                    onClick={() => handleHeaderLinkClick(sub.href)}
-                  >
-                    {sub.label}
-                  </Link>
-                ))}
-              </div>
-            )}
-          </div>
-        ))}
-      </nav>
+              {menu.submenus.length > 0 && hoveredMenu === index && isHovered && canHoverMenu && (
+                <div className={STYLE.submenu}>
+                  {menu.submenus.map((sub) => (
+                    <Link
+                      key={sub.href}
+                      href={sub.href}
+                      className={STYLE.submenuItem}
+                      onClick={() => handleHeaderLinkClick(sub.href)}
+                    >
+                      {sub.label}
+                    </Link>
+                  ))}
+                </div>
+              )}
+            </div>
+          ))}
+        </nav>
 
-      <div className={STYLE.languageSelector}>
-        <button className={STYLE.languageButton}>KR</button>
-        <span className={STYLE.languageSeparator} />
-        <button className={STYLE.languageButton}>EN</button>
-      </div>
-    </header>
+        <div className={STYLE.languageSelector}>
+          <button className={STYLE.languageButton}>KR</button>
+          <span className={STYLE.languageSeparator} />
+          <button className={STYLE.languageButton}>EN</button>
+        </div>
+      </header>
+      {routeLoadingOverlay}
+    </>
   );
 }

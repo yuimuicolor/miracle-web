@@ -74,7 +74,6 @@ export default function AboutHistorySection() {
                         src={item.imageSrc}
                         alt={item.imageAlt}
                         fill
-                        unoptimized
                         sizes="(max-width: 1279px) 15rem, 28rem"
                         className={ABOUT_PAGE_STYLE.historyImage}
                       />

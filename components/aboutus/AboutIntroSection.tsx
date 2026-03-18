@@ -159,6 +159,12 @@ export default function AboutIntroSection() {
                 alt={row.imageAlt}
                 width={row.imageWidth}
                 height={row.imageHeight}
+                priority={rowIndex === 0}
+                sizes={
+                  rowIndex === 0
+                    ? "(max-width: 767px) 100vw, (max-width: 1279px) 40rem, 50rem"
+                    : "(max-width: 767px) 100vw, (max-width: 1279px) 60rem, 60rem"
+                }
                 className={ABOUT_PAGE_STYLE.imageObj}
               />
             </ScrollReveal>

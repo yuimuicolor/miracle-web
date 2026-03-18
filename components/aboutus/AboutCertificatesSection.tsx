@@ -1,3 +1,4 @@
+import Image from "next/image";
 import ScrollReveal from "@/components/ScrollReveal";
 import {
   ABOUT_PAGE_STYLE,
@@ -40,9 +41,11 @@ export default function AboutCertificatesSection() {
             {...SECTION_REVEAL_EFFECT}
           >
             <div className={ABOUT_PAGE_STYLE.certificateImageRatio}>
-              <img
+              <Image
                 src="/images/main-bg.png"
                 alt={cert.title}
+                fill
+                sizes="(max-width: 767px) 50vw, (max-width: 1023px) 33vw, 20vw"
                 className={ABOUT_PAGE_STYLE.imageObj}
               />
             </div>
