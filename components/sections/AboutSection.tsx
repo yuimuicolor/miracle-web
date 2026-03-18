@@ -45,14 +45,14 @@ const getAboutSlides = () => {
 
 const STYLE = {
   section: `
-    w-full h-full min-h-screen bg-bg-dark
-    px-[1.6rem] pt-[10rem] pb-[8rem]
-    md:px-[4rem] md:pt-[14rem] md:pb-[12rem]
-    lg:px-[8rem] lg:pt-[17rem]
-    xl:h-screen xl:pb-[8rem]
+    flex w-full h-full min-h-screen bg-bg-dark
+    px-[1.6rem] pb-[8rem] pt-header-offset
+    md:px-[4rem] md:pb-[12rem]
+    lg:px-[8rem]
+    xl:h-screen xl:pt-[17rem] xl:pb-[8rem]
   `,
   content: `
-    mx-auto flex w-full flex-col gap-[2rem]
+    mx-auto flex w-full flex-1 flex-col justify-center gap-[2rem]
     md:gap-[4rem]
     xl:justify-between xl:gap-[6rem]
   `,

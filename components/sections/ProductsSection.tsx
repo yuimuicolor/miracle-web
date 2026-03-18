@@ -11,6 +11,7 @@ import { PRODUCTS, toProductPathId } from "@/lib/productsData";
 import { BRAND_DATA, HOME_CONTENT } from "@/lib/siteData";
 
 const AUTO_SPEED = 1;
+const MOBILE_AUTO_SPEED = 0.5;
 
 const STYLE = {
   section: `
@@ -24,9 +25,9 @@ const STYLE = {
   subText: "font-noto text-[1.6rem] md:text-[1.8rem] lg:text-[2rem] text-black",
   sliderArea: "flex items-center gap-[1.6rem]",
   track: `
-    no-scrollbar flex flex-1 overflow-x-auto py-[1.5rem]
+    no-scrollbar grid flex-1 grid-flow-col grid-rows-2 auto-cols-[30rem] overflow-x-auto py-[1.5rem]
     gap-[1.6rem]
-    md:gap-[2rem]
+    md:flex md:grid-flow-row md:grid-rows-none md:auto-cols-auto md:gap-[2rem]
   `,
   cardWrap: "w-[30rem] shrink-0",
   cardLink: "block",
@@ -58,6 +59,7 @@ export default function ProductsSection() {
   const isHoverPauseRef = useRef(false);
   const arrowAnimRef = useRef<number>(0);
   const autoScrollEnabledRef = useRef(true);
+  const autoSpeedRef = useRef(AUTO_SPEED);
 
   const normalizeScroll = (value: number, half: number) => {
     if (half <= 0) return value;
@@ -68,6 +70,20 @@ export default function ProductsSection() {
     const cards = container.querySelectorAll<HTMLElement>("[data-product-card='true']");
     halfRef.current = cards[PRODUCTS.length]?.offsetLeft ?? container.scrollWidth / 2;
   };
+
+  useEffect(() => {
+    const updateAutoSpeed = () => {
+      const isMobileViewport = window.innerWidth < 768;
+      autoSpeedRef.current = isMobileViewport ? MOBILE_AUTO_SPEED : AUTO_SPEED;
+    };
+
+    updateAutoSpeed();
+    window.addEventListener("resize", updateAutoSpeed);
+
+    return () => {
+      window.removeEventListener("resize", updateAutoSpeed);
+    };
+  }, []);
 
   useEffect(() => {
     const container = trackRef.current;
@@ -93,7 +109,7 @@ export default function ProductsSection() {
               );
             }
           } else if (autoScrollEnabledRef.current) {
-            autoCarryRef.current += AUTO_SPEED;
+            autoCarryRef.current += autoSpeedRef.current;
             const movePx = autoCarryRef.current >= 1 ? Math.floor(autoCarryRef.current) : 0;
             if (movePx > 0) {
               container.scrollLeft = normalizeScroll(

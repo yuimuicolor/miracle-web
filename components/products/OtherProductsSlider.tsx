@@ -20,7 +20,7 @@ const STYLE = {
   title: `
     shrink-0 font-gilda font-normal uppercase
     leading-[1.2] tracking-[-0.05em] text-black
-    text-[2.4rem] md:text-[3.6rem] lg:text-[5.6rem]
+    text-[3.2rem] md:text-[3.6rem] lg:text-[5.6rem]
   `,
   star: "leading-[1.2] text-point pl-[0.2em]",
   divider: `
