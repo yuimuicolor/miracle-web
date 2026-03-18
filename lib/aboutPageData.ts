@@ -10,6 +10,8 @@ export interface AboutHistoryItem {
   year: string;
   date: string;
   title: string;
+  imageSrc: string;
+  imageAlt: string;
 }
 
 export interface CertificateItem {
@@ -50,12 +52,83 @@ export const ABOUT_PAGE_CONTENT = {
     headingKo: "히스토리",
     description: "미라클의 발자취를 연도별로 확인해보세요.",
     items: [
-      { year: "2016", date: "01-03", title: "브랜드 스튜디오 설립" },
-      { year: "2017", date: "04-05", title: "MIRACLE 리브랜딩 공개" },
-      { year: "2018", date: "05-06", title: "디지털 캠페인 전개" },
-      { year: "2019", date: "11-16", title: "브랜드 전략팀 확장" },
-      { year: "2022", date: "04-01", title: "크리에이티브 랩 론칭" },
-      { year: "2025", date: "11-11", title: "K-브랜드 글로벌 진출" },
+      {
+        year: "2016",
+        date: "04-05",
+        title: "MIRACLE 창립",
+        imageSrc: "/images/about-us/history-1.webp",
+        imageAlt: "2016 MIRACLE 창립",
+      },
+      {
+        year: "2017",
+        date: "04-05",
+        title: "MIRACLE.jp, 창립",
+        imageSrc: "/images/about-us/history-2.webp",
+        imageAlt: "2017 MIRACLE.jp 창립",
+      },
+      {
+        year: "2018",
+        date: "06-06",
+        title: "MIRACLE global 활동",
+        imageSrc: "/images/about-us/history-3.webp",
+        imageAlt: "2018 MIRACLE global 활동",
+      },
+      {
+        year: "2019",
+        date: "11-16",
+        title: "구직관리 1위 기업 달성",
+        imageSrc: "/images/about-us/history-4.webp",
+        imageAlt: "2019 구직관리 1위 기업 달성",
+      },
+      {
+        year: "2022",
+        date: "04-01",
+        title: "가입자 1000명 보유",
+        imageSrc: "/images/about-us/history-5.webp",
+        imageAlt: "2022 가입자 1000명 보유",
+      },
+      {
+        year: "2025",
+        date: "11-11",
+        title: "K 글로벌 대회 기업 수상",
+        imageSrc: "/images/about-us/history-6.webp",
+        imageAlt: "2025 K 글로벌 대회 기업 수상",
+      },
+      {
+        year: "2026",
+        date: "02-14",
+        title: "브랜드 파트너십 50건 달성",
+        imageSrc: "/images/about-us/history-1.webp",
+        imageAlt: "2026 브랜드 파트너십 50건 달성",
+      },
+      {
+        year: "2027",
+        date: "07-21",
+        title: "아시아 디자인 어워드 수상",
+        imageSrc: "/images/about-us/history-2.webp",
+        imageAlt: "2027 아시아 디자인 어워드 수상",
+      },
+      {
+        year: "2028",
+        date: "12-03",
+        title: "글로벌 지사 3개국 확장",
+        imageSrc: "/images/about-us/history-3.webp",
+        imageAlt: "2028 글로벌 지사 3개국 확장",
+      },
+      {
+        year: "2029",
+        date: "03-18",
+        title: "브랜드 캠페인 누적 100건 돌파",
+        imageSrc: "/images/about-us/history-4.webp",
+        imageAlt: "2029 브랜드 캠페인 누적 100건 돌파",
+      },
+      {
+        year: "2030",
+        date: "09-09",
+        title: "글로벌 파트너 네트워크 확장",
+        imageSrc: "/images/about-us/history-5.webp",
+        imageAlt: "2030 글로벌 파트너 네트워크 확장",
+      },
     ] satisfies AboutHistoryItem[],
   },
   certificates: {

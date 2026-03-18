@@ -75,20 +75,37 @@ const STYLE = {
   // ── History / Certs / CEO (기존 유지) ──────────────────────────────────
   sectionBase: "max-w-[80rem] mx-auto",
   sectionGapTop: "mt-28",
-  sectionHeading: "text-center mb-12",
-  sectionHeadingEn: "font-noto tracking-[0.32em] text-white/80 text-[1.2rem]",
+  historySection: "w-full",
+  sectionHeading: "text-center mb-[3.2rem] md:mb-[6rem] lg:mb-[12rem]",
+  sectionHeadingEn:
+    "font-noto font-medium uppercase tracking-[0.2em] text-white/80 text-[1.4rem] leading-[130%] lg:text-[2.2rem]",
   sectionHeadingKr:
-    "font-noto font-bold inline-block bg-point px-3 py-1 mt-2 text-[2.4rem]",
-  sectionHeadingDesc: "font-noto text-white/70 mt-3 text-[1.4rem]",
-  historyGrid: "grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3",
-  historyCard: "relative",
-  historyImageWrap: "w-full h-[16.25rem] overflow-hidden",
-  historyImage: "w-full h-full object-cover",
+    "font-noto font-bold inline-block bg-point px-3 py-1 mt-[1.2rem] tracking-[-0.03em] text-[3.4rem] leading-[150%] md:text-[4.8rem] lg:text-[5.6rem]",
+  sectionHeadingDesc:
+    "font-noto font-normal tracking-[-0.05em] text-white/70 mt-[1.6rem] text-[1.6rem] leading-[150%] md:text-[1.8rem] lg:text-[2rem]",
+  historyRows: "flex w-full flex-col gap-[20rem]",
+  historyRow: "flex w-full flex-col lg:flex-row lg:items-center",
+  historyRowOdd: "",
+  historyRowEven: "",
+  historyCard: "flex shrink-0 items-stretch gap-[2rem] lg:min-w-0 lg:shrink",
+  historyImageWrap:
+    "relative w-[28rem] max-w-[28rem] shrink-0 overflow-hidden aspect-[280/373] lg:min-w-0 lg:shrink",
+  historyImage: "object-cover",
+  historyTextCol:
+    "flex min-w-0 flex-col items-start justify-between text-left lg:shrink-0",
   historyYear:
-    "absolute top-3 right-3 text-point bg-white/95 px-2 py-1 font-noto font-bold leading-none text-[1.4rem]",
-  historyMetaWrap: "mt-3",
-  historyDate: "font-noto text-white/80 text-[1.2rem]",
-  historyTitle: "font-noto font-bold text-[1.4rem]",
+    "inline-block px-[1rem] py-[0.3rem] font-gilda font-normal tracking-[-0.05em] text-[4.8rem] leading-[120%] lg:text-[5.6rem]",
+  historyYearOdd: "bg-white text-point",
+  historyYearEven: "bg-point text-white",
+  historyMetaWrap: "mt-auto flex flex-col gap-[0.4rem]",
+  historyDate:
+    "font-noto font-medium tracking-[0.2em] text-white/80 text-[1.6rem] leading-[130%] lg:text-[2.2rem]",
+  historyTitle:
+    "font-noto font-medium tracking-[-0.05em] text-white text-[1.8rem] leading-[100%] lg:text-[2.4rem]",
+  historyRowDividerBase:
+    "hidden lg:block h-px flex-1 min-w-0 self-center bg-white/35",
+  historyCardGap: "hidden lg:block w-[8rem] shrink-0",
+  historyDividerGap: "hidden lg:block w-[4rem] shrink-0",
   certificateGrid: "grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-5",
   certificateCard: "relative overflow-hidden",
   certificateImageRatio: "aspect-[3/4]",
@@ -118,6 +135,10 @@ const MARQUEE_TEXT = "Trust  Integrity  Reliability  Transformation";
 
 export default function AboutUsPage() {
   const { history, certificates, ceo } = ABOUT_PAGE_CONTENT;
+  const historyRows = Array.from(
+    { length: Math.ceil(history.items.length / 2) },
+    (_, rowIndex) => history.items.slice(rowIndex * 2, rowIndex * 2 + 2),
+  );
 
   return (
     <main className={STYLE.main}>
@@ -254,37 +275,74 @@ export default function AboutUsPage() {
         </div>
       </div>
 
-      <section className={`${STYLE.sectionBase} ${STYLE.sectionGapTop}`}>
+      <section className={`${STYLE.historySection}`}>
         <div className={STYLE.sectionHeading}>
           <p className={STYLE.sectionHeadingEn}>{history.headingEn}</p>
           <h3 className={STYLE.sectionHeadingKr}>{history.headingKo}</h3>
           <p className={STYLE.sectionHeadingDesc}>{history.description}</p>
         </div>
 
-        <div className={STYLE.historyGrid}>
-          {history.items.map((item) => (
-            <article
-              key={`${item.year}-${item.date}`}
-              className={STYLE.historyCard}
-            >
-              <div className={STYLE.historyImageWrap}>
-                <img
-                  src={`/images/about-us/history-${history.items.indexOf(item) + 1}.webp`}
-                  alt={item.title}
-                  className={STYLE.historyImage}
-                />
+        <div className={STYLE.historyRows}>
+          {historyRows.map((rowItems, rowIndex) => {
+            const isOddRow = rowIndex % 2 === 0;
+            const isLastRow = rowIndex === historyRows.length - 1;
+
+            return (
+              <div
+                key={`history-row-${rowIndex}`}
+                className={`${STYLE.historyRow} ${isOddRow ? STYLE.historyRowOdd : STYLE.historyRowEven}`}
+              >
+                {!isOddRow ? <div className={STYLE.historyRowDividerBase} /> : null}
+                {!isOddRow ? <div className={STYLE.historyDividerGap} /> : null}
+
+                {rowItems.map((item, cardIndex) => (
+                  <div key={`${item.year}-${item.date}`} className="contents">
+                    <article
+                      className={STYLE.historyCard}
+                    >
+                      <div className={STYLE.historyImageWrap}>
+                        <Image
+                          src={item.imageSrc}
+                          alt={item.imageAlt}
+                          fill
+                          sizes="(max-width: 1024px) 100vw, 28rem"
+                          className={STYLE.historyImage}
+                        />
+                      </div>
+
+                      <div className={STYLE.historyTextCol}>
+                        <span
+                          className={`${STYLE.historyYear} ${isOddRow ? STYLE.historyYearOdd : STYLE.historyYearEven}`}
+                        >
+                          {item.year}
+                        </span>
+
+                        <div className={STYLE.historyMetaWrap}>
+                          <p className={STYLE.historyDate}>{item.date}</p>
+                          <p className={STYLE.historyTitle}>{item.title}</p>
+                        </div>
+                      </div>
+                    </article>
+
+                    {cardIndex < rowItems.length - 1 ? (
+                      <div className={STYLE.historyCardGap} />
+                    ) : null}
+                  </div>
+                ))}
+
+                {isOddRow && !isLastRow ? (
+                  <div className={STYLE.historyDividerGap} />
+                ) : null}
+                {isOddRow && !isLastRow ? (
+                  <div className={STYLE.historyRowDividerBase} />
+                ) : null}
               </div>
-              <span className={STYLE.historyYear}>{item.year}</span>
-              <div className={STYLE.historyMetaWrap}>
-                <p className={STYLE.historyDate}>{item.date}</p>
-                <p className={STYLE.historyTitle}>{item.title}</p>
-              </div>
-            </article>
-          ))}
+            );
+          })}
         </div>
       </section>
 
-      <section className={`${STYLE.sectionBase} ${STYLE.sectionGapTop}`}>
+      <section>
         <div className={STYLE.sectionHeading}>
           <p className={STYLE.sectionHeadingEn}>{certificates.headingEn}</p>
           <h3 className={STYLE.sectionHeadingKr}>{certificates.headingKo}</h3>
