@@ -144,6 +144,15 @@ export default function Header() {
 
     const pathOnly = toPathOnly(href);
     const hasHash = href.includes("#");
+    const hash = hasHash ? href.split("#")[1] : null;
+
+    if (hasHash && pathname.startsWith(pathOnly) && hash) {
+      // 같은 페이지 내 hash 이동: 메뉴가 닫힌 뒤 수동 스크롤
+      setTimeout(() => {
+        document.getElementById(hash)?.scrollIntoView({ behavior: "smooth" });
+      }, 80);
+      return;
+    }
 
     if (!hasHash && pathname.startsWith(pathOnly)) {
       router.refresh();
