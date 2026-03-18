@@ -67,12 +67,12 @@ const STYLE = {
     "absolute h-[2px] w-[3rem] bg-white transition-all duration-300 ease-in-out",
   mobileMenuPanel: "w-full border-t border-white/10 py-[1.2rem]",
   mobileMenuItemButton: `
-    flex w-full items-center justify-center gap-[1rem] py-[1.2rem] text-center
+    flex w-full items-center justify-center gap-[1rem] py-[1.4rem] text-center
     font-noto text-[2rem] text-white/90 transition-colors hover:text-white
   `,
   mobileMenuChevron:
     "text-[1.4rem] text-white/70 transition-transform duration-300",
-  mobileSubmenuWrap: "mb-[0.6rem] w-full border-l border-white/20",
+  mobileSubmenuWrap: "mb-[0.6rem] w-full",
   mobileSubmenuItem:
     "block w-full py-[0.8rem] text-center text-[1.8rem] font-noto text-white/70 transition-colors hover:text-white",
 };

@@ -9,10 +9,10 @@ import { HOME_CONTENT, STORE_DATA } from "@/lib/siteData";
 const STYLE = {
   section: "w-full bg-point",
   panel: `
-    w-full min-h-screen bg-bg-dark
+    w-full bg-bg-dark
     rounded-b-[12rem] px-[4rem] pt-[10rem] pb-[8rem]
     md:rounded-b-[20rem] md:px-[12rem] md:pt-[14rem] md:pb-[12rem]
-    lg:rounded-b-[30rem] lg:px-[16rem] lg:pt-[17rem]
+    lg:rounded-b-[30rem] lg:px-[16rem] lg:pt-[17rem] lg:min-h-screen 
   `,
   content: `
     mx-auto flex w-full max-w-[1200px] flex-col
