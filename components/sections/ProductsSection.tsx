@@ -295,7 +295,7 @@ export default function ProductsSection() {
                   onClick={handleCardClick}
                   onDragStart={handleNativeDragStart}
                 >
-                  <ProductBox item={item} />
+                  <ProductBox item={item} index={index}/>
                 </Link>
               </div>
             ))}

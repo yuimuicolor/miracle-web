@@ -4,6 +4,7 @@ import { ProductItem } from "@/lib/productsData";
 
 interface ProductBoxProps {
   item: ProductItem;
+  index?: number;
 }
 
 const STYLE = {
@@ -12,8 +13,10 @@ const STYLE = {
     border border-black/10 bg-[#d6d6d6]
     shadow-[2px_2px_10px_rgba(0,0,0,0.2)]
   `,
-  image: "object-cover transition-[filter] duration-300 ease-out group-hover:blur-[4px]",
-  overlay: "absolute inset-0 bg-linear-to-b from-transparent via-transparent to-black/45 transition-opacity duration-300",
+  image:
+    "object-cover transition-[filter] duration-300 ease-out group-hover:blur-[4px]",
+  overlay:
+    "absolute inset-0 bg-linear-to-b from-transparent via-transparent to-black/45 transition-opacity duration-300",
   hoverTint:
     "pointer-events-none absolute inset-0 z-[2] bg-hover/60 opacity-0 transition-opacity duration-300 group-hover:opacity-100",
   plusWrap:
@@ -37,7 +40,9 @@ const TWO_LINE_CLAMP_STYLE = {
   overflow: "hidden",
 };
 
-export default function ProductBox({ item }: ProductBoxProps) {
+export default function ProductBox({ item, index }: ProductBoxProps) {
+  const isFirstImage = index !== undefined && index < 4;
+
   return (
     <article className={STYLE.card}>
       <Image
@@ -45,6 +50,9 @@ export default function ProductBox({ item }: ProductBoxProps) {
         alt={item.brandKo}
         fill
         draggable={false}
+        priority={isFirstImage}
+        loading={isFirstImage ? "eager" : "lazy"}
+        quality={60}
         sizes="(max-width: 767px) 75vw, (max-width: 1023px) 40vw, 24vw"
         className={STYLE.image}
       />
