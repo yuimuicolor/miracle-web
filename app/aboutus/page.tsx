@@ -2,140 +2,266 @@ import Image from "next/image";
 import ScrollReveal from "@/components/ScrollReveal";
 import SectionTitle from "@/components/sections/common/SectionTitle";
 import { ABOUT_PAGE_CONTENT } from "@/lib/aboutPageData";
+import { STORE_DATA } from "@/lib/siteData";
 
 const STYLE = {
+  // ============================================================
+  // Page Shell
+  // ============================================================
   main: `
-		min-h-screen bg-bg-dark text-white flex flex-col
-		gap-[6rem] lg:gap-[10rem]
-		px-[1.6rem] md:px-[4rem] lg:px-[8rem]
-	`,
+    box-border flex min-h-screen w-full flex-col overflow-x-hidden bg-bg-dark text-white
+    gap-[6rem]
+    px-[1.6rem]
+    md:px-[4rem]
+    lg:gap-[10rem] lg:px-[8rem]
+  `,
 
-  // ── Intro section ─────────────────────────────────────────────────────
+  // ============================================================
+  // Intro Section
+  // ============================================================
   titleWrap: `
-		mb-[6rem]
-		md:mb-[8rem]
-		lg:mb-[10rem]
-	`,
+    mb-[6rem]
+    md:mb-[8rem]
+    lg:mb-[10rem]
+  `,
   introList: `
-		flex flex-col
-		gap-[6rem]
-		lg:gap-[10rem]
-	`,
+    flex flex-col
+    gap-[6rem]
+    lg:gap-[10rem]
+  `,
   introRow: `
     flex flex-col items-start
-		gap-[4rem]
+    gap-[4rem]
     xl:flex-row xl:items-center xl:justify-between xl:gap-[4rem]
-	`,
+  `,
   introRowReverse: `
     flex flex-col items-start
-		gap-[4rem]
+    gap-[4rem]
     xl:flex-row-reverse xl:items-center xl:justify-between xl:gap-[4rem]
-	`,
-  textCol:
-    "flex w-full min-w-0 flex-col gap-[4rem] xl:w-auto xl:max-w-[72rem] xl:shrink-0",
+  `,
+  textCol: `
+    flex w-full min-w-0 flex-col
+    gap-[4rem]
+    xl:w-auto xl:max-w-[72rem] xl:shrink-0
+  `,
   titleBlock: `
-		flex flex-col
-		gap-[0.8rem] font-noto font-bold tracking-[-0.03em] text-white
-		text-[3.2rem] leading-[1.5]
-		md:text-[4.8rem]
-		lg:gap-[2rem] lg:text-[5.6rem] lg:leading-[1.3]
-	`,
+    flex flex-col
+    gap-[0.8rem]
+    font-noto font-bold tracking-[-0.03em] text-white
+    text-[3.2rem] leading-[1.5]
+    md:text-[4.8rem]
+    lg:gap-[2rem] lg:text-[5.6rem] lg:leading-[1.3]
+  `,
   hlPoint: "bg-point text-white px-[0.6rem]",
   hlWhite: "bg-white text-point px-[0.6rem]",
   desc: `
-		font-noto tracking-[-0.05em] text-white
-		text-[1.6rem] leading-[1.5]
-		md:text-[1.8rem]
-		lg:text-[2rem]
-	`,
+    font-noto tracking-[-0.05em] text-white
+    text-[1.6rem] leading-[1.5]
+    md:text-[1.8rem]
+    lg:text-[2rem]
+  `,
   imageCircleWrap: `
     self-end shrink-0 overflow-hidden rounded-full
     w-full aspect-square
     md:w-[40rem] md:aspect-square
     xl:self-auto xl:shrink xl:min-w-0 xl:w-full xl:max-w-[50rem] xl:aspect-square
-	`,
+  `,
   imageRectWrap: `
     self-end shrink-0 overflow-hidden rounded-full
-		w-full aspect-[3/2]
+    w-full aspect-[3/2]
     md:w-[60rem] md:aspect-[8/5]
     xl:self-auto xl:shrink xl:min-w-0 xl:w-full xl:max-w-[60rem] xl:aspect-[3/2]
-	`,
+  `,
   imageObj: "w-full h-full object-cover",
 
-  // ── Marquee ────────────────────────────────────────────────────────────
-  marqueeSection: `w-full`,
-
-  marqueeTrack: "flex whitespace-nowrap animate-marquee",
+  // ============================================================
+  // Marquee Section
+  // ============================================================
+  marqueeSection: `
+    w-full overflow-hidden
+    py-[2rem]
+    lg:py-[3rem]
+  `,
+  marqueeTrack: `
+    flex w-max min-w-full items-center whitespace-nowrap animate-marquee
+  `,
+  marqueeSet: "flex shrink-0 items-center",
   marqueeChunk: `
-		font-playwrite font-extralight shrink-0 text-white/80
-		text-[4rem] leading-none tracking-[-0.01em]
-		pr-[5rem]
-		lg:text-[8rem] lg:pr-[10rem]
-	`,
+    inline-block shrink-0 align-middle
+    font-playwrite font-extralight text-white/80
+    pt-[0.08em] pb-[0.18em] pr-[0.8rem] align-middle
+    text-[4rem] leading-[1] tracking-[-0.01em]
+    lg:text-[8rem] lg:leading-[1]
+  `,
 
-  // ── History / Certs / CEO (기존 유지) ──────────────────────────────────
-  sectionBase: "max-w-[80rem] mx-auto",
-  sectionGapTop: "mt-28",
+  // ============================================================
+  // History Section
+  // ============================================================
   historySection: "w-full",
-  sectionHeading: "text-center mb-[3.2rem] md:mb-[6rem] lg:mb-[12rem]",
-  sectionHeadingEn:
-    "font-noto font-medium uppercase tracking-[0.2em] text-white/80 text-[1.4rem] leading-[130%] lg:text-[2.2rem]",
-  sectionHeadingKr:
-    "font-noto font-bold inline-block bg-point px-3 py-1 mt-[1.2rem] tracking-[-0.03em] text-[3.4rem] leading-[150%] md:text-[4.8rem] lg:text-[5.6rem]",
-  sectionHeadingDesc:
-    "font-noto font-normal tracking-[-0.05em] text-white/70 mt-[1.6rem] text-[1.6rem] leading-[150%] md:text-[1.8rem] lg:text-[2rem]",
-  historyRows: "flex w-full flex-col gap-[20rem]",
-  historyRow: "flex w-full flex-col lg:flex-row lg:items-center",
+  sectionHeading: `
+    mb-[3.2rem] text-center
+    md:mb-[6rem]
+    lg:mb-[12rem]
+  `,
+  sectionHeadingEn: `
+    font-noto font-medium uppercase tracking-[0.2em] text-white/80
+    text-[1.4rem] leading-[130%]
+    lg:text-[2.2rem]
+  `,
+  sectionHeadingKr: `
+    mt-[1.2rem] inline-block bg-point px-3 py-1
+    font-noto font-bold tracking-[-0.03em]
+    text-[3.4rem] leading-[150%]
+    md:text-[4.8rem]
+    lg:text-[5.6rem]
+  `,
+  sectionHeadingDesc: `
+    mt-[1.6rem]
+    font-noto font-normal tracking-[-0.05em] text-white/70
+    text-[1.6rem] leading-[150%]
+    md:text-[1.8rem]
+    lg:text-[2rem]
+  `,
+  historyRows: `
+    flex w-full flex-col items-center
+    gap-[4rem]
+    xl:items-stretch xl:gap-[20rem]
+  `,
+  historyRow: `
+    flex w-full max-w-[44rem] flex-col items-start
+    gap-[4rem]
+    xl:max-w-none xl:flex-row xl:items-center xl:gap-0
+  `,
   historyRowOdd: "",
   historyRowEven: "",
-  historyCard: "flex shrink-0 items-stretch gap-[2rem] lg:min-w-0 lg:shrink",
-  historyImageWrap:
-    "relative w-[28rem] max-w-[28rem] shrink-0 overflow-hidden aspect-[280/373] lg:min-w-0 lg:shrink",
+  historyCard: `
+    flex shrink-0 items-stretch
+    gap-[2rem]
+    xl:min-w-0 xl:shrink
+  `,
+  historyImageWrap: `relative h-[20rem] w-[15rem] shrink-0 overflow-hidden
+    md:h-[26rem] md:w-[20rem]
+    xl:h-auto xl:w-[28rem] xl:max-w-[28rem] xl:aspect-[280/373] xl:min-w-0 xl:shrink
+  `,
   historyImage: "object-cover",
-  historyTextCol:
-    "flex min-w-0 flex-col items-start justify-between text-left lg:shrink-0",
-  historyYear:
-    "inline-block px-[1rem] py-[0.3rem] font-gilda font-normal tracking-[-0.05em] text-[4.8rem] leading-[120%] lg:text-[5.6rem]",
+  historyTextCol: `
+    flex min-w-0 flex-col items-start justify-between
+    text-left
+    xl:shrink-0
+  `,
+  historyYear: `inline-block px-[0.8rem] py-[0.2rem] font-gilda font-normal tracking-[-0.05em]
+    text-[3.2rem] leading-[120%]
+    md:text-[4rem]
+    xl:px-[1rem] xl:py-[0.3rem] xl:text-[5.6rem]
+  `,
   historyYearOdd: "bg-white text-point",
   historyYearEven: "bg-point text-white",
   historyMetaWrap: "mt-auto flex flex-col gap-[0.4rem]",
-  historyDate:
-    "font-noto font-medium tracking-[0.2em] text-white/80 text-[1.6rem] leading-[130%] lg:text-[2.2rem]",
-  historyTitle:
-    "font-noto font-medium tracking-[-0.05em] text-white text-[1.8rem] leading-[100%] lg:text-[2.4rem]",
-  historyRowDividerBase:
-    "hidden lg:block h-px flex-1 min-w-0 self-center origin-left bg-white/35",
-  historyCardGap: "hidden lg:block w-[8rem] shrink-0",
-  historyDividerGap: "hidden lg:block w-[4rem] shrink-0",
-  certificateGrid: "grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-5",
+  historyDate: `
+    font-noto font-medium tracking-[0.2em] text-white/80
+    text-[1.2rem] leading-[130%]
+    md:text-[1.8rem]
+    xl:text-[2.2rem]
+  `,
+  historyTitle: `
+    font-noto font-medium tracking-[-0.05em] text-white
+    text-[1.8rem] leading-[150%]
+    md:text-[2.4rem] md:leading-[100%]
+    xl:text-[2.4rem] xl:leading-[100%]
+  `,
+  historyRowDividerBase: `
+    hidden h-px min-w-0 flex-1 self-center origin-left bg-white/35
+    xl:block
+  `,
+  historyCardGap: "hidden xl:block w-[8rem] shrink-0",
+  historyDividerGap: "hidden xl:block w-[4rem] shrink-0",
+
+  // ============================================================
+  // Certificate Section
+  // ============================================================
+  certificateGrid: `
+    grid grid-cols-2
+    gap-3
+    sm:grid-cols-3
+    lg:grid-cols-5
+  `,
   certificateCard: "relative overflow-hidden",
   certificateImageRatio: "aspect-[3/4]",
   certificateCaption:
     "absolute inset-x-0 bottom-0 p-2 bg-gradient-to-t from-black/80 to-transparent",
   certificateTitle: "font-noto text-[1rem] text-white/85",
   certificateDesc: "font-noto text-white/95 text-[1.2rem]",
+
+  // ============================================================
+  // CEO Section
+  // ============================================================
   ceoSection: `
-		mx-auto mt-28 grid max-w-[80rem] grid-cols-1 items-end gap-10
-		lg:grid-cols-[22.5rem_1fr]
-	`,
-  ceoEnLabel: "font-noto tracking-[0.28em] text-white/80 text-[1.2rem]",
-  ceoTitle: "font-gilda mt-2 text-[4rem] lg:text-[6rem]",
-  ceoBar: "w-28 h-[0.1875rem] bg-white mt-4",
-  ceoNameWrap: "font-noto mt-5 text-[1.6rem]",
-  ceoNameText: "bg-point px-2 py-1",
-  ceoDescription:
-    "mt-5 font-noto leading-[1.6] text-white/80 whitespace-pre-line text-[1.4rem]",
-  ceoSocialWrap: "flex gap-3 mt-8",
-  ceoSocialButton:
-    "w-9 h-9 rounded-full border border-white/60 font-noto text-white/90 text-[1.2rem]",
-  ceoVisualWrap: "h-[26.25rem] w-full overflow-hidden sm:h-[35rem]",
-  ceoVisual: "w-full h-full object-cover",
+    flex w-full flex-col items-start
+    gap-[6rem]
+    lg:flex-row lg:items-start lg:justify-between lg:gap-[4rem]
+  `,
+  ceoCopyCol: `
+    flex flex-col items-start gap-[2rem]
+    lg:w-fit lg:shrink-0 lg: gap-[4rem]
+  `,
+  ceoEnLabel: `
+    font-noto font-medium uppercase tracking-[0.24em] text-white/80
+    text-[1.4rem] leading-[130%]
+    lg:text-[2rem]
+  `,
+  ceoTitle: `
+    font-gilda tracking-[-0.03em] text-white
+    text-[5.2rem] leading-[100%]
+    lg:text-[7.2rem]
+  `,
+  ceoBar: "h-[0.4rem] w-[14rem] rounded-full bg-white",
+  ceoNameWrap: "font-noto",
+  ceoNameText: `
+    inline-block bg-point px-[0.8rem] py-[0.2rem]
+    text-[3.2rem] leading-[130%] tracking-[-0.03em] text-white
+    lg:text-[3.6rem]
+  `,
+  ceoDescription: `
+    whitespace-pre-line
+    font-noto text-white/90 tracking-[-0.05em]
+    text-[1.8rem] leading-[150%]
+    lg:text-[2.2rem]
+  `,
+  ceoDecor: `
+    font-gilda text-point-light tracking-[0.06em]
+    text-[5.2rem] leading-none
+    lg:text-[6.2rem]
+  `,
+  ceoSNSChannelsWrap: `
+    flex items-center
+    gap-[2rem]
+  `,
+  ceoSNSChannelsLink: `
+    inline-flex h-[6rem] w-[6rem] items-center justify-center
+    transition-transform duration-200 hover:scale-[1.04]
+  `,
+  ceoSnsIconWrap: "relative h-[6rem] w-[6rem]",
+  ceoSnsIconBase:
+    "absolute h-[6rem] w-[6rem] transition-opacity duration-300 ease-out group-hover:opacity-0",
+  ceoSnsIconHover:
+    "absolute h-[6rem] w-[6rem] opacity-0 transition-opacity duration-300 ease-out group-hover:opacity-100",
+  ceoPhotoWrap: `
+    relative w-full max-w-[70rem] overflow-hidden bg-black/10
+    aspect-square
+  `,
+  ceoPhoto: "w-full h-full object-cover",
 };
 
-const MARQUEE_TEXT = "Trust  Integrity  Reliability  Transformation";
+const MARQUEE_TEXT = " Trust Integrity Reliability Transformation ";
+const MARQUEE_REPEAT_COUNT = 4;
 
 export default function AboutUsPage() {
   const { history, certificates, ceo } = ABOUT_PAGE_CONTENT;
+  const ceoSnsMap = {
+    IG: STORE_DATA.sns.instagram,
+    YT: STORE_DATA.sns.youtube,
+    X: STORE_DATA.sns.x,
+  } as const;
   const INTRO_BASE_DELAY_MS = 70;
   const INTRO_ROW_STEP_MS = 120;
   const INTRO_INNER_STEP_MS = 110;
@@ -152,7 +278,7 @@ export default function AboutUsPage() {
 
   return (
     <main className={STYLE.main}>
-      {/* ── About US 인트로 ─────────────────────────────── */}
+      {/* ==================== Intro Section ==================== */}
       <section>
         <ScrollReveal
           className={STYLE.titleWrap}
@@ -211,7 +337,11 @@ export default function AboutUsPage() {
             </ScrollReveal>
             <ScrollReveal
               className={STYLE.imageCircleWrap}
-              delayMs={INTRO_BASE_DELAY_MS + INTRO_ROW_STEP_MS * 0 + INTRO_INNER_STEP_MS}
+              delayMs={
+                INTRO_BASE_DELAY_MS +
+                INTRO_ROW_STEP_MS * 0 +
+                INTRO_INNER_STEP_MS
+              }
               durationMs={INTRO_DURATION_MS}
               threshold={INTRO_THRESHOLD}
               rootMargin={INTRO_ROOT_MARGIN}
@@ -266,7 +396,11 @@ export default function AboutUsPage() {
             </ScrollReveal>
             <ScrollReveal
               className={STYLE.imageRectWrap}
-              delayMs={INTRO_BASE_DELAY_MS + INTRO_ROW_STEP_MS * 1 + INTRO_INNER_STEP_MS}
+              delayMs={
+                INTRO_BASE_DELAY_MS +
+                INTRO_ROW_STEP_MS * 1 +
+                INTRO_INNER_STEP_MS
+              }
               durationMs={INTRO_DURATION_MS}
               threshold={INTRO_THRESHOLD}
               rootMargin={INTRO_ROOT_MARGIN}
@@ -311,7 +445,11 @@ export default function AboutUsPage() {
             </ScrollReveal>
             <ScrollReveal
               className={STYLE.imageRectWrap}
-              delayMs={INTRO_BASE_DELAY_MS + INTRO_ROW_STEP_MS * 2 + INTRO_INNER_STEP_MS}
+              delayMs={
+                INTRO_BASE_DELAY_MS +
+                INTRO_ROW_STEP_MS * 2 +
+                INTRO_INNER_STEP_MS
+              }
               durationMs={INTRO_DURATION_MS}
               threshold={INTRO_THRESHOLD}
               rootMargin={INTRO_ROOT_MARGIN}
@@ -330,7 +468,7 @@ export default function AboutUsPage() {
         </div>
       </section>
 
-      {/* ── 마키 레터링 ──────────────────────────────────── */}
+      {/* ==================== Marquee Section ==================== */}
       <ScrollReveal
         className={STYLE.marqueeSection}
         durationMs={SECTION_DURATION_MS}
@@ -340,14 +478,24 @@ export default function AboutUsPage() {
         visibleClassName="opacity-100 translate-x-0 blur-0"
       >
         <div className={STYLE.marqueeTrack} aria-hidden="true">
-          {Array.from({ length: 6 }).map((_, i) => (
-            <span key={i} className={STYLE.marqueeChunk}>
-              {MARQUEE_TEXT}
-            </span>
+          {[0, 1].map((setIndex) => (
+            <div key={`marquee-set-${setIndex}`} className={STYLE.marqueeSet}>
+              {Array.from({ length: MARQUEE_REPEAT_COUNT }).map(
+                (_, chunkIndex) => (
+                  <span
+                    key={`marquee-${setIndex}-${chunkIndex}`}
+                    className={STYLE.marqueeChunk}
+                  >
+                    {MARQUEE_TEXT}
+                  </span>
+                ),
+              )}
+            </div>
           ))}
         </div>
       </ScrollReveal>
 
+      {/* ==================== History Section ==================== */}
       <section className={`${STYLE.historySection}`}>
         <ScrollReveal
           className={STYLE.sectionHeading}
@@ -389,7 +537,9 @@ export default function AboutUsPage() {
                   <div key={`${item.year}-${item.date}`} className="contents">
                     <ScrollReveal
                       as="article"
-                      delayMs={(isOddRow ? cardIndex : cardIndex + 1) * STAGGER_MS}
+                      delayMs={
+                        (isOddRow ? cardIndex : cardIndex + 1) * STAGGER_MS
+                      }
                       durationMs={820}
                       className={STYLE.historyCard}
                     >
@@ -399,7 +549,7 @@ export default function AboutUsPage() {
                           alt={item.imageAlt}
                           fill
                           unoptimized
-                          sizes="(max-width: 1024px) 100vw, 28rem"
+                          sizes="(max-width: 1279px) 15rem, 28rem"
                           className={STYLE.historyImage}
                         />
                       </div>
@@ -443,6 +593,7 @@ export default function AboutUsPage() {
         </div>
       </section>
 
+      {/* ==================== Certificate Section ==================== */}
       <section>
         <ScrollReveal
           className={STYLE.sectionHeading}
@@ -486,33 +637,66 @@ export default function AboutUsPage() {
         </div>
       </section>
 
+      {/* ==================== CEO Section ==================== */}
       <section className={STYLE.ceoSection}>
         <ScrollReveal
+          className={STYLE.ceoCopyCol}
           durationMs={SECTION_DURATION_MS}
           threshold={SECTION_THRESHOLD}
           rootMargin={SECTION_ROOT_MARGIN}
           hiddenClassName="opacity-0 -translate-x-[2.4rem] blur-[6px]"
           visibleClassName="opacity-100 translate-x-0 blur-0"
         >
-          <p className={STYLE.ceoEnLabel}>{ceo.label}</p>
-          <h3 className={STYLE.ceoTitle}>{ceo.title}</h3>
+          <div className="flex flex-col gap-[2rem]">
+            <p className={STYLE.ceoEnLabel}>{ceo.label}</p>
+            <h3 className={STYLE.ceoTitle}>{ceo.title}</h3>
+          </div>
           <div className={STYLE.ceoBar} />
           <p className={STYLE.ceoNameWrap}>
             <span className={STYLE.ceoNameText}>{ceo.name}</span>
           </p>
           <p className={STYLE.ceoDescription}>{ceo.description}</p>
+          <p className={STYLE.ceoDecor}>***</p>
 
-          <div className={STYLE.ceoSocialWrap}>
-            {ceo.socialChannels.map((channel) => (
-              <button key={channel} className={STYLE.ceoSocialButton}>
-                {channel}
-              </button>
-            ))}
+          <div className={STYLE.ceoSNSChannelsWrap}>
+            {ceo.socialChannels.map((channel) => {
+              const snsItem = ceoSnsMap[channel as keyof typeof ceoSnsMap];
+
+              if (!snsItem) return null;
+
+              return (
+                <a
+                  key={channel}
+                  href={snsItem.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className={`${STYLE.ceoSNSChannelsLink} group`}
+                  aria-label={snsItem.label}
+                >
+                  <span className={STYLE.ceoSnsIconWrap}>
+                    <Image
+                      src={snsItem.iconSrc}
+                      alt={snsItem.label}
+                      width={60}
+                      height={60}
+                      className={STYLE.ceoSnsIconBase}
+                    />
+                    <Image
+                      src={snsItem.hoverIconSrc}
+                      alt={snsItem.label}
+                      width={60}
+                      height={60}
+                      className={STYLE.ceoSnsIconHover}
+                    />
+                  </span>
+                </a>
+              );
+            })}
           </div>
         </ScrollReveal>
 
         <ScrollReveal
-          className={STYLE.ceoVisualWrap}
+          className={STYLE.ceoPhotoWrap}
           delayMs={120}
           durationMs={SECTION_DURATION_MS}
           threshold={SECTION_THRESHOLD}
@@ -523,7 +707,7 @@ export default function AboutUsPage() {
           <img
             src="/images/about-us/ceo-photo.webp"
             alt={ceo.imageAlt}
-            className={STYLE.ceoVisual}
+            className={STYLE.ceoPhoto}
           />
         </ScrollReveal>
       </section>
