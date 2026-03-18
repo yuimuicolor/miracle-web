@@ -136,6 +136,37 @@ export default function Header() {
     }
   }, [isMenuOpen]);
 
+  const scrollToHashWithOffset = (hash: string) => {
+    const target = document.getElementById(hash);
+    if (!target) return;
+
+    const rootStyle = getComputedStyle(document.documentElement);
+    const pageOffsetTopVar = rootStyle.getPropertyValue("--page-offset-top").trim();
+    const pageOffsetTopPx = Number.parseFloat(pageOffsetTopVar) || 0;
+
+    const absoluteTop = target.getBoundingClientRect().top + window.scrollY;
+    const nextTop = Math.max(0, absoluteTop - pageOffsetTopPx);
+
+    window.scrollTo({ top: nextTop, behavior: "smooth" });
+  };
+
+  useEffect(() => {
+    const applyHashOffset = () => {
+      const hash = window.location.hash.replace("#", "");
+      if (!hash) return;
+
+      // Wait for route/content paint before measuring target position.
+      window.setTimeout(() => scrollToHashWithOffset(hash), 120);
+    };
+
+    applyHashOffset();
+    window.addEventListener("hashchange", applyHashOffset);
+
+    return () => {
+      window.removeEventListener("hashchange", applyHashOffset);
+    };
+  }, [pathname, deviceType]);
+
   const handleHeaderLinkClick = (href: string) => {
     setIsHovered(false);
     setHoveredMenu(null);
@@ -149,7 +180,7 @@ export default function Header() {
     if (hasHash && pathname.startsWith(pathOnly) && hash) {
       // 같은 페이지 내 hash 이동: 메뉴가 닫힌 뒤 수동 스크롤
       setTimeout(() => {
-        document.getElementById(hash)?.scrollIntoView({ behavior: "smooth" });
+        scrollToHashWithOffset(hash);
       }, 80);
       return;
     }

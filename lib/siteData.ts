@@ -79,12 +79,12 @@ export const STORE_DATA = {
 export const NAVIGATION_MENU: NavigationMenuItem[] = [
   {
     title: "ABOUT US",
-    href: "/aboutus",
+    href: "/aboutus#company",
     submenus: [
-      { label: "회사소개", href: "/aboutus/company" },
-      { label: "히스토리", href: "/aboutus/history" },
-      { label: "인증서", href: "/aboutus/certificates" },
-      { label: "CEO소개", href: "/aboutus/ceo" },
+      { label: "회사소개", href: "/aboutus#company" },
+      { label: "히스토리", href: "/aboutus#history" },
+      { label: "인증서", href: "/aboutus#certificates" },
+      { label: "CEO소개", href: "/aboutus#ceo" },
     ],
   },
   {

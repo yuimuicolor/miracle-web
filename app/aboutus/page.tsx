@@ -254,6 +254,7 @@ const STYLE = {
 
 const MARQUEE_TEXT = " Trust Integrity Reliability Transformation ";
 const MARQUEE_REPEAT_COUNT = 4;
+const ANCHOR_PADDING_TOP = "var(--page-offset-top)";
 
 export default function AboutUsPage() {
   const { history, certificates, ceo } = ABOUT_PAGE_CONTENT;
@@ -279,7 +280,7 @@ export default function AboutUsPage() {
   return (
     <main className={STYLE.main}>
       {/* ==================== Intro Section ==================== */}
-      <section>
+      <section id="company" style={{ paddingTop: ANCHOR_PADDING_TOP }}>
         <ScrollReveal
           className={STYLE.titleWrap}
           delayMs={0}
@@ -496,7 +497,11 @@ export default function AboutUsPage() {
       </ScrollReveal>
 
       {/* ==================== History Section ==================== */}
-      <section className={`${STYLE.historySection}`}>
+      <section
+        id="history"
+        className={`${STYLE.historySection}`}
+        style={{ paddingTop: ANCHOR_PADDING_TOP }}
+      >
         <ScrollReveal
           className={STYLE.sectionHeading}
           durationMs={SECTION_DURATION_MS}
@@ -594,7 +599,10 @@ export default function AboutUsPage() {
       </section>
 
       {/* ==================== Certificate Section ==================== */}
-      <section>
+      <section
+        id="certificates"
+        style={{ paddingTop: ANCHOR_PADDING_TOP }}
+      >
         <ScrollReveal
           className={STYLE.sectionHeading}
           durationMs={SECTION_DURATION_MS}
@@ -638,7 +646,11 @@ export default function AboutUsPage() {
       </section>
 
       {/* ==================== CEO Section ==================== */}
-      <section className={STYLE.ceoSection}>
+      <section
+        id="ceo"
+        className={STYLE.ceoSection}
+        style={{ paddingTop: ANCHOR_PADDING_TOP }}
+      >
         <ScrollReveal
           className={STYLE.ceoCopyCol}
           durationMs={SECTION_DURATION_MS}
@@ -647,7 +659,7 @@ export default function AboutUsPage() {
           hiddenClassName="opacity-0 -translate-x-[2.4rem] blur-[6px]"
           visibleClassName="opacity-100 translate-x-0 blur-0"
         >
-          <div className="flex flex-col gap-[2rem]">
+          <div className="flex flex-col gap-8">
             <p className={STYLE.ceoEnLabel}>{ceo.label}</p>
             <h3 className={STYLE.ceoTitle}>{ceo.title}</h3>
           </div>
