@@ -1,5 +1,7 @@
 import Link from "next/link";
 import ZoomablePhotoCard from "@/components/gallery/ZoomablePhotoCard";
+import ScrollReveal from "@/components/ScrollReveal";
+import { HOME_REVEAL } from "@/components/sections/homeMotion";
 import { getGalleryImages, type GalleryImageItem } from "../../lib/galleryData";
 import MoreButton from "../MoreButton";
 import SectionTitle from "./common/SectionTitle";
@@ -34,19 +36,28 @@ export default function GallerySection() {
   return (
     <section className={STYLE.section}>
       <div className={STYLE.content}>
-        <SectionTitle title={gallerySection.sectionTitle} color="white" />
+        <ScrollReveal className="w-full" {...HOME_REVEAL.sectionTitle}>
+          <SectionTitle title={gallerySection.sectionTitle} color="white" />
+        </ScrollReveal>
 
         <div className={STYLE.grid}>
-          {galleryImages.map((image: GalleryImageItem) => (
-            <ZoomablePhotoCard key={image.src} src={image.src} alt={image.alt} />
+          {galleryImages.map((image: GalleryImageItem, index) => (
+            <ScrollReveal
+              key={image.src}
+              className="w-full"
+              delayMs={index * 70}
+              {...HOME_REVEAL.card}
+            >
+              <ZoomablePhotoCard src={image.src} alt={image.alt} />
+            </ScrollReveal>
           ))}
         </div>
 
-        <div className={STYLE.buttonWrap}>
+        <ScrollReveal className={STYLE.buttonWrap} delayMs={180} {...HOME_REVEAL.button}>
           <Link href="/gallery">
             <MoreButton text={gallerySection.moreButtonText} size="L" mode="light" />
           </Link>
-        </div>
+        </ScrollReveal>
       </div>
     </section>
   );

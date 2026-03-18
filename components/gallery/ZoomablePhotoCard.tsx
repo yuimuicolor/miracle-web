@@ -30,7 +30,7 @@ const MAIN_TITLE_CLAMP_STYLE = {
 };
 
 const STYLE = {
-  card: "group relative aspect-square overflow-hidden bg-black/20",
+  card: "group relative block w-full aspect-square overflow-hidden bg-black/20",
   image:
     "object-cover transform-gpu transition-transform duration-150 ease-out will-change-transform group-hover:scale-[1.035]",
   hoverBlur:

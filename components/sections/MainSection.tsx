@@ -1,13 +1,17 @@
 'use client';
 
 import { ChevronDown } from 'lucide-react';
+import ScrollReveal from '@/components/ScrollReveal';
+import { HOME_REVEAL } from '@/components/sections/homeMotion';
 import { HOME_CONTENT } from '@/lib/siteData';
 
 const STYLE = {
   section:
     'relative h-screen w-full flex flex-col items-center justify-center overflow-hidden bg-bg-dark',
   background:
-    "absolute inset-0 bg-[url('/images/main-bg.png')] bg-cover bg-center opacity-60",
+    "absolute inset-0 bg-[url('/images/main-bg.png')] bg-cover bg-center opacity-60 animate-home-hero-drift",
+  glow:
+    'pointer-events-none absolute left-1/2 top-1/2 h-[44rem] w-[44rem] -translate-x-1/2 -translate-y-1/2 rounded-full bg-point/30 blur-[120px] animate-home-hero-glow md:h-[58rem] md:w-[58rem]',
   contentWrap: 'relative z-10 flex flex-col items-center gap-2 text-center',
   title: `
     relative font-noto leading-normal tracking-[-0.03em] text-white
@@ -31,7 +35,7 @@ const STYLE = {
     md:text-[6rem]
   `,
   scrollGuideWrap:
-    'absolute bottom-10 flex flex-col items-center gap-2 opacity-40 animate-bounce',
+    'absolute bottom-10 flex flex-col items-center gap-2 opacity-40 animate-home-soft-float',
   scrollGuideText: `
     text-center font-noto font-100 tracking-[0.3em] text-white
     text-[1.6rem]
@@ -46,30 +50,36 @@ export default function MainSection() {
   return (
     <section className={STYLE.section}>
       <div className={STYLE.background} />
+      <div className={STYLE.glow} />
 
-      {/* 텍스트 컨텐츠 */}
       <div className={STYLE.contentWrap}>
-        {/* 한글 메인 타이틀 */}
-        <h3 className={STYLE.title}>
-          <b>{mainSection.title.firstEmphasis}</b>{mainSection.title.betweenText}<b>{mainSection.title.secondEmphasis}</b>{mainSection.title.suffix}
-          <span className={STYLE.titleStar}>{mainSection.title.star}</span>
-        </h3>
+        <ScrollReveal delayMs={80} {...HOME_REVEAL.heroTitle}>
+          <h3 className={STYLE.title}>
+            <b>{mainSection.title.firstEmphasis}</b>{mainSection.title.betweenText}<b>{mainSection.title.secondEmphasis}</b>{mainSection.title.suffix}
+            <span className={STYLE.titleStar}>{mainSection.title.star}</span>
+          </h3>
+        </ScrollReveal>
 
-        {/* 보라색 강조 박스 + 필기체 느낌 */}
-        <div className={STYLE.logoWrap}>
-          <span className={STYLE.logoText}>
-            {mainSection.logoText}
-          </span>
-        </div>
+        <ScrollReveal delayMs={220} {...HOME_REVEAL.heroLogo}>
+          <div className={STYLE.logoWrap}>
+            <span className={STYLE.logoText}>
+              {mainSection.logoText}
+            </span>
+          </div>
+        </ScrollReveal>
 
-        {/* 영문 서브 타이틀 */}
-        <h3 className={STYLE.subtitle}>
-          {mainSection.subtitle}
-        </h3>
+        <ScrollReveal delayMs={340} {...HOME_REVEAL.heroSubtitle}>
+          <h3 className={STYLE.subtitle}>
+            {mainSection.subtitle}
+          </h3>
+        </ScrollReveal>
       </div>
 
-      {/* 스크롤 다운 안내 */}
-      <div className={STYLE.scrollGuideWrap}>
+      <ScrollReveal
+        className={STYLE.scrollGuideWrap}
+        delayMs={540}
+        {...HOME_REVEAL.heroSubtitle}
+      >
         <span className={STYLE.scrollGuideText}>
           {mainSection.scrollGuide.split('\n').map((line, index, array) => (
             <span key={`${line}-${index}`}>
@@ -79,7 +89,7 @@ export default function MainSection() {
           ))}
         </span>
         <ChevronDown className={STYLE.scrollGuideIcon} size={20} />
-      </div>
+      </ScrollReveal>
     </section>
   );
 }

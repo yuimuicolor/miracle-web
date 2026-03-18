@@ -3,6 +3,8 @@
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 import ProductBox from "@/components/products/ProductBox";
+import ScrollReveal from "@/components/ScrollReveal";
+import { HOME_REVEAL } from "@/components/sections/homeMotion";
 import MoreButton from "../MoreButton";
 import SectionTitle from "./common/SectionTitle";
 import { PRODUCTS, toProductPathId } from "@/lib/productsData";
@@ -241,14 +243,14 @@ export default function ProductsSection() {
   return (
     <section className={STYLE.section}>
       <div className={STYLE.content}>
-        <div className={STYLE.titleWrap}>
+        <ScrollReveal className={STYLE.titleWrap} {...HOME_REVEAL.sectionTitle}>
           <SectionTitle title={productsSection.sectionTitle} color="black" />
           <p className={STYLE.subText}>
             <strong className="font-bold">{BRAND_DATA.uppercaseName}</strong>{productsSection.description}
           </p>
-        </div>
+        </ScrollReveal>
 
-        <div className={STYLE.sliderArea}>
+        <ScrollReveal className={STYLE.sliderArea} delayMs={120} {...HOME_REVEAL.sectionBody}>
           <button
             type="button"
             className={`${STYLE.arrowButton}`}
@@ -291,13 +293,13 @@ export default function ProductsSection() {
           >
             ›
           </button>
-        </div>
+        </ScrollReveal>
 
-        <div className={STYLE.buttonWrap}>
+        <ScrollReveal className={STYLE.buttonWrap} delayMs={220} {...HOME_REVEAL.button}>
           <Link href="/products">
             <MoreButton text={productsSection.moreButtonText} size="L" mode="dark" />
           </Link>
-        </div>
+        </ScrollReveal>
       </div>
     </section>
   );

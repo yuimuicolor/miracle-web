@@ -1,6 +1,8 @@
 "use client";
 
 import { useState, ChangeEvent, FormEvent } from "react";
+import ScrollReveal from "@/components/ScrollReveal";
+import { HOME_REVEAL } from "@/components/sections/homeMotion";
 import { supabase } from "@/lib/supabase";
 import { ContactData } from "@/types/contact";
 import { HOME_CONTENT } from "@/lib/siteData";
@@ -90,19 +92,23 @@ export default function ContactUsSection() {
   return (
     <section className={STYLE.section}>
       <div className={STYLE.inner}>
-        <h1 className={STYLE.title}>
-          {contactSection.title}<span className={STYLE.titleStar}>{contactSection.titleStar}</span>
-        </h1>
-        <div className={STYLE.divider} />
+        <ScrollReveal {...HOME_REVEAL.sectionTitle}>
+          <h1 className={STYLE.title}>
+            {contactSection.title}<span className={STYLE.titleStar}>{contactSection.titleStar}</span>
+          </h1>
+          <div className={STYLE.divider} />
+        </ScrollReveal>
 
         <form onSubmit={handleSubmit} className={STYLE.form}>
           <div className={STYLE.formGrid}>
-            {contactSection.fields.map((field) => {
+            {contactSection.fields.map((field, index) => {
               const isTextarea = field.inputType === "textarea";
 
               return (
-                <div
+                <ScrollReveal
                   key={field.name}
+                  delayMs={index * 70}
+                  {...HOME_REVEAL.card}
                   className={isTextarea ? STYLE.fieldBlockMessage : STYLE.fieldBlock}
                 >
                   <label className={STYLE.label}>
@@ -128,12 +134,12 @@ export default function ContactUsSection() {
                       className={STYLE.input}
                     />
                   )}
-                </div>
+                </ScrollReveal>
               );
             })}
           </div>
 
-          <div className={STYLE.submitWrap}>
+          <ScrollReveal className={STYLE.submitWrap} delayMs={180} {...HOME_REVEAL.button}>
             <label className={STYLE.consentLabel}>
               <input type="checkbox" required className={STYLE.checkbox} />
               <span>{contactSection.consentText} <span className="font-bold">{contactSection.consentLinkLabel}</span></span>
@@ -145,7 +151,7 @@ export default function ContactUsSection() {
             >
               {contactSection.submitButtonText}
             </button>
-          </div>
+          </ScrollReveal>
         </form>
       </div>
     </section>

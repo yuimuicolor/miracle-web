@@ -2,6 +2,8 @@ import Link from "next/link";
 import path from "node:path";
 import { readdirSync } from "node:fs";
 import MoreButton from "../MoreButton";
+import ScrollReveal from "@/components/ScrollReveal";
+import { HOME_REVEAL } from "@/components/sections/homeMotion";
 import AboutSlider from "./AboutSlider";
 import SectionTitle from "./common/SectionTitle";
 import { HOME_CONTENT } from "@/lib/siteData";
@@ -91,9 +93,11 @@ export default function AboutSection() {
   return (
     <section className={STYLE.section}>
       <div className={STYLE.content}>
-        <SectionTitle title={aboutSection.sectionTitle} color="white" />
+        <ScrollReveal {...HOME_REVEAL.sectionTitle}>
+          <SectionTitle title={aboutSection.sectionTitle} color="white" />
+        </ScrollReveal>
         <div className={STYLE.body}>
-          <div className={STYLE.textWrap}>
+          <ScrollReveal className={STYLE.textWrap} delayMs={80} {...HOME_REVEAL.textBlock}>
             <p className={STYLE.lead}>
               <span className={STYLE.leadLine}>
                 <span className={STYLE.leadSegmentPoint}>독창적인 발상</span>
@@ -109,11 +113,11 @@ export default function AboutSection() {
             <Link href="/aboutus">
               <MoreButton text={aboutSection.moreButtonText} size="S" mode="light" />
             </Link>
-          </div>
+          </ScrollReveal>
 
-          <div className={STYLE.sliderWrap}>
+          <ScrollReveal className={STYLE.sliderWrap} delayMs={180} {...HOME_REVEAL.mediaBlock}>
             <AboutSlider slides={slides} />
-          </div>
+          </ScrollReveal>
         </div>
       </div>
     </section>

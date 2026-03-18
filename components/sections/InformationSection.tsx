@@ -2,6 +2,8 @@
 
 import { ExternalLink } from "lucide-react";
 import Image from "next/image";
+import ScrollReveal from "@/components/ScrollReveal";
+import { HOME_REVEAL } from "@/components/sections/homeMotion";
 import { HOME_CONTENT, STORE_DATA } from "@/lib/siteData";
 
 const STYLE = {
@@ -88,18 +90,18 @@ export default function InformationSection() {
   return (
     <section className={STYLE.section}>
       <div className={STYLE.panel}>
-        <div className={STYLE.titleRow}>
+        <ScrollReveal className={STYLE.titleRow} {...HOME_REVEAL.sectionTitle}>
           <div className={STYLE.titleHead}>
             <span className={STYLE.titleLine} />
             <h2 className={STYLE.title}>{informationSection.sectionTitle}</h2>
             <span className={STYLE.titleLine} />
           </div>
           <p className={STYLE.stars}>{informationSection.starsText}</p>
-        </div>
+        </ScrollReveal>
 
         <div className={STYLE.content}>
           <div className={STYLE.body}>
-            <div className={STYLE.mapWrap}>
+            <ScrollReveal className={STYLE.mapWrap} delayMs={80} {...HOME_REVEAL.mediaBlock}>
               <iframe
                 title={informationSection.mapTitle}
                 className={STYLE.mapFrame}
@@ -107,64 +109,72 @@ export default function InformationSection() {
                 referrerPolicy="no-referrer-when-downgrade"
                 src={mapEmbedUrl}
               />
-            </div>
+            </ScrollReveal>
 
             <div className={STYLE.infoCol}>
-              <button
-                type="button"
-                className={STYLE.infoLink}
-                onClick={openDirections}
-              >
-                <Image
-                  src={STORE_DATA.infoIcons.location}
-                  alt={informationSection.locationIconAlt}
-                  width={40}
-                  height={40}
-                  className={STYLE.mainIcon}
-                />
-                <div className={STYLE.infoTextWrap}>
-                  <span className={STYLE.infoText}>{STORE_DATA.address}</span>
-                  <ExternalLink className={STYLE.extIcon} />
-                </div>
-              </button>
+              <ScrollReveal delayMs={140} {...HOME_REVEAL.textBlock}>
+                <button
+                  type="button"
+                  className={STYLE.infoLink}
+                  onClick={openDirections}
+                >
+                  <Image
+                    src={STORE_DATA.infoIcons.location}
+                    alt={informationSection.locationIconAlt}
+                    width={40}
+                    height={40}
+                    className={STYLE.mainIcon}
+                  />
+                  <div className={STYLE.infoTextWrap}>
+                    <span className={STYLE.infoText}>{STORE_DATA.address}</span>
+                    <ExternalLink className={STYLE.extIcon} />
+                  </div>
+                </button>
+              </ScrollReveal>
 
-              <a
-                href={`tel:${toDialNumber(STORE_DATA.phone)}`}
-                className={STYLE.infoLink}
-              >
-                <Image
-                  src={STORE_DATA.infoIcons.phone}
-                  alt={informationSection.phoneIconAlt}
-                  width={40}
-                  height={40}
-                  className={STYLE.mainIcon}
-                />
-                <div className={STYLE.infoTextWrap}>
-                  <span className={STYLE.infoText}>{STORE_DATA.phone}</span>
-                  <ExternalLink className={STYLE.extIcon} />
-                </div>
-              </a>
+              <ScrollReveal delayMs={220} {...HOME_REVEAL.textBlock}>
+                <a
+                  href={`tel:${toDialNumber(STORE_DATA.phone)}`}
+                  className={STYLE.infoLink}
+                >
+                  <Image
+                    src={STORE_DATA.infoIcons.phone}
+                    alt={informationSection.phoneIconAlt}
+                    width={40}
+                    height={40}
+                    className={STYLE.mainIcon}
+                  />
+                  <div className={STYLE.infoTextWrap}>
+                    <span className={STYLE.infoText}>{STORE_DATA.phone}</span>
+                    <ExternalLink className={STYLE.extIcon} />
+                  </div>
+                </a>
+              </ScrollReveal>
 
-              <a href={`mailto:${STORE_DATA.email}`} className={STYLE.infoLink}>
-                <Image
-                  src={STORE_DATA.infoIcons.email}
-                  alt={informationSection.emailIconAlt}
-                  width={40}
-                  height={40}
-                  className={STYLE.mainIcon}
-                />
-                <div className={STYLE.infoTextWrap}>
-                  <span className={STYLE.infoText}>{STORE_DATA.email}</span>
-                  <ExternalLink className={STYLE.extIcon} />
-                </div>
-              </a>
+              <ScrollReveal delayMs={300} {...HOME_REVEAL.textBlock}>
+                <a href={`mailto:${STORE_DATA.email}`} className={STYLE.infoLink}>
+                  <Image
+                    src={STORE_DATA.infoIcons.email}
+                    alt={informationSection.emailIconAlt}
+                    width={40}
+                    height={40}
+                    className={STYLE.mainIcon}
+                  />
+                  <div className={STYLE.infoTextWrap}>
+                    <span className={STYLE.infoText}>{STORE_DATA.email}</span>
+                    <ExternalLink className={STYLE.extIcon} />
+                  </div>
+                </a>
+              </ScrollReveal>
 
-              <div className={STYLE.chip}>
+              <ScrollReveal delayMs={380} {...HOME_REVEAL.card}>
+                <div className={STYLE.chip}>
                 <p className={STYLE.chipTitle}>{informationSection.businessHoursLabel}</p>
                 <p className={STYLE.chipBody}>{STORE_DATA.businessHours}</p>
-              </div>
+                </div>
+              </ScrollReveal>
 
-              <div className={STYLE.snsRow}>
+              <ScrollReveal className={STYLE.snsRow} delayMs={460} {...HOME_REVEAL.button}>
                 {snsEntries.map((snsItem) => (
                   <a
                     key={snsItem.label}
@@ -192,7 +202,7 @@ export default function InformationSection() {
                     </span>
                   </a>
                 ))}
-              </div>
+              </ScrollReveal>
             </div>
           </div>
         </div>
