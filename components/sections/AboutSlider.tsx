@@ -8,6 +8,7 @@ interface AboutSliderProps {
 }
 
 const AUTO_SLIDE_MS = 4000;
+const AXIS_LOCK_THRESHOLD = 8;
 
 export default function AboutSlider({ slides }: AboutSliderProps) {
   const safeSlides = useMemo(
@@ -20,6 +21,9 @@ export default function AboutSlider({ slides }: AboutSliderProps) {
   const [isDragging, setIsDragging] = useState(false);
   const [interactionVersion, setInteractionVersion] = useState(0);
   const startXRef = useRef<number | null>(null);
+  const startYRef = useRef<number | null>(null);
+  const axisLockRef = useRef<"none" | "x" | "y">("none");
+  const pointerIdRef = useRef<number | null>(null);
   const wheelLockRef = useRef(false);
   const autoTimerRef = useRef<number | null>(null);
 
@@ -64,20 +68,46 @@ export default function AboutSlider({ slides }: AboutSliderProps) {
   }, [currentIndex, safeSlides.length]);
 
   const handlePointerDown = (event: React.PointerEvent<HTMLDivElement>) => {
-    resetAutoSlide();
     startXRef.current = event.clientX;
-    setIsDragging(true);
-
-    event.currentTarget.setPointerCapture(event.pointerId);
+    startYRef.current = event.clientY;
+    axisLockRef.current = "none";
+    pointerIdRef.current = event.pointerId;
+    setDragOffset(0);
   };
 
   const handlePointerMove = (event: React.PointerEvent<HTMLDivElement>) => {
-    if (startXRef.current === null) {
+    if (startXRef.current === null || startYRef.current === null) {
       return;
     }
 
-    const delta = event.clientX - startXRef.current;
-    setDragOffset(delta);
+    const deltaX = event.clientX - startXRef.current;
+    const deltaY = event.clientY - startYRef.current;
+
+    if (axisLockRef.current === "none") {
+      const absX = Math.abs(deltaX);
+      const absY = Math.abs(deltaY);
+
+      if (Math.max(absX, absY) < AXIS_LOCK_THRESHOLD) {
+        return;
+      }
+
+      axisLockRef.current = absX > absY ? "x" : "y";
+
+      if (axisLockRef.current === "x") {
+        setIsDragging(true);
+        resetAutoSlide();
+        if (pointerIdRef.current !== null) {
+          event.currentTarget.setPointerCapture(pointerIdRef.current);
+        }
+      }
+    }
+
+    if (axisLockRef.current !== "x") {
+      return;
+    }
+
+    event.preventDefault();
+    setDragOffset(deltaX);
   };
 
   const handlePointerEnd = () => {
@@ -85,15 +115,20 @@ export default function AboutSlider({ slides }: AboutSliderProps) {
       return;
     }
 
-    if (dragOffset <= -50) {
-      goNext();
-    } else if (dragOffset >= 50) {
-      goPrev();
+    if (axisLockRef.current === "x") {
+      if (dragOffset <= -50) {
+        goNext();
+      } else if (dragOffset >= 50) {
+        goPrev();
+      }
+
+      resetAutoSlide();
     }
 
-    resetAutoSlide();
-
     startXRef.current = null;
+    startYRef.current = null;
+    axisLockRef.current = "none";
+    pointerIdRef.current = null;
     setDragOffset(0);
     setIsDragging(false);
   };

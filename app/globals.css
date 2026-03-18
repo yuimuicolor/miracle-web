@@ -117,13 +117,15 @@
     -webkit-font-smoothing: antialiased; /* 폰트를 더 매끄럽게 */
   }
 
-  html:has(.home-snap),
-  body:has(.home-snap) {
-    scroll-snap-type: y mandatory;
-  }
+  @media (min-width: 1024px) {
+    html:has(.home-snap),
+    body:has(.home-snap) {
+      scroll-snap-type: y mandatory;
+    }
 
-  body:has(.home-snap) footer {
-    scroll-snap-align: start;
+    body:has(.home-snap) footer {
+      scroll-snap-align: start;
+    }
   }
 
   @media (min-width: 768px) {

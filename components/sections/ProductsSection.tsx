@@ -25,7 +25,7 @@ const STYLE = {
   subText: "font-noto text-[1.6rem] md:text-[1.8rem] lg:text-[2rem] text-black",
   sliderArea: "flex items-center gap-[1.6rem]",
   track: `
-    no-scrollbar grid flex-1 grid-flow-col grid-rows-2 auto-cols-[30rem] overflow-x-auto py-[1.5rem]
+    no-scrollbar grid flex-1 grid-flow-col grid-rows-2 auto-cols-[30rem] overflow-x-auto overscroll-x-contain touch-pan-x py-[1.5rem]
     gap-[1.6rem]
     md:flex md:grid-flow-row md:grid-rows-none md:auto-cols-auto md:gap-[2rem]
   `,
