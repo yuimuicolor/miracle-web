@@ -1,10 +1,11 @@
 "use client";
 
-import { useState, ChangeEvent, FormEvent } from "react";
+import { useState, ChangeEvent, SyntheticEvent } from "react";
 import ScrollReveal from "@/components/ScrollReveal";
 import { HOME_REVEAL } from "@/components/sections/homeMotion";
 import { supabase } from "@/lib/supabase";
 import { ContactData } from "@/types/contact";
+import { sendContactEmail } from "@/app/actions";
 import { HOME_CONTENT } from "@/lib/siteData";
 
 const STYLE = {
@@ -14,35 +15,37 @@ const STYLE = {
     md:px-[4rem] md:pt-[14rem]
     lg:px-[8rem] lg:pt-[17rem]
   `,
-  inner: 'w-full mx-auto',
+  inner: "w-full mx-auto",
   title: `
     font-gilda uppercase leading-none text-white
     text-[3.6rem]
     md:text-[5.6rem]
     lg:text-[8rem]
   `,
-  titleStar: 'text-point-light',
+  titleStar: "text-point-light",
   divider: `
     w-full h-px bg-white
     mt-[1rem] mb-[2rem]
     md:mt-[2rem] md:mb-[4rem]
     lg:mt-[3rem] lg:mb-[6rem]
   `,
-  form: 'w-full',
+  form: "w-full",
   formGrid: `
     grid grid-cols-1 gap-x-[4rem] gap-y-[0.8rem]
     md:gap-y-[2rem]
     lg:grid-cols-2 lg:gap-x-[4rem] lg:gap-y-[4rem]
   `,
-  fieldBlock: 'flex flex-col gap-[0.6rem] lg:flex-row lg:items-center lg:gap-[2rem]',
-  fieldBlockMessage: 'lg:col-span-2 flex flex-col gap-[0.6rem] lg:flex-row lg:items-start lg:gap-[2rem]',
+  fieldBlock:
+    "flex flex-col gap-[0.6rem] lg:flex-row lg:items-center lg:gap-[2rem]",
+  fieldBlockMessage:
+    "lg:col-span-2 flex flex-col gap-[0.6rem] lg:flex-row lg:items-start lg:gap-[2rem]",
   label: `
     flex gap-[0.4rem] font-normal tracking-[-0.01em]
     text-[1.8rem]
     md:text-[2rem]
     lg:w-[10rem] lg:shrink-0 lg:text-[2.4rem]
   `,
-  required: 'text-point-green',
+  required: "text-point-green",
   input: `
     w-full bg-white/50 text-black outline-none transition-colors duration-500 focus:bg-white
     h-[4.8rem] px-[1.2rem] text-[1.8rem]
@@ -55,16 +58,16 @@ const STYLE = {
     md:h-[18rem] md:px-[1.6rem] md:text-[2rem]
     lg:text-[2.4rem]
   `,
-  submitWrap: 'mt-[1.2rem] flex w-full flex-col gap-[4rem]',
+  submitWrap: "mt-[1.2rem] flex w-full flex-col gap-[4rem]",
   consentLabel: `
     flex w-full items-center gap-[0.8rem] tracking-[-0.05rem]
     text-[1.8rem]
     md:text-[1.8rem]
     lg:ml-[12rem] lg:w-[calc(100%-12rem)]
   `,
-  checkbox: 'h-[1.8rem] w-[1.8rem] accent-white',
+  checkbox: "h-[1.8rem] w-[1.8rem] accent-white",
   submitButton:
-    'self-center h-[8rem] w-[28rem] rounded-full bg-white text-[3.2rem] font-bold text-point font-pretendard transition-colors hover:bg-white',
+    "self-center h-[8rem] w-[28rem] rounded-full bg-white text-[3.2rem] font-bold text-point font-pretendard transition-colors hover:bg-white",
 };
 
 export default function ContactUsSection() {
@@ -84,9 +87,48 @@ export default function ContactUsSection() {
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
+  /**
+   * 고객 문의 폼 제출 핸들러
+   * Supabase 데이터베이스에 입력을 저장하고 사용자에게 피드백을 제공합니다.
+   */
+  const handleSubmit = async (e: SyntheticEvent<HTMLFormElement>) => {
     e.preventDefault();
-    void supabase;
+
+    // 입력 데이터 전처리 및 유효성 검사 (필수 필드 공백 제거 등)
+    const submitData: ContactData = {
+      ...formData,
+      company: formData.company?.trim() || "",
+      message: formData.message.trim(),
+    };
+
+    // 필수 입력값 검증 (클라이언트측 2차 검증)
+    if (!submitData.name || !submitData.email || !submitData.message) {
+      alert("필수 입력 항목을 모두 작성해 주세요.");
+      return;
+    }
+
+    try {
+      // 🚀 1. 서버 액션 호출 (이 함수 하나가 DB저장 + 메일발송 다 함)
+      const result = await sendContactEmail(submitData);
+
+      if (!result.success) {
+        throw new Error("서버에서 처리에 실패했습니다.");
+      }
+
+      // 2. 성공 시 UI 처리
+      alert("문의가 성공적으로 접수되었습니다. 빠른 시일 내에 연락드리겠습니다.");
+
+      setFormData({
+        name: "",
+        phone: "",
+        email: "",
+        company: "",
+        message: "",
+      });
+    } catch (error) {
+      console.error("[Contact Error]:", error);
+      alert("전송 중 오류가 발생했습니다.");
+    }
   };
 
   return (
@@ -94,7 +136,8 @@ export default function ContactUsSection() {
       <div className={STYLE.inner}>
         <ScrollReveal {...HOME_REVEAL.sectionTitle}>
           <h1 className={STYLE.title}>
-            {contactSection.title}<span className={STYLE.titleStar}>{contactSection.titleStar}</span>
+            {contactSection.title}
+            <span className={STYLE.titleStar}>{contactSection.titleStar}</span>
           </h1>
           <div className={STYLE.divider} />
         </ScrollReveal>
@@ -109,11 +152,15 @@ export default function ContactUsSection() {
                   key={field.name}
                   delayMs={index * 70}
                   {...HOME_REVEAL.card}
-                  className={isTextarea ? STYLE.fieldBlockMessage : STYLE.fieldBlock}
+                  className={
+                    isTextarea ? STYLE.fieldBlockMessage : STYLE.fieldBlock
+                  }
                 >
                   <label className={STYLE.label}>
                     {field.label}
-                    {field.required ? <span className={STYLE.required}>*</span> : null}
+                    {field.required ? (
+                      <span className={STYLE.required}>*</span>
+                    ) : null}
                   </label>
                   {isTextarea ? (
                     <textarea
@@ -139,16 +186,22 @@ export default function ContactUsSection() {
             })}
           </div>
 
-          <ScrollReveal className={STYLE.submitWrap} delayMs={180} {...HOME_REVEAL.button}>
+          <ScrollReveal
+            className={STYLE.submitWrap}
+            delayMs={180}
+            {...HOME_REVEAL.button}
+          >
             <label className={STYLE.consentLabel}>
               <input type="checkbox" required className={STYLE.checkbox} />
-              <span>{contactSection.consentText} <span className="font-bold">{contactSection.consentLinkLabel}</span></span>
+              <span>
+                {contactSection.consentText}{" "}
+                <span className="font-bold">
+                  {contactSection.consentLinkLabel}
+                </span>
+              </span>
             </label>
 
-            <button
-              type="submit"
-              className={STYLE.submitButton}
-            >
+            <button type="submit" className={STYLE.submitButton}>
               {contactSection.submitButtonText}
             </button>
           </ScrollReveal>
