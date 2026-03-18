@@ -1,4 +1,6 @@
 import ProductsPageGrid from "@/components/products/ProductsPageGrid";
+import ScrollReveal from "@/components/ScrollReveal";
+import { HOME_REVEAL } from "@/components/sections/homeMotion";
 import SectionTitle from "@/components/sections/common/SectionTitle";
 import { PRODUCTS } from "@/lib/productsData";
 import { BRAND_DATA, HOME_CONTENT } from "@/lib/siteData";
@@ -34,15 +36,17 @@ export default function ProductsPage() {
 	return (
 		<section className={STYLE.section}>
 			<div className={STYLE.content}>
-				<div className={STYLE.titleWrap}>
+				<ScrollReveal className={STYLE.titleWrap} {...HOME_REVEAL.sectionTitle}>
 					<SectionTitle title={productsSection.sectionTitle} color="black" />
 					<p className={STYLE.subText}>
 						<strong className="font-bold">{BRAND_DATA.name}</strong>
 						{productsSection.description}
 					</p>
-				</div>
+				</ScrollReveal>
 
-				<ProductsPageGrid products={PRODUCTS} />
+				<ScrollReveal className="w-full" delayMs={120} {...HOME_REVEAL.sectionBody}>
+					<ProductsPageGrid products={PRODUCTS} />
+				</ScrollReveal>
 			</div>
 		</section>
 	);

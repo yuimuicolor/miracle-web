@@ -3,6 +3,8 @@
 import { useMemo, useState } from "react";
 import MoreButton from "@/components/MoreButton";
 import ProductsPageBox from "@/components/products/ProductsPageBox";
+import ScrollReveal from "@/components/ScrollReveal";
+import { HOME_REVEAL } from "@/components/sections/homeMotion";
 import type { ProductItem } from "@/lib/productsData";
 
 interface ProductsPageGridProps {
@@ -17,7 +19,7 @@ const STYLE = {
     md:grid-cols-2 md:gap-x-[1.6rem] md:gap-y-[4rem]
     lg:grid-cols-3 lg:gap-x-[6rem] lg:gap-y-[4rem]
   `,
-  buttonWrap: "flex justify-center",
+  buttonWrap: "mt-[4rem] flex justify-center lg:mt-[6rem]",
 };
 
 export default function ProductsPageGrid({ products }: ProductsPageGridProps) {
@@ -33,20 +35,27 @@ export default function ProductsPageGrid({ products }: ProductsPageGridProps) {
   return (
     <>
       <div className={STYLE.grid}>
-        {visibleProducts.map((product) => (
-          <ProductsPageBox key={product.id} item={product} />
+        {visibleProducts.map((product, index) => (
+          <ScrollReveal
+            key={product.id}
+            className="w-full"
+            delayMs={(index % PAGE_SIZE) * 60}
+            {...HOME_REVEAL.card}
+          >
+            <ProductsPageBox item={product} />
+          </ScrollReveal>
         ))}
       </div>
 
       {hasMore ? (
-        <div className={STYLE.buttonWrap}>
+        <ScrollReveal className={STYLE.buttonWrap} delayMs={120} {...HOME_REVEAL.button}>
           <MoreButton
             text="MORE"
             size="L"
             mode="dark"
             onClick={() => setVisibleCount((prev) => prev + PAGE_SIZE)}
           />
-        </div>
+        </ScrollReveal>
       ) : null}
     </>
   );

@@ -2,7 +2,9 @@
 
 import { useMemo, useState } from "react";
 import MoreButton from "@/components/MoreButton";
+import ScrollReveal from "@/components/ScrollReveal";
 import ZoomablePhotoCard from "@/components/gallery/ZoomablePhotoCard";
+import { HOME_REVEAL } from "@/components/sections/homeMotion";
 
 interface GalleryPageGridItem {
   src: string;
@@ -23,7 +25,7 @@ const STYLE = {
     md:grid-cols-3 md:gap-[2rem]
     lg:gap-[4rem]
   `,
-  buttonWrap: "flex justify-center",
+  buttonWrap: "mt-[4rem] flex justify-center lg:mt-[6rem]",
 };
 
 export default function GalleryPageGrid({ images }: GalleryPageGridProps) {
@@ -39,27 +41,33 @@ export default function GalleryPageGrid({ images }: GalleryPageGridProps) {
   return (
     <>
       <div className={STYLE.grid}>
-        {visibleImages.map((image) => (
-          <ZoomablePhotoCard
+        {visibleImages.map((image, index) => (
+          <ScrollReveal
             key={image.src}
-            src={image.src}
-            alt={image.alt}
-            mode="with-title"
-            subtitle={image.subtitle}
-            mainTitle={image.mainTitle}
-          />
+            className="w-full"
+            delayMs={(index % PAGE_SIZE) * 60}
+            {...HOME_REVEAL.card}
+          >
+            <ZoomablePhotoCard
+              src={image.src}
+              alt={image.alt}
+              mode="with-title"
+              subtitle={image.subtitle}
+              mainTitle={image.mainTitle}
+            />
+          </ScrollReveal>
         ))}
       </div>
 
       {hasMore ? (
-        <div className={STYLE.buttonWrap}>
+        <ScrollReveal className={STYLE.buttonWrap} delayMs={120} {...HOME_REVEAL.button}>
           <MoreButton
             text="MORE"
             size="L"
             mode="light"
             onClick={() => setVisibleCount((prev) => prev + PAGE_SIZE)}
           />
-        </div>
+        </ScrollReveal>
       ) : null}
     </>
   );

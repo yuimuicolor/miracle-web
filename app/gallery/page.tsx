@@ -1,4 +1,6 @@
 import GalleryPageGrid from "../../components/gallery/GalleryPageGrid";
+import ScrollReveal from "@/components/ScrollReveal";
+import { HOME_REVEAL } from "@/components/sections/homeMotion";
 import SectionTitle from "@/components/sections/common/SectionTitle";
 import { getGalleryImages } from "../../lib/galleryData";
 import { HOME_CONTENT } from "@/lib/siteData";
@@ -25,8 +27,12 @@ export default function GalleryPage() {
       <div className={STYLE.bgImage} />
       <div className={STYLE.bgOverlay} />
       <div className={STYLE.content}>
-        <SectionTitle title={gallerySection.sectionTitle} color="white" />
-        <GalleryPageGrid images={galleryImages} />
+        <ScrollReveal className="w-full" {...HOME_REVEAL.sectionTitle}>
+          <SectionTitle title={gallerySection.sectionTitle} color="white" />
+        </ScrollReveal>
+        <ScrollReveal className="w-full" delayMs={120} {...HOME_REVEAL.sectionBody}>
+          <GalleryPageGrid images={galleryImages} />
+        </ScrollReveal>
       </div>
     </section>
   );
