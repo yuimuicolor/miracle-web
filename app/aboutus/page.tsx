@@ -1,4 +1,5 @@
 import Image from "next/image";
+import ScrollReveal from "@/components/ScrollReveal";
 import SectionTitle from "@/components/sections/common/SectionTitle";
 import { ABOUT_PAGE_CONTENT } from "@/lib/aboutPageData";
 
@@ -103,7 +104,7 @@ const STYLE = {
   historyTitle:
     "font-noto font-medium tracking-[-0.05em] text-white text-[1.8rem] leading-[100%] lg:text-[2.4rem]",
   historyRowDividerBase:
-    "hidden lg:block h-px flex-1 min-w-0 self-center bg-white/35",
+    "hidden lg:block h-px flex-1 min-w-0 self-center origin-left bg-white/35",
   historyCardGap: "hidden lg:block w-[8rem] shrink-0",
   historyDividerGap: "hidden lg:block w-[4rem] shrink-0",
   certificateGrid: "grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-5",
@@ -135,6 +136,15 @@ const MARQUEE_TEXT = "Trust  Integrity  Reliability  Transformation";
 
 export default function AboutUsPage() {
   const { history, certificates, ceo } = ABOUT_PAGE_CONTENT;
+  const INTRO_BASE_DELAY_MS = 70;
+  const INTRO_ROW_STEP_MS = 120;
+  const INTRO_INNER_STEP_MS = 110;
+  const INTRO_DURATION_MS = 840;
+  const INTRO_THRESHOLD = 0.2;
+  const INTRO_ROOT_MARGIN = "0px 0px 6% 0px";
+  const SECTION_DURATION_MS = 820;
+  const SECTION_THRESHOLD = 0.16;
+  const SECTION_ROOT_MARGIN = "0px 0px 10% 0px";
   const historyRows = Array.from(
     { length: Math.ceil(history.items.length / 2) },
     (_, rowIndex) => history.items.slice(rowIndex * 2, rowIndex * 2 + 2),
@@ -144,14 +154,30 @@ export default function AboutUsPage() {
     <main className={STYLE.main}>
       {/* ── About US 인트로 ─────────────────────────────── */}
       <section>
-        <div className={STYLE.titleWrap}>
+        <ScrollReveal
+          className={STYLE.titleWrap}
+          delayMs={0}
+          durationMs={INTRO_DURATION_MS}
+          threshold={INTRO_THRESHOLD}
+          rootMargin={INTRO_ROOT_MARGIN}
+          hiddenClassName="opacity-0 -translate-x-[2.8rem] blur-[8px]"
+          visibleClassName="opacity-100 translate-x-0 blur-0"
+        >
           <SectionTitle title="ABOUT US" color="white" />
-        </div>
+        </ScrollReveal>
 
         <div className={STYLE.introList}>
           {/* Row 1: 텍스트 왼쪽 · 원형 이미지 오른쪽 */}
           <div className={STYLE.introRow}>
-            <div className={STYLE.textCol}>
+            <ScrollReveal
+              className={STYLE.textCol}
+              delayMs={INTRO_BASE_DELAY_MS + INTRO_ROW_STEP_MS * 0}
+              durationMs={INTRO_DURATION_MS}
+              threshold={INTRO_THRESHOLD}
+              rootMargin={INTRO_ROOT_MARGIN}
+              hiddenClassName="opacity-0 -translate-x-[3.2rem] blur-[8px]"
+              visibleClassName="opacity-100 translate-x-0 blur-0"
+            >
               <h2 className={STYLE.titleBlock}>
                 <span>
                   <span className={STYLE.hlPoint}>독창적인 발상</span>으로
@@ -182,8 +208,16 @@ export default function AboutUsPage() {
                 <br />
                 당신의 하루에 자연스럽게 스며드는 경험을 만들어 갑니다.
               </p>
-            </div>
-            <div className={STYLE.imageCircleWrap}>
+            </ScrollReveal>
+            <ScrollReveal
+              className={STYLE.imageCircleWrap}
+              delayMs={INTRO_BASE_DELAY_MS + INTRO_ROW_STEP_MS * 0 + INTRO_INNER_STEP_MS}
+              durationMs={INTRO_DURATION_MS}
+              threshold={INTRO_THRESHOLD}
+              rootMargin={INTRO_ROOT_MARGIN}
+              hiddenClassName="opacity-0 -translate-x-[3.2rem] blur-[8px]"
+              visibleClassName="opacity-100 translate-x-0 blur-0"
+            >
               <Image
                 src="/images/about-us/about-photo-1.webp"
                 alt="독창적인 발상"
@@ -191,12 +225,20 @@ export default function AboutUsPage() {
                 height={500}
                 className={STYLE.imageObj}
               />
-            </div>
+            </ScrollReveal>
           </div>
 
           {/* Row 2: 직사각 이미지 왼쪽 · 텍스트 오른쪽 */}
           <div className={STYLE.introRowReverse}>
-            <div className={STYLE.textCol}>
+            <ScrollReveal
+              className={STYLE.textCol}
+              delayMs={INTRO_BASE_DELAY_MS + INTRO_ROW_STEP_MS * 1}
+              durationMs={INTRO_DURATION_MS}
+              threshold={INTRO_THRESHOLD}
+              rootMargin={INTRO_ROOT_MARGIN}
+              hiddenClassName="opacity-0 -translate-x-[3.2rem] blur-[8px]"
+              visibleClassName="opacity-100 translate-x-0 blur-0"
+            >
               <h2 className={STYLE.titleBlock}>
                 <span>
                   MING: <span className={STYLE.hlPoint}>기적</span>
@@ -221,8 +263,16 @@ export default function AboutUsPage() {
                 <br />
                 이것을 우리는 MING:기적, 즉 ‘밍기적’이라고 부르기로 했습니다.
               </p>
-            </div>
-            <div className={STYLE.imageRectWrap}>
+            </ScrollReveal>
+            <ScrollReveal
+              className={STYLE.imageRectWrap}
+              delayMs={INTRO_BASE_DELAY_MS + INTRO_ROW_STEP_MS * 1 + INTRO_INNER_STEP_MS}
+              durationMs={INTRO_DURATION_MS}
+              threshold={INTRO_THRESHOLD}
+              rootMargin={INTRO_ROOT_MARGIN}
+              hiddenClassName="opacity-0 -translate-x-[3.2rem] blur-[8px]"
+              visibleClassName="opacity-100 translate-x-0 blur-0"
+            >
               <Image
                 src="/images/about-us/about-photo-2.webp"
                 alt="MING 기적"
@@ -230,12 +280,20 @@ export default function AboutUsPage() {
                 height={400}
                 className={STYLE.imageObj}
               />
-            </div>
+            </ScrollReveal>
           </div>
 
           {/* Row 3: 텍스트 왼쪽 · 직사각 이미지 오른쪽 */}
           <div className={STYLE.introRow}>
-            <div className={STYLE.textCol}>
+            <ScrollReveal
+              className={STYLE.textCol}
+              delayMs={INTRO_BASE_DELAY_MS + INTRO_ROW_STEP_MS * 2}
+              durationMs={INTRO_DURATION_MS}
+              threshold={INTRO_THRESHOLD}
+              rootMargin={INTRO_ROOT_MARGIN}
+              hiddenClassName="opacity-0 -translate-x-[3.2rem] blur-[8px]"
+              visibleClassName="opacity-100 translate-x-0 blur-0"
+            >
               <h2 className={STYLE.titleBlock}>
                 <span>
                   <span className={STYLE.hlPoint}>고양이</span>는 귀엽습니다
@@ -250,8 +308,16 @@ export default function AboutUsPage() {
                 <br />
                 우리는 고양이를 사랑합니다. 고양이는 귀엽기 때문입니다.
               </p>
-            </div>
-            <div className={STYLE.imageRectWrap}>
+            </ScrollReveal>
+            <ScrollReveal
+              className={STYLE.imageRectWrap}
+              delayMs={INTRO_BASE_DELAY_MS + INTRO_ROW_STEP_MS * 2 + INTRO_INNER_STEP_MS}
+              durationMs={INTRO_DURATION_MS}
+              threshold={INTRO_THRESHOLD}
+              rootMargin={INTRO_ROOT_MARGIN}
+              hiddenClassName="opacity-0 -translate-x-[3.2rem] blur-[8px]"
+              visibleClassName="opacity-100 translate-x-0 blur-0"
+            >
               <Image
                 src="/images/about-us/about-photo-3.webp"
                 alt="고양이는 귀엽습니다"
@@ -259,13 +325,20 @@ export default function AboutUsPage() {
                 height={400}
                 className={STYLE.imageObj}
               />
-            </div>
+            </ScrollReveal>
           </div>
         </div>
       </section>
 
       {/* ── 마키 레터링 ──────────────────────────────────── */}
-      <div className={STYLE.marqueeSection}>
+      <ScrollReveal
+        className={STYLE.marqueeSection}
+        durationMs={SECTION_DURATION_MS}
+        threshold={SECTION_THRESHOLD}
+        rootMargin={SECTION_ROOT_MARGIN}
+        hiddenClassName="opacity-0 -translate-x-[2.4rem] blur-[6px]"
+        visibleClassName="opacity-100 translate-x-0 blur-0"
+      >
         <div className={STYLE.marqueeTrack} aria-hidden="true">
           {Array.from({ length: 6 }).map((_, i) => (
             <span key={i} className={STYLE.marqueeChunk}>
@@ -273,31 +346,51 @@ export default function AboutUsPage() {
             </span>
           ))}
         </div>
-      </div>
+      </ScrollReveal>
 
       <section className={`${STYLE.historySection}`}>
-        <div className={STYLE.sectionHeading}>
+        <ScrollReveal
+          className={STYLE.sectionHeading}
+          durationMs={SECTION_DURATION_MS}
+          threshold={SECTION_THRESHOLD}
+          rootMargin={SECTION_ROOT_MARGIN}
+          hiddenClassName="opacity-0 -translate-x-[2.4rem] blur-[6px]"
+          visibleClassName="opacity-100 translate-x-0 blur-0"
+        >
           <p className={STYLE.sectionHeadingEn}>{history.headingEn}</p>
           <h3 className={STYLE.sectionHeadingKr}>{history.headingKo}</h3>
           <p className={STYLE.sectionHeadingDesc}>{history.description}</p>
-        </div>
+        </ScrollReveal>
 
         <div className={STYLE.historyRows}>
           {historyRows.map((rowItems, rowIndex) => {
             const isOddRow = rowIndex % 2 === 0;
             const isLastRow = rowIndex === historyRows.length - 1;
+            const STAGGER_MS = 110;
 
             return (
               <div
                 key={`history-row-${rowIndex}`}
                 className={`${STYLE.historyRow} ${isOddRow ? STYLE.historyRowOdd : STYLE.historyRowEven}`}
               >
-                {!isOddRow ? <div className={STYLE.historyRowDividerBase} /> : null}
+                {!isOddRow ? (
+                  <ScrollReveal
+                    delayMs={0}
+                    durationMs={760}
+                    threshold={0.12}
+                    className={STYLE.historyRowDividerBase}
+                    hiddenClassName="opacity-100 scale-x-0"
+                    visibleClassName="opacity-100 scale-x-100"
+                  />
+                ) : null}
                 {!isOddRow ? <div className={STYLE.historyDividerGap} /> : null}
 
                 {rowItems.map((item, cardIndex) => (
                   <div key={`${item.year}-${item.date}`} className="contents">
-                    <article
+                    <ScrollReveal
+                      as="article"
+                      delayMs={(isOddRow ? cardIndex : cardIndex + 1) * STAGGER_MS}
+                      durationMs={820}
                       className={STYLE.historyCard}
                     >
                       <div className={STYLE.historyImageWrap}>
@@ -305,6 +398,7 @@ export default function AboutUsPage() {
                           src={item.imageSrc}
                           alt={item.imageAlt}
                           fill
+                          unoptimized
                           sizes="(max-width: 1024px) 100vw, 28rem"
                           className={STYLE.historyImage}
                         />
@@ -322,7 +416,7 @@ export default function AboutUsPage() {
                           <p className={STYLE.historyTitle}>{item.title}</p>
                         </div>
                       </div>
-                    </article>
+                    </ScrollReveal>
 
                     {cardIndex < rowItems.length - 1 ? (
                       <div className={STYLE.historyCardGap} />
@@ -334,7 +428,14 @@ export default function AboutUsPage() {
                   <div className={STYLE.historyDividerGap} />
                 ) : null}
                 {isOddRow && !isLastRow ? (
-                  <div className={STYLE.historyRowDividerBase} />
+                  <ScrollReveal
+                    delayMs={rowItems.length * STAGGER_MS}
+                    durationMs={760}
+                    threshold={0.12}
+                    className={STYLE.historyRowDividerBase}
+                    hiddenClassName="opacity-100 scale-x-0"
+                    visibleClassName="opacity-100 scale-x-100"
+                  />
                 ) : null}
               </div>
             );
@@ -343,15 +444,32 @@ export default function AboutUsPage() {
       </section>
 
       <section>
-        <div className={STYLE.sectionHeading}>
+        <ScrollReveal
+          className={STYLE.sectionHeading}
+          durationMs={SECTION_DURATION_MS}
+          threshold={SECTION_THRESHOLD}
+          rootMargin={SECTION_ROOT_MARGIN}
+          hiddenClassName="opacity-0 -translate-x-[2.4rem] blur-[6px]"
+          visibleClassName="opacity-100 translate-x-0 blur-0"
+        >
           <p className={STYLE.sectionHeadingEn}>{certificates.headingEn}</p>
           <h3 className={STYLE.sectionHeadingKr}>{certificates.headingKo}</h3>
           <p className={STYLE.sectionHeadingDesc}>{certificates.description}</p>
-        </div>
+        </ScrollReveal>
 
         <div className={STYLE.certificateGrid}>
-          {certificates.items.map((cert) => (
-            <article key={cert.id} className={STYLE.certificateCard}>
+          {certificates.items.map((cert, index) => (
+            <ScrollReveal
+              key={cert.id}
+              as="article"
+              className={STYLE.certificateCard}
+              delayMs={index * 65}
+              durationMs={SECTION_DURATION_MS}
+              threshold={SECTION_THRESHOLD}
+              rootMargin={SECTION_ROOT_MARGIN}
+              hiddenClassName="opacity-0 -translate-x-[2.4rem] blur-[6px]"
+              visibleClassName="opacity-100 translate-x-0 blur-0"
+            >
               <div className={STYLE.certificateImageRatio}>
                 <img
                   src="/images/main-bg.png"
@@ -363,13 +481,19 @@ export default function AboutUsPage() {
                 <p className={STYLE.certificateTitle}>{cert.title}</p>
                 <p className={STYLE.certificateDesc}>{cert.desc}</p>
               </div>
-            </article>
+            </ScrollReveal>
           ))}
         </div>
       </section>
 
       <section className={STYLE.ceoSection}>
-        <div>
+        <ScrollReveal
+          durationMs={SECTION_DURATION_MS}
+          threshold={SECTION_THRESHOLD}
+          rootMargin={SECTION_ROOT_MARGIN}
+          hiddenClassName="opacity-0 -translate-x-[2.4rem] blur-[6px]"
+          visibleClassName="opacity-100 translate-x-0 blur-0"
+        >
           <p className={STYLE.ceoEnLabel}>{ceo.label}</p>
           <h3 className={STYLE.ceoTitle}>{ceo.title}</h3>
           <div className={STYLE.ceoBar} />
@@ -385,15 +509,23 @@ export default function AboutUsPage() {
               </button>
             ))}
           </div>
-        </div>
+        </ScrollReveal>
 
-        <div className={STYLE.ceoVisualWrap}>
+        <ScrollReveal
+          className={STYLE.ceoVisualWrap}
+          delayMs={120}
+          durationMs={SECTION_DURATION_MS}
+          threshold={SECTION_THRESHOLD}
+          rootMargin={SECTION_ROOT_MARGIN}
+          hiddenClassName="opacity-0 -translate-x-[2.4rem] blur-[6px]"
+          visibleClassName="opacity-100 translate-x-0 blur-0"
+        >
           <img
             src="/images/about-us/ceo-photo.webp"
             alt={ceo.imageAlt}
             className={STYLE.ceoVisual}
           />
-        </div>
+        </ScrollReveal>
       </section>
     </main>
   );
