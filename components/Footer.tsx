@@ -27,16 +27,16 @@ const STYLE = {
     lg:gap-[4rem] lg:px-[8rem]
   `,
   logo: 'h-[2.4rem]',
-  desktopInfoWrap: "hidden flex-col gap-[1.2rem] text-[1.6rem] md:flex",
+  desktopInfoWrap: "hidden flex-col gap-[1.2rem] text-[1.8rem] md:flex",
   desktopRow: "flex flex-wrap items-center gap-x-[3rem]",
   desktopItem: "flex items-center gap-[0.8rem]",
   desktopLabel: "text-white/70",
   desktopValue: "text-white",
-  mobileInfoWrap: "flex flex-col gap-[1.2rem] text-[1.6rem] md:hidden",
+  mobileInfoWrap: "flex flex-col gap-[1.2rem] text-[1.8rem] md:hidden",
   mobileItem: "flex items-start justify-start gap-[0.8rem]",
   mobileLabel: "text-white/70",
   mobileValue: "text-white",
-  policy: "text-[1.6rem] text-white/70 underline decoration-white/40 underline-offset-2",
+  policy: "text-[1.8rem] text-white/70 underline decoration-white/40 underline-offset-2",
 };
 
 export default function Footer() {

@@ -79,7 +79,7 @@ export const ABOUT_PAGE_STYLE = {
   hlWhite: "bg-white text-point px-[0.6rem]",
   desc: `
     font-noto tracking-[-0.05em] text-white
-    text-[1.6rem] leading-[1.5]
+    text-[1.8rem] leading-[1.5]
     md:text-[1.8rem]
     lg:text-[2rem]
   `,
@@ -133,7 +133,7 @@ export const ABOUT_PAGE_STYLE = {
   sectionHeadingDesc: `
     mt-[1.6rem]
     font-noto font-normal tracking-[-0.05em] text-white/70
-    text-[1.6rem] leading-[150%]
+    text-[1.8rem] leading-[150%]
     md:text-[1.8rem]
     lg:text-[2rem]
   `,

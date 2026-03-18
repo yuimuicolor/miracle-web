@@ -60,7 +60,7 @@ const STYLE = {
   `,
   category: `
     font-noto text-black/60
-    text-[1.6rem] leading-[130%] tracking-[-0.05em]
+    text-[1.8rem] leading-[130%] tracking-[-0.05em]
     lg:text-[1.8rem] lg:leading-[150%]
   `,
 
@@ -88,12 +88,12 @@ const STYLE = {
   optionRow: "flex flex-wrap items-center gap-[1.2rem]",
   optionChip: `
     border border-black px-[1.2rem] py-[0.4rem] font-noto font-medium text-black
-    text-[1.6rem] leading-[130%] tracking-[-0.05em]
+    text-[1.8rem] leading-[130%] tracking-[-0.05em]
     lg:text-[1.8rem] lg:leading-[150%]
   `,
   desc: `
     font-noto font-medium text-black
-    text-[1.6rem] leading-[150%] tracking-[-0.05em]
+    text-[1.8rem] leading-[150%] tracking-[-0.05em]
     lg:text-[1.8rem]
   `,
   buyButton: `

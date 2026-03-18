@@ -9,7 +9,7 @@ const STYLE = {
     md:right-16 md:bottom-16
     lg:right-24 lg:bottom-24
   `,
-  arrow: "text-[1.6rem] leading-none",
+  arrow: "text-[1.8rem] leading-none",
   label: "mt-[0.4rem] text-[1.8rem] leading-none tracking-[0.2em]",
 };
 

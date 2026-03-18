@@ -7,10 +7,10 @@ import GallerySection from '@/components/sections/GallerySection';
 import InformationSection from '@/components/sections/InformationSection';
 
 const STYLE = {
-  main: 'home-snap no-footer-offset w-full bg-bg-dark',
-  snapSection: 'snap-start snap-always min-h-screen-minus-header-offset',
+  main: 'home-snap no-header-offset no-footer-offset w-full bg-bg-dark',
+  snapSection: 'lg:snap-start lg:snap-always lg:min-h-screen-minus-header-offset',
   sectionFallback:
-    'snap-start snap-always min-h-screen-minus-header-offset w-full bg-bg-dark/60',
+    'lg:snap-start lg:snap-always lg:min-h-screen-minus-header-offset w-full bg-bg-dark/60',
 };
 
 export default function Home() {

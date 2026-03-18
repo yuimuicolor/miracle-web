@@ -58,7 +58,7 @@ const STYLE = {
   submitWrap: 'mt-[1.2rem] flex w-full flex-col gap-[4rem]',
   consentLabel: `
     flex w-full items-center gap-[0.8rem] tracking-[-0.05rem]
-    text-[1.6rem]
+    text-[1.8rem]
     md:text-[1.8rem]
     lg:ml-[12rem] lg:w-[calc(100%-12rem)]
   `,

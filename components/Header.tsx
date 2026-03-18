@@ -67,7 +67,7 @@ const STYLE = {
   `,
   mobileMenuChevron: "text-[1.4rem] text-white/70 transition-transform duration-300",
   mobileSubmenuWrap: "mb-[0.6rem] w-full border-l border-white/20",
-  mobileSubmenuItem: "block w-full py-[0.8rem] text-center text-[1.6rem] font-noto text-white/70 transition-colors hover:text-white"
+  mobileSubmenuItem: "block w-full py-[0.8rem] text-center text-[1.8rem] font-noto text-white/70 transition-colors hover:text-white"
 };
 
 export default function Header() {

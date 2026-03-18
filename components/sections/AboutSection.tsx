@@ -47,7 +47,7 @@ const ABOUT_SLIDES = getAboutSlides();
 
 const STYLE = {
   section: `
-    flex w-full h-full min-h-screen bg-bg-dark
+    flex w-full bg-bg-dark
     px-[1.6rem] pb-[8rem] pt-header-offset
     md:px-[4rem] md:pb-[12rem]
     lg:px-[8rem]
@@ -82,7 +82,7 @@ const STYLE = {
   `,
   desc: `
     leading-[1.5] tracking-[-0.05em] text-white
-    text-[1.6rem]
+    text-[1.8rem]
     md:text-[1.8rem]
     lg:text-[2rem]
   `,

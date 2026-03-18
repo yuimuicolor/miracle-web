@@ -20,7 +20,7 @@ const STYLE = {
     "pointer-events-none absolute right-[2rem] top-[2rem] z-[5] flex h-[6rem] w-[6rem] items-center justify-center rounded-full bg-white/85 text-hover opacity-0 transition-all duration-300 group-hover:opacity-100",
   textWrap: "absolute bottom-[1.8rem] left-[1.8rem] flex flex-col",
   category: `
-    font-noto text-[1.6rem] uppercase leading-[1.3] tracking-[0.13em] text-white
+    font-noto text-[1.8rem] uppercase leading-[1.3] tracking-[0.13em] text-white
     drop-shadow-[0_2px_12px_rgba(0,0,0,0.85)]
     transition-opacity duration-300 group-hover:opacity-90
   `,

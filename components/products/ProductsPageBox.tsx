@@ -50,7 +50,7 @@ const STYLE = {
     group-hover:bg-hover
   `,
   desc: `
-    font-noto font-medium text-[1.6rem] xl:text-[1.8rem] leading-[1.5] tracking-[-0.05em] text-black
+    font-noto font-medium text-[1.8rem] xl:text-[1.8rem] leading-[1.5] tracking-[-0.05em] text-black
     transition-colors duration-300
     group-hover:text-hover
   `,

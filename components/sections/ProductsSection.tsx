@@ -22,7 +22,7 @@ const STYLE = {
   `,
   content: "mx-auto flex w-full flex-col gap-[6rem]",
   titleWrap: "flex flex-col gap-[0.8rem] md:gap-[0rem] lg:gap-[2rem]",
-  subText: "font-noto text-[1.6rem] md:text-[1.8rem] lg:text-[2rem] text-black",
+  subText: "font-noto text-[1.8rem] md:text-[1.8rem] lg:text-[2rem] text-black",
   sliderArea: "flex items-center gap-[1.6rem]",
   track: `
     no-scrollbar grid flex-1 grid-flow-col grid-rows-2 auto-cols-[30rem] overflow-x-auto overscroll-x-contain touch-pan-x py-[1.5rem]
