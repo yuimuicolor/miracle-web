@@ -1,18 +1,13 @@
 import { FOOTER_DATA } from "@/lib/footerData";
+import { BRAND_DATA } from "@/lib/siteData";
 import Image from "next/image";
 
 // 데스크탑/태블릿에서는 5개 항목을 3줄로 나눠서 보여주기 위한 인덱스 배열
-const DESKTOP_ROW_INDEXES = [
-  [0, 1],
-  [2],
-  [3, 4],
-] as const;
+const DESKTOP_ROW_INDEXES = [[0, 1], [2], [3, 4]] as const;
 
 const getDesktopRows = () =>
   DESKTOP_ROW_INDEXES.map((row) =>
-    row
-      .map((index) => FOOTER_DATA.items[index])
-      .filter(Boolean)
+    row.map((index) => FOOTER_DATA.items[index]).filter(Boolean),
   );
 
 const STYLE = {
@@ -27,7 +22,7 @@ const STYLE = {
     md:h-full md:px-[4rem] md:py-0
     lg:gap-[4rem] lg:px-[8rem]
   `,
-  logo: 'h-[2.4rem]',
+  logo: "h-[2.4rem]",
   desktopInfoWrap: "hidden flex-col gap-[1.2rem] text-[1.8rem] md:flex",
   desktopRow: "flex flex-wrap items-center gap-x-[3rem]",
   desktopItem: "flex items-center gap-[0.8rem]",
@@ -37,7 +32,8 @@ const STYLE = {
   mobileItem: "flex items-start justify-start gap-[0.8rem]",
   mobileLabel: "text-white/70",
   mobileValue: "text-white",
-  policy: "text-[1.8rem] text-white/70 underline decoration-white/40 underline-offset-2",
+  policy:
+    "text-[1.8rem] text-white/70 underline decoration-white/40 underline-offset-2",
 };
 
 export default function Footer() {
@@ -45,8 +41,12 @@ export default function Footer() {
 
   const renderInfoItem = (label: string, value: string, mobile = false) => (
     <div key={label} className={mobile ? STYLE.mobileItem : STYLE.desktopItem}>
-      <span className={mobile ? STYLE.mobileLabel : STYLE.desktopLabel}>{label}</span>
-      <span className={mobile ? STYLE.mobileValue : STYLE.desktopValue}>{value}</span>
+      <span className={mobile ? STYLE.mobileLabel : STYLE.desktopLabel}>
+        {label}
+      </span>
+      <span className={mobile ? STYLE.mobileValue : STYLE.desktopValue}>
+        {value}
+      </span>
     </div>
   );
 
@@ -54,7 +54,14 @@ export default function Footer() {
     <footer className={STYLE.root}>
       <div className={STYLE.inner}>
         <div>
-          <Image src="/images/logo-white.png" alt="Miracle Logo" className={STYLE.logo} />
+          <Image
+            src={BRAND_DATA.logoSrc}
+            alt={BRAND_DATA.logoAlt}
+            width={120}
+            height={24}
+            priority
+            className={STYLE.logo}
+          />
         </div>
 
         <div className={STYLE.desktopInfoWrap}>
@@ -66,7 +73,9 @@ export default function Footer() {
         </div>
 
         <div className={STYLE.mobileInfoWrap}>
-          {FOOTER_DATA.items.map((item) => renderInfoItem(item.label, item.value, true))}
+          {FOOTER_DATA.items.map((item) =>
+            renderInfoItem(item.label, item.value, true),
+          )}
         </div>
 
         <p className={STYLE.policy}>{FOOTER_DATA.policyText}</p>

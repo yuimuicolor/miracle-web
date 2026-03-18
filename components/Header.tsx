@@ -262,6 +262,9 @@ export default function Header() {
               <Image
                 src={BRAND_DATA.logoSrc}
                 alt={BRAND_DATA.logoAlt}
+                width={120}
+                height={24}
+                priority
                 className={STYLE.logo}
               />
             </Link>
@@ -396,7 +399,10 @@ export default function Header() {
         <Link href="/">
           <Image
             src={BRAND_DATA.logoSrc}
-            alt={BRAND_DATA.logoAlt}
+                alt={BRAND_DATA.logoAlt}
+            width={120}
+            height={24}
+            priority
             className={STYLE.logo}
           />
         </Link>
