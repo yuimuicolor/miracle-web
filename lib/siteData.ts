@@ -101,10 +101,10 @@ export const NAVIGATION_MENU: NavigationMenuItem[] = [
   },
   {
     title: "CONTACT",
-    href: "/contact",
+    href: "/contact#information",
     submenus: [
-      { label: "오시는길", href: "/contact/directions" },
-      { label: "상담문의", href: "/contact/inquiry" },
+      { label: "INFORMATION", href: "/contact#information" },
+      { label: "CONTACT US", href: "/contact#contact-us" },
     ],
   },
 ];

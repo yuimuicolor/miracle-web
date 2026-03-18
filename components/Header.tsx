@@ -78,7 +78,8 @@ export default function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [expandedMobileMenus, setExpandedMobileMenus] = useState<number[]>([]);
   const [deviceType, setDeviceType] = useState<"pc" | "tablet" | "mobile">("mobile");
-  const activatedMenu = NAVIGATION_MENU.find((menu) => pathname.startsWith(menu.href))?.title ?? "";
+  const toPathOnly = (href: string) => href.split("#")[0];
+  const activatedMenu = NAVIGATION_MENU.find((menu) => pathname.startsWith(toPathOnly(menu.href)))?.title ?? "";
   const isPC = deviceType === "pc";
   const isTablet = deviceType === "tablet";
   const canHoverMenu = isPC;
@@ -141,7 +142,10 @@ export default function Header() {
     setIsMenuOpen(false);
     setExpandedMobileMenus([]);
 
-    if (pathname.startsWith(href)) {
+    const pathOnly = toPathOnly(href);
+    const hasHash = href.includes("#");
+
+    if (!hasHash && pathname.startsWith(pathOnly)) {
       router.refresh();
     }
   };
@@ -230,7 +234,7 @@ export default function Header() {
                           key={sub.href}
                           href={sub.href}
                           className={STYLE.mobileSubmenuItem}
-                          onClick={() => handleHeaderLinkClick(menu.href)}
+                          onClick={() => handleHeaderLinkClick(sub.href)}
                         >
                           {sub.label}
                         </Link>
@@ -283,7 +287,7 @@ export default function Header() {
                     key={sub.href}
                     href={sub.href}
                     className={STYLE.submenuItem}
-                    onClick={() => handleHeaderLinkClick(menu.href)}
+                    onClick={() => handleHeaderLinkClick(sub.href)}
                   >
                     {sub.label}
                   </Link>
