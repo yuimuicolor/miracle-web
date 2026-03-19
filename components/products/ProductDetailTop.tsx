@@ -23,7 +23,8 @@ const STYLE = {
     contents no-scrollbar
     xl:flex xl:size-full xl:flex-col xl:items-end xl:overflow-y-auto xl:gap-[3rem]
   `,
-  thumbnailWrap: "order-1 xl:order-none flex w-full max-w-[70rem] flex-col items-center gap-[1.6rem]",
+  thumbnailWrap:
+    "order-1 xl:order-none flex w-full max-w-[70rem] flex-col items-center gap-[1.6rem]",
   thumbnailMain:
     "group relative w-full aspect-[1/1] overflow-hidden bg-black/5",
   thumbnailImage: "object-cover",
@@ -45,7 +46,8 @@ const STYLE = {
   detailImages: "order-3 flex flex-col max-w-[70rem] w-full xl:order-none",
   detailImageWrap: "w-full",
 
-  modal: "fixed inset-0 z-[120] flex items-center justify-center bg-black/82 px-[2rem] py-[2rem]",
+  modal:
+    "fixed inset-0 z-[120] flex items-center justify-center bg-black/82 px-[2rem] py-[2rem]",
   modalInner: "relative flex items-start justify-center",
   modalImage:
     "block h-auto w-auto max-h-[calc(100vh-8rem)] max-w-[calc(100vw-10rem)] object-contain",
@@ -108,7 +110,11 @@ const STYLE = {
 
 function ExpandIcon() {
   return (
-    <svg viewBox="0 0 24 24" aria-hidden="true" className="h-[2.4rem] w-[2.4rem] text-white">
+    <svg
+      viewBox="0 0 24 24"
+      aria-hidden="true"
+      className="h-[2.4rem] w-[2.4rem] text-white"
+    >
       <path
         d="M13 4h7v7h-2.8V8.78l-5.96 5.96-1.98-1.98 5.96-5.96H13V4Z"
         fill="currentColor"
@@ -137,29 +143,28 @@ export default function ProductDetailTop({ product }: ProductDetailTopProps) {
   const detailImages =
     product.detailImages.length > 0 ? product.detailImages : [product.image];
 
+  // 1. 마운트 상태 관리
   useEffect(() => {
     setIsMounted(true);
   }, []);
 
+  // 2. 이미지 프리로드 (activeIndex가 바뀔 때마다 실행)
   useEffect(() => {
-    if (!isModalOpen) {
-      return;
-    }
+    const total = thumbnails.length;
+    if (total <= 1) return;
 
-    // activeIndex가 바뀔 때마다 앞뒤 이미지를 미리 로드
-useEffect(() => {
-  const total = thumbnails.length;
-  if (total <= 1) return;
+    const nextIndex = (activeIndex + 1) % total;
+    const prevIndex = (activeIndex - 1 + total) % total;
 
-  const nextIndex = (activeIndex + 1) % total;
-  const prevIndex = (activeIndex - 1 + total) % total;
+    [thumbnails[nextIndex], thumbnails[prevIndex]].forEach((src) => {
+      const img = new window.Image();
+      img.src = src;
+    });
+  }, [activeIndex, thumbnails]);
 
-  // 브라우저 캐시에 미리 넣어두기
-  [thumbnails[nextIndex], thumbnails[prevIndex]].forEach((src) => {
-    const img = new window.Image();
-    img.src = src;
-  });
-}, [activeIndex, thumbnails]);
+  // 3. 모달 관련 사이드 이펙트 (스크롤 제어 및 키보드 이벤트)
+  useEffect(() => {
+    if (!isModalOpen) return;
 
     const handleKeyDown = (event: KeyboardEvent) => {
       if (event.key === "Escape") {
@@ -168,15 +173,16 @@ useEffect(() => {
     };
 
     const originalOverflow = document.body.style.overflow;
-    document.body.style.overflow = "hidden";
+    document.body.style.overflow = "hidden"; // 모달 열리면 스크롤 방지
     window.addEventListener("keydown", handleKeyDown);
 
     return () => {
-      document.body.style.overflow = originalOverflow;
+      document.body.style.overflow = originalOverflow; // 모달 닫히면 스크롤 복구
       window.removeEventListener("keydown", handleKeyDown);
     };
   }, [isModalOpen]);
 
+  // --- 이벤트 핸들러 ---
   const openZoomModal = (src: string, alt: string) => {
     setModalSrc(src);
     setModalAlt(alt);
@@ -339,8 +345,15 @@ useEffect(() => {
               role="dialog"
               aria-modal="true"
             >
-              <div className={STYLE.modalInner} onClick={(event) => event.stopPropagation()}>
-                <Image src={modalSrc} alt={modalAlt} className={STYLE.modalImage} />
+              <div
+                className={STYLE.modalInner}
+                onClick={(event) => event.stopPropagation()}
+              >
+                <Image
+                  src={modalSrc}
+                  alt={modalAlt}
+                  className={STYLE.modalImage}
+                />
                 <button
                   type="button"
                   className={STYLE.modalClose}
