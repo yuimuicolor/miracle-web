@@ -116,23 +116,20 @@
     margin: 0;
     word-break: keep-all;
     -webkit-font-smoothing: antialiased; /* 폰트를 더 매끄럽게 */
+    background-color: var(--color-bg-dark);
   }
 
 @media (min-width: 1024px) {
-  /* 1. 최상단에 스냅 타입 선언 */
   html:has(.home-snap),
   html:has(.snap-container) {
     scroll-snap-type: y mandatory;
     scroll-behavior: smooth;
+    background-color: var(--color-bg-dark);
   }
 
-  /* 2. 중간에 낀 모든 래퍼들을 투명인간(display: contents)으로 만듭니다. */
-  /* 이렇게 하면 section들이 html/body의 직계 자식처럼 취급됩니다. */
   html:has(.home-snap) .site-shell,
-  html:has(.home-snap) .page-content,
   html:has(.home-snap) .home-snap,
   html:has(.snap-container) .site-shell,
-  html:has(.snap-container) .page-content,
   html:has(.snap-container) .snap-container {
     display: contents;
   }

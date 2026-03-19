@@ -20,7 +20,7 @@ interface GalleryPageGridProps {
 const PAGE_SIZE = 6;
 
 const STYLE = {
-  grid: `mx-auto grid w-full max-w-[1200px]
+  grid: `grid w-full
     grid-cols-2 gap-[1.6rem]
     md:grid-cols-3 md:gap-[2rem]
     lg:gap-[4rem]
