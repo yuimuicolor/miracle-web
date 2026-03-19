@@ -31,10 +31,10 @@ const STYLE = {
     whitespace-nowrap font-noto leading-none tracking-normal text-white/80 hover:text-white
     text-[1.8rem] lg:text-[2.4rem]
     ${isActive ? "font-semibold" : "font-normal"} 
-    ${isHovered ? "bg-hover/70 border-b-[1px] border-white" : ""}
+    ${isHovered ? "bg-hover/70" : ""}
   `,
   submenu: `
-    absolute top-full left-0 z-50 w-full text-center shadow-lg bg-point
+    absolute top-full left-0 z-50 w-full text-center shadow-lg bg-point  border-t-[1px] border-white
   `,
   submenuItem: `
     block h-[6rem] flex items-center justify-center
@@ -412,11 +412,12 @@ export default function Header() {
             <div
               key={menu.title}
               className={STYLE.menuWrap}
-              onMouseEnter={() =>
-                canHoverMenu &&
-                menu.submenus.length > 0 &&
-                setHoveredMenu(index)
-              }
+              onMouseEnter={() => {
+                if (canHoverMenu) {
+                  setIsHovered(true);
+                  setHoveredMenu(index);
+                }
+              }}
               onMouseLeave={() => setHoveredMenu(null)}
             >
               <Link
