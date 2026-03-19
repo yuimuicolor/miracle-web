@@ -1,6 +1,10 @@
+"use client";
+
 import { FOOTER_DATA } from "@/lib/footerData";
-import { BRAND_DATA } from "@/lib/siteData";
+import { BRAND_DATA, HOME_CONTENT } from "@/lib/siteData";
 import Image from "next/image";
+import { useState } from "react";
+import TextModal from "./TextModal";
 
 // 데스크탑/태블릿에서는 5개 항목을 3줄로 나눠서 보여주기 위한 인덱스 배열
 const DESKTOP_ROW_INDEXES = [[0, 1], [2], [3, 4]] as const;
@@ -37,7 +41,9 @@ const STYLE = {
 };
 
 export default function Footer() {
+  const [isTextModalOpen, setIsTextModalOpen] = useState(false);
   const desktopRows = getDesktopRows();
+  const { contactSection } = HOME_CONTENT;
 
   const renderInfoItem = (label: string, value: string, mobile = false) => (
     <div key={label} className={mobile ? STYLE.mobileItem : STYLE.desktopItem}>
@@ -51,6 +57,7 @@ export default function Footer() {
   );
 
   return (
+    <>
     <footer className={STYLE.root}>
       <div className={STYLE.inner}>
         <div>
@@ -78,8 +85,22 @@ export default function Footer() {
           )}
         </div>
 
-        <p className={STYLE.policy}>{FOOTER_DATA.policyText}</p>
+        <p className={STYLE.policy}>
+            <span 
+              className="cursor-pointer border-b border-transparent hover:border-gray-400 transition-all"
+              onClick={() => setIsTextModalOpen(true)}
+            >
+              {FOOTER_DATA.policyText}
+            </span>
+          </p>
       </div>
     </footer>
+    <TextModal
+        isOpen={isTextModalOpen}
+        onClose={() => setIsTextModalOpen(false)}
+        title={FOOTER_DATA.policyText}
+        content={contactSection.privacyPolicyContent} 
+      />
+    </>
   );
 }
