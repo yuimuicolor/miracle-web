@@ -350,9 +350,12 @@ export default function ProductDetailTop({ product }: ProductDetailTopProps) {
                 onClick={(event) => event.stopPropagation()}
               >
                 <Image
+                width={500}
+                height={500}
                   src={modalSrc}
                   alt={modalAlt}
                   className={STYLE.modalImage}
+                  
                 />
                 <button
                   type="button"
