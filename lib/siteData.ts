@@ -90,9 +90,7 @@ export const NAVIGATION_MENU: NavigationMenuItem[] = [
   {
     title: "PRODUCTS",
     href: "/products",
-    submenus: [
-      { label: "전체제품", href: "/products" },
-    ],
+    submenus: [{ label: "전체제품", href: "/products" }],
   },
   {
     title: "GALLERY",
@@ -154,6 +152,25 @@ export const HOME_CONTENT = {
     submitButtonText: "제출",
     consentText: "(필수) 아래 개인정보 이용 정책에 동의합니다.",
     consentLinkLabel: "[전문보기]",
+    privacyPolicyContent: `
+[개인정보 수집 및 이용 안내]
+
+1. 수집하는 개인정보 항목
+- 필수항목: 성함, 이메일, 문의 내용
+- 선택항목: 연락처, 회사명
+
+2. 개인정보의 수집 및 이용 목적
+- 고객 문의에 대한 답변 및 본인 확인
+- 서비스 안내 및 프로젝트 상담을 위한 연락
+
+3. 개인정보의 보유 및 이용 기간
+- 원칙적으로 개인정보 수집 및 이용 목적이 달성된 후에는 해당 정보를 지체 없이 파기합니다.
+- 단, 관계 법령의 규정에 의하여 보존할 필요가 있는 경우 일정 기간 보관할 수 있습니다.
+
+4. 동의를 거부할 권리
+- 귀하는 개인정보 수집 및 이용에 동의하지 않을 권리가 있습니다. 단, 필수항목에 대한 동의를 거부하실 경우 문의 접수가 제한될 수 있습니다.
+    `.trim(),
+
     fields: [
       { name: "name", label: "이름", required: true },
       { name: "phone", label: "연락처", required: true },

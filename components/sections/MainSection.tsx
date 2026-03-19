@@ -39,7 +39,6 @@ const STYLE = {
   scrollGuideText: `
     text-center font-noto font-100 tracking-[0.3em] text-white
     text-[1.8rem]
-    md:text-[1.8rem]
   `,
   scrollGuideIcon: 'text-white',
 };

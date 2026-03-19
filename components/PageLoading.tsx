@@ -9,7 +9,7 @@ const STYLE = {
 	spinner:
 		"h-[4.8rem] w-[4.8rem] animate-spin rounded-full border-[0.4rem] border-white/20 border-t-point-light",
 	text:
-		"font-noto text-[1.5rem] tracking-[0.08em] text-white/70 md:text-[1.8rem]",
+		"font-noto text-[1.8rem] tracking-[0.08em] text-white/70",
 };
 
 export default function PageLoading({ label = "LOADING" }: PageLoadingProps) {

@@ -80,7 +80,6 @@ export const ABOUT_PAGE_STYLE = {
   desc: `
     font-noto tracking-[-0.05em] text-white
     text-[1.8rem] leading-[1.5]
-    md:text-[1.8rem]
     lg:text-[2rem]
   `,
   imageCircleWrap: `
@@ -134,7 +133,6 @@ export const ABOUT_PAGE_STYLE = {
     mt-[1.6rem]
     font-noto font-normal tracking-[-0.05em] text-white/70
     text-[1.8rem] leading-[150%]
-    md:text-[1.8rem]
     lg:text-[2rem]
   `,
   historyRows: `
@@ -174,15 +172,13 @@ export const ABOUT_PAGE_STYLE = {
   historyMetaWrap: "mt-auto flex flex-col gap-[0.4rem]",
   historyDate: `
     font-noto font-medium tracking-[0.2em] text-white/80
-    text-[1.2rem] leading-[130%]
-    md:text-[1.8rem]
+    text-[1.6rem] leading-[130%]
     xl:text-[2.2rem]
   `,
   historyTitle: `
     font-noto font-medium tracking-[-0.05em] text-white
     text-[1.8rem] leading-[150%]
     md:text-[2.4rem] md:leading-[100%]
-    xl:text-[2.4rem] xl:leading-[100%]
   `,
   historyRowDividerBase: `
     hidden h-px min-w-0 flex-1 self-center origin-left bg-white/35

@@ -48,7 +48,7 @@ const STYLE = {
   mainIcon:
     "h-[2.4rem] w-[2.4rem] md:h-[3.2rem] md:w-[3.2rem] lg:h-[4rem] lg:w-[4rem] flex-shrink-0",
   infoText:
-    "font-noto text-[1.8rem] leading-[1.35] text-white/90 transition-colors duration-200 group-hover:text-white md:text-[1.8rem] lg:text-[2.0rem]",
+    "font-noto text-[1.8rem] leading-[1.35] text-white/90 transition-colors duration-200 group-hover:text-white lg:text-[2.0rem]",
   extIcon:
     "mt-[0.2rem] h-[1.6rem] w-[1.6rem] md:h-[1.8rem] md:w-[1.8rem] lg:h-[2rem] lg:w-[2rem] text-white/55 transition-all duration-200 group-hover:text-white/90 group-hover:translate-x-[0.1rem]",
   chip: `
@@ -57,9 +57,9 @@ const STYLE = {
     lg:mt-[0.4rem]
   `,
   chipTitle:
-    "font-noto font-bold text-[1.8rem] leading-[1.2] md:text-[1.8rem] lg:text-[2.0rem]",
+    "font-noto font-bold text-[1.8rem] leading-[1.2] lg:text-[2.0rem]",
   chipBody:
-    "font-noto text-[1.8rem] leading-[1.3] md:text-[1.8rem] lg:text-[2.0rem]",
+    "font-noto text-[1.8rem] leading-[1.3] lg:text-[2.0rem]",
   snsRow: `
     mt-[2rem] flex items-center gap-[2rem]
     md:gap-[4rem]

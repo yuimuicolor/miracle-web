@@ -25,7 +25,6 @@ const STYLE = {
 	subText: `
 		font-noto text-black
 		text-[1.8rem]
-		md:text-[1.8rem]
 		lg:text-[2rem]
 	`,
 };

@@ -67,7 +67,7 @@ const STYLE = {
   brandCol: "flex flex-col gap-[0.8rem]",
   brandEn: `
     font-noto font-medium uppercase text-black tracking-[0.2em] leading-[130%]
-    text-[1.2rem]
+    text-[1.6rem]
     md:text-[1.8rem]
     lg:text-[2.2rem]
   `,

@@ -83,7 +83,6 @@ const STYLE = {
   desc: `
     leading-[1.5] tracking-[-0.05em] text-white
     text-[1.8rem]
-    md:text-[1.8rem]
     lg:text-[2rem]
   `,
 };

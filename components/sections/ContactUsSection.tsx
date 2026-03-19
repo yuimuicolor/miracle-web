@@ -7,6 +7,7 @@ import { supabase } from "@/lib/supabase";
 import { ContactData } from "@/types/contact";
 import { sendContactEmail } from "@/app/actions";
 import { HOME_CONTENT } from "@/lib/siteData";
+import TextModal from "../TextModal";
 
 const STYLE = {
   section: `
@@ -59,19 +60,23 @@ const STYLE = {
     lg:text-[2.4rem]
   `,
   submitWrap: "mt-[1.2rem] flex w-full flex-col gap-[4rem]",
+  consentContainer: "flex flex-col items-start md:flex-row gap-[0.8rem]",
   consentLabel: `
-    flex w-full items-center gap-[0.8rem] tracking-[-0.05rem]
+    flex cursor-pointer items-center gap-[0.6rem] font-normal
+    tracking-[-0.05rem]
     text-[1.8rem]
-    md:text-[1.8rem]
-    lg:ml-[12rem] lg:w-[calc(100%-12rem)]
+    lg:ml-[12rem] 
   `,
   checkbox: "h-[1.8rem] w-[1.8rem] accent-white",
+  consentLink: `ml-[2.4rem] font-bold border-b border-white cursor-pointer  transition-colors md:ml-0 `,
   submitButton:
     "self-center h-[8rem] w-full max-w-[28rem] rounded-full bg-white text-[3.2rem] font-bold text-point font-pretendard transition-colors hover:bg-white",
 };
 
 export default function ContactUsSection() {
   const { contactSection } = HOME_CONTENT;
+  const [isTextModalOpen, setIsTextModalOpen] = useState(false);
+
   const [formData, setFormData] = useState<ContactData>({
     name: "",
     phone: "",
@@ -116,7 +121,9 @@ export default function ContactUsSection() {
       }
 
       // 2. 성공 시 UI 처리
-      alert("문의가 성공적으로 접수되었습니다. 빠른 시일 내에 연락드리겠습니다.");
+      alert(
+        "문의가 성공적으로 접수되었습니다. 빠른 시일 내에 연락드리겠습니다.",
+      );
 
       setFormData({
         name: "",
@@ -132,81 +139,96 @@ export default function ContactUsSection() {
   };
 
   return (
-    <section className={STYLE.section}>
-      <div className={STYLE.inner}>
-        <ScrollReveal {...HOME_REVEAL.sectionTitle}>
-          <h1 className={STYLE.title}>
-            {contactSection.title}
-            <span className={STYLE.titleStar}>{contactSection.titleStar}</span>
-          </h1>
-          <div className={STYLE.divider} />
-        </ScrollReveal>
+    <>
+      <section className={STYLE.section}>
+        <div className={STYLE.inner}>
+          <ScrollReveal {...HOME_REVEAL.sectionTitle}>
+            <h1 className={STYLE.title}>
+              {contactSection.title}
+              <span className={STYLE.titleStar}>
+                {contactSection.titleStar}
+              </span>
+            </h1>
+            <div className={STYLE.divider} />
+          </ScrollReveal>
 
-        <form onSubmit={handleSubmit} className={STYLE.form}>
-          <div className={STYLE.formGrid}>
-            {contactSection.fields.map((field, index) => {
-              const isTextarea = field.inputType === "textarea";
+          <form onSubmit={handleSubmit} className={STYLE.form}>
+            <div className={STYLE.formGrid}>
+              {contactSection.fields.map((field, index) => {
+                const isTextarea = field.inputType === "textarea";
 
-              return (
-                <ScrollReveal
-                  key={field.name}
-                  delayMs={index * 70}
-                  {...HOME_REVEAL.card}
-                  className={
-                    isTextarea ? STYLE.fieldBlockMessage : STYLE.fieldBlock
-                  }
+                return (
+                  <ScrollReveal
+                    key={field.name}
+                    delayMs={index * 70}
+                    {...HOME_REVEAL.card}
+                    className={
+                      isTextarea ? STYLE.fieldBlockMessage : STYLE.fieldBlock
+                    }
+                  >
+                    <label className={STYLE.label}>
+                      {field.label}
+                      {field.required ? (
+                        <span className={STYLE.required}>*</span>
+                      ) : null}
+                    </label>
+                    {isTextarea ? (
+                      <textarea
+                        name={field.name}
+                        required={field.required}
+                        rows={field.rows ?? 4}
+                        value={formData[field.name]}
+                        onChange={handleChange}
+                        className={STYLE.textarea}
+                      />
+                    ) : (
+                      <input
+                        name={field.name}
+                        type={field.type ?? "text"}
+                        required={field.required}
+                        value={formData[field.name]}
+                        onChange={handleChange}
+                        className={STYLE.input}
+                      />
+                    )}
+                  </ScrollReveal>
+                );
+              })}
+            </div>
+
+            <ScrollReveal
+              className={STYLE.submitWrap}
+              delayMs={180}
+              {...HOME_REVEAL.button}
+            >
+              <div className={STYLE.consentContainer}>
+                <label className={STYLE.consentLabel}>
+                  <input type="checkbox" required className={STYLE.checkbox} />
+                  <span>{contactSection.consentText}</span>
+                </label>
+                <span
+                  className={STYLE.consentLink}
+                  onClick={() => setIsTextModalOpen(true)}
                 >
-                  <label className={STYLE.label}>
-                    {field.label}
-                    {field.required ? (
-                      <span className={STYLE.required}>*</span>
-                    ) : null}
-                  </label>
-                  {isTextarea ? (
-                    <textarea
-                      name={field.name}
-                      required={field.required}
-                      rows={field.rows ?? 4}
-                      value={formData[field.name]}
-                      onChange={handleChange}
-                      className={STYLE.textarea}
-                    />
-                  ) : (
-                    <input
-                      name={field.name}
-                      type={field.type ?? "text"}
-                      required={field.required}
-                      value={formData[field.name]}
-                      onChange={handleChange}
-                      className={STYLE.input}
-                    />
-                  )}
-                </ScrollReveal>
-              );
-            })}
-          </div>
-
-          <ScrollReveal
-            className={STYLE.submitWrap}
-            delayMs={180}
-            {...HOME_REVEAL.button}
-          >
-            <label className={STYLE.consentLabel}>
-              <input type="checkbox" required className={STYLE.checkbox} />
-              <span>
-                {contactSection.consentText}{" "}
-                <span className="font-bold">
                   {contactSection.consentLinkLabel}
                 </span>
-              </span>
-            </label>
+              </div>
 
-            <button type="submit" className={STYLE.submitButton}>
-              {contactSection.submitButtonText}
-            </button>
-          </ScrollReveal>
-        </form>
-      </div>
-    </section>
+              <button type="submit" className={STYLE.submitButton}>
+                {contactSection.submitButtonText}
+              </button>
+            </ScrollReveal>
+          </form>
+        </div>
+      </section>
+
+      {/* 텍스트 모달 호출 */}
+      <TextModal
+        isOpen={isTextModalOpen}
+        onClose={() => setIsTextModalOpen(false)}
+        title={"개인정보 이용 정책 전문"}
+        content={contactSection.privacyPolicyContent} // lib/siteData에 내용 추가 필요!
+      />
+    </>
   );
 }
