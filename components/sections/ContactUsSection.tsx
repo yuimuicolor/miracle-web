@@ -67,7 +67,7 @@ const STYLE = {
   `,
   checkbox: "h-[1.8rem] w-[1.8rem] accent-white",
   submitButton:
-    "self-center h-[8rem] w-[28rem] rounded-full bg-white text-[3.2rem] font-bold text-point font-pretendard transition-colors hover:bg-white",
+    "self-center h-[8rem] w-full max-w-[28rem] rounded-full bg-white text-[3.2rem] font-bold text-point font-pretendard transition-colors hover:bg-white",
 };
 
 export default function ContactUsSection() {
