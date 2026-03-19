@@ -76,8 +76,7 @@ export default function MainSection() {
 
       <ScrollReveal
         className={STYLE.scrollGuideWrap}
-        delayMs={540}
-        {...HOME_REVEAL.heroSubtitle}
+        delayMs={340}
       >
         <span className={STYLE.scrollGuideText}>
           {mainSection.scrollGuide.split('\n').map((line, index, array) => (
