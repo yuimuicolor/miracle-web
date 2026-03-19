@@ -114,6 +114,7 @@
     font-family: var(--font-noto);
     color: var(--color-white);
     margin: 0;
+    word-break: keep-all;
     -webkit-font-smoothing: antialiased; /* 폰트를 더 매끄럽게 */
   }
 
