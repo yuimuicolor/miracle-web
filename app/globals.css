@@ -110,6 +110,7 @@
   }
 
   body {
+    min-width: 310px;
     font-size: 1.6rem; /* 기본 폰트 크기 */
     font-family: var(--font-noto);
     color: var(--color-white);
@@ -164,10 +165,6 @@
   .page-content > :first-child {
     box-sizing: border-box;
     padding-top: var(--page-offset-top);
-  }
-
-  .site-shell {
-    min-width: 310px;
   }
 
   .page-content > :last-child {
