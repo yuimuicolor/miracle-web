@@ -56,15 +56,15 @@ const STYLE = {
   content: `
     mx-auto flex flex-1 flex-col justify-center gap-[2rem]
     md:gap-[4rem]
-    xl:justify-between xl:gap-[6rem]
+    xl:gap-[6rem]
   `,
   body: `
     flex flex-col gap-[3rem]
     md:gap-[4rem]
     xl:flex-row xl:justify-between
   `,
-  textWrap: "flex flex-col items-start gap-[2rem] lg:gap-[2.8rem]",
-  sliderWrap: "w-full lg:max-w-[600px] xl:max-w-[700px]",
+  textWrap: "flex flex-col items-start gap-[2rem] lg:gap-[2.8rem] lg:flex-shrink-0",
+  sliderWrap: "w-full  xl:max-w-[700px] xl:flex-shrink-1",
   lead: `
     flex flex-col gap-[0.8rem] font-noto tracking-[-0.03em] text-white
     text-[3.2rem]
