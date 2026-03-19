@@ -146,6 +146,21 @@ export default function ProductDetailTop({ product }: ProductDetailTopProps) {
       return;
     }
 
+    // activeIndex가 바뀔 때마다 앞뒤 이미지를 미리 로드
+useEffect(() => {
+  const total = thumbnails.length;
+  if (total <= 1) return;
+
+  const nextIndex = (activeIndex + 1) % total;
+  const prevIndex = (activeIndex - 1 + total) % total;
+
+  // 브라우저 캐시에 미리 넣어두기
+  [thumbnails[nextIndex], thumbnails[prevIndex]].forEach((src) => {
+    const img = new window.Image();
+    img.src = src;
+  });
+}, [activeIndex, thumbnails]);
+
     const handleKeyDown = (event: KeyboardEvent) => {
       if (event.key === "Escape") {
         setIsModalOpen(false);
@@ -205,7 +220,8 @@ export default function ProductDetailTop({ product }: ProductDetailTopProps) {
               src={thumbnails[activeIndex]}
               alt={`${product.brandKo} 썸네일 ${activeIndex + 1}`}
               fill
-              priority
+              priority={activeIndex === 0}
+              quality={75}
               draggable={false}
               sizes="50vw"
               className={STYLE.thumbnailImage}
