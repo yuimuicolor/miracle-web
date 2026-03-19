@@ -9,21 +9,20 @@ import { HOME_CONTENT, STORE_DATA } from "@/lib/siteData";
 const STYLE = {
   section: "w-full bg-point",
   panel: `
-    w-full bg-bg-dark
+    bg-bg-dark
     rounded-b-[12rem] pt-[10rem] pb-[8rem]
-    md:rounded-b-[20rem] md:px-[12rem] md:pt-[14rem] md:pb-[12rem]
-    lg:rounded-b-[30rem] lg:px-[16rem] lg:pt-[17rem] lg:min-h-screen 
+    md:rounded-b-[20rem]  md:pt-[14rem] md:pb-[12rem]
+    lg:rounded-b-[30rem] lg:pt-[17rem] lg:min-h-screen 
   `,
   content: `
-    mx-auto flex w-full max-w-[1200px] flex-col
+    mx-auto flex max-w-[1200px] flex-col
     gap-[4rem] px-[1.6rem]
     md:gap-[5rem] md:px-[4rem]
     lg:gap-[6rem] lg:px-0
   `,
   titleRow: `
-    flex w-[calc(100%+8rem)] -mx-[4rem] flex-col items-center
-    md:w-[calc(100%+24rem)] md:-mx-[12rem]
-    lg:w-[calc(100%+32rem)] lg:-mx-[16rem] lg:gap-[2rem]
+    w-full flex flex-col items-center
+    lg:gap-[2rem]
   `,
   titleHead: "flex w-full items-center gap-[0.8rem] md:gap-[2rem] lg:gap-[4rem]",
   titleLine: "h-px flex-1 bg-white/60",

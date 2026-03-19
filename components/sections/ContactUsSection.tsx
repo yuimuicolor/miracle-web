@@ -10,12 +10,12 @@ import TextModal from "../TextModal";
 
 const STYLE = {
   section: `
-    w-full min-h-screen bg-point
+    min-h-screen bg-point
     px-[1.6rem] pt-[10rem] pb-[8rem]
     md:px-[4rem] md:pt-[14rem]
     lg:px-[8rem] lg:pt-[17rem]
   `,
-  inner: "w-full mx-auto",
+  inner: "mx-auto",
   title: `
     font-gilda uppercase leading-none text-white
     text-[3.6rem]

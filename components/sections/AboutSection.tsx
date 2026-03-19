@@ -54,7 +54,7 @@ const STYLE = {
     xl:h-screen xl:pt-[17rem] xl:pb-[8rem]
   `,
   content: `
-    mx-auto flex w-full flex-1 flex-col justify-center gap-[2rem]
+    mx-auto flex flex-1 flex-col justify-center gap-[2rem]
     md:gap-[4rem]
     xl:justify-between xl:gap-[6rem]
   `,

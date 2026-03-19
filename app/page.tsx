@@ -7,7 +7,7 @@ import GallerySection from '@/components/sections/GallerySection';
 import InformationSection from '@/components/sections/InformationSection';
 
 const STYLE = {
-  main: 'home-snap no-header-offset no-footer-offset w-full bg-bg-dark',
+  main: 'home-snap no-header-offset no-footer-offset w-full overflow-x-hidden bg-bg-dark',
   snapSection: 'lg:snap-start lg:snap-always lg:min-h-screen-minus-header-offset',
   sectionFallback:
     'lg:snap-start lg:snap-always lg:min-h-screen-minus-header-offset w-full bg-bg-dark/60',
