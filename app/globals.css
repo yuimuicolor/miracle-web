@@ -118,20 +118,6 @@
     -webkit-font-smoothing: antialiased; /* 폰트를 더 매끄럽게 */
   }
 
-  @media (min-width: 1024px) {
-    html:has(.home-snap),
-    html:has(.contact-snap),
-    body:has(.home-snap),
-    body:has(.contact-snap) {
-      scroll-snap-type: y mandatory;
-    }
-
-    body:has(.home-snap) footer,
-    body:has(.contact-snap) footer {
-      scroll-snap-align: start;
-    }
-  }
-
   @media (min-width: 768px) {
     :root {
       --header-height-current: var(--header-height-tablet);

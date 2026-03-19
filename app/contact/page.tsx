@@ -3,16 +3,15 @@ import InformationSection from "@/components/sections/InformationSection";
 
 const STYLE = {
 	page: "no-header-offset no-footer-offset w-full bg-point",
-	sectionItem: "snap-start",
 };
 
 export default function ContactPage() {
 	return (
 		<div className={STYLE.page}>
-			<div id="information" className={"contactSnap"}>
+			<div id="information">
 				<InformationSection />
 			</div>
-			<div id="contact-us" className={"contactSnap"}>
+			<div id="contact-us">
 				<ContactUsSection />
 			</div>
 		</div>
