@@ -3,9 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "predev": "npm run images:about:webp",
     "dev": "next dev",
-    "prebuild": "npm run images:about:webp",
     "build": "next build",
     "start": "next start",
     "release": "git checkout main && git pull origin main && git merge dev && git push origin main && git checkout dev",
