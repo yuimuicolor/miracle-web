@@ -8,10 +8,6 @@
     "prebuild": "npm run images:about:webp",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint",
-    "images:about:webp": "node scripts/optimize-about-slider.mjs",
-    "images:gallery:webp": "node scripts/optimize-gallery-images.mjs",
-    "images:products:organize": "node scripts/organize-product-images.mjs",
     "release": "git checkout main && git pull origin main && git merge dev && git push origin main && git checkout dev",
     "prepare": "husky",
     "image-opt": "node scripts/optimize-images.mjs"
