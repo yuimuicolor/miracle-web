@@ -3,7 +3,6 @@
 import { useState, ChangeEvent, SyntheticEvent } from "react";
 import ScrollReveal from "@/components/ScrollReveal";
 import { HOME_REVEAL } from "@/components/sections/homeMotion";
-import { supabase } from "@/lib/supabase";
 import { ContactData } from "@/types/contact";
 import { sendContactEmail } from "@/app/actions";
 import { HOME_CONTENT } from "@/lib/siteData";
@@ -11,7 +10,7 @@ import TextModal from "../TextModal";
 
 const STYLE = {
   section: `
-    w-full min-h-screen-minus-header-offset bg-point
+    w-full min-h-screen bg-point
     px-[1.6rem] pt-[10rem] pb-[8rem]
     md:px-[4rem] md:pt-[14rem]
     lg:px-[8rem] lg:pt-[17rem]
@@ -21,20 +20,22 @@ const STYLE = {
     font-gilda uppercase leading-none text-white
     text-[3.6rem]
     md:text-[5.6rem]
-    lg:text-[8rem]
+    lg:text-[6.4rem]
+    xl:text-[8rem]
   `,
   titleStar: "text-point-light",
   divider: `
     w-full h-px bg-white
     mt-[1rem] mb-[2rem]
     md:mt-[2rem] md:mb-[4rem]
-    lg:mt-[3rem] lg:mb-[6rem]
+    xl:mb-[6rem]
   `,
   form: "w-full",
   formGrid: `
     grid grid-cols-1 gap-x-[4rem] gap-y-[0.8rem]
     md:gap-y-[2rem]
-    lg:grid-cols-2 lg:gap-x-[4rem] lg:gap-y-[4rem]
+    lg:grid-cols-2 lg:gap-x-[6rem] lg:gap-y-[2.8rem]
+    xl:gap-x-[12rem]
   `,
   fieldBlock:
     "flex flex-col gap-[0.6rem] lg:flex-row lg:items-center lg:gap-[2rem]",
@@ -43,21 +44,19 @@ const STYLE = {
   label: `
     flex gap-[0.4rem] font-normal tracking-[-0.01em]
     text-[1.8rem]
-    md:text-[2rem]
-    lg:w-[10rem] lg:shrink-0 lg:text-[2.4rem]
+    lg:w-[8rem] lg:shrink-0 lg:text-[2rem]
   `,
   required: "text-point-green",
   input: `
     w-full bg-white/50 text-black outline-none transition-colors duration-500 focus:bg-white
-    h-[4.8rem] px-[1.2rem] text-[1.8rem]
-    md:h-[6rem] md:px-[1.6rem] md:text-[2rem]
-    lg:h-[7.2rem] lg:text-[2.4rem]
+    h-[4.4rem] px-[1.2rem] text-[1.8rem]
+    md:h-[4.8rem] md:px-[1.6rem]
+    lg:h-[5.2rem] lg:text-[2rem]
   `,
   textarea: `
     w-full resize-none bg-white/50 text-black outline-none transition-colors duration-500 focus:bg-white
     h-[15rem] px-[1.2rem] py-[1.2rem] text-[1.8rem]
-    md:h-[18rem] md:px-[1.6rem] md:text-[2rem]
-    lg:text-[2.4rem]
+    md:h-[18rem] md:px-[1.6rem] lg:text-[2rem]
   `,
   submitWrap: "mt-[1.2rem] flex w-full flex-col gap-[4rem]",
   consentContainer: "flex flex-col items-start md:flex-row gap-[0.8rem]",

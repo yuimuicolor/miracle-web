@@ -31,7 +31,8 @@ const STYLE = {
     font-gilda font-normal uppercase antialiased [text-rendering:geometricPrecision] [-webkit-font-smoothing:antialiased]
     text-[3.4rem] leading-[1.08] tracking-[-0.01em]
     md:text-[5.6rem] md:leading-[5.6rem] md:tracking-[-0.05em]
-    lg:text-[8rem] lg:leading-[8rem] lg:tracking-[0em]
+    lg:text-[6.4rem] lg:leading-[6.4rem]
+    xl:text-[8rem] xl:leading-[8rem] xl:tracking-[0em]
   `,
   stars: `
     font-gilda leading-[1.2] tracking-[-0.05em] text-point-light

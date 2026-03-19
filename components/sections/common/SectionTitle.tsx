@@ -15,7 +15,8 @@ const STYLE = {
     font-gilda font-normal uppercase antialiased [text-rendering:geometricPrecision] [-webkit-font-smoothing:antialiased]
     text-[3.4rem] leading-[1.08] tracking-[-0.01em]
     md:text-[5.6rem] md:leading-[5.6rem] md:tracking-[-0.05em]
-    lg:text-[8rem] lg:leading-[8rem] lg:tracking-[0em]
+    lg:text-[6.4rem] lg:leading-[6.4rem]
+    xl:text-[8rem] xl:leading-[8rem] xl:tracking-[0em]
   `,
   line: 'w-full h-[0.1rem] md:flex-1',
   textColor: (color: 'white' | 'black') => (color === 'black' ? 'text-black' : 'text-white'),

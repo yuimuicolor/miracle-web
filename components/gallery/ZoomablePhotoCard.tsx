@@ -144,7 +144,7 @@ export default function ZoomablePhotoCard({
         ? createPortal(
             <div className={STYLE.modal} onClick={() => setIsOpen(false)} role="dialog" aria-modal="true">
               <div className={STYLE.modalInner} onClick={(event) => event.stopPropagation()}>
-                <Image src={src} alt={alt} className={STYLE.modalImage} />
+                <Image width={500} height={500} src={src} alt={alt} className={STYLE.modalImage} />
                 <button
                   type="button"
                   className={STYLE.modalClose}

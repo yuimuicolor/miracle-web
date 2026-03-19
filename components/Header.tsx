@@ -6,6 +6,7 @@ import Image from "next/image";
 import { usePathname, useRouter } from "next/navigation";
 import { HEADER_CONFIG, HEADER_HEIGHTS_CSS } from "@/lib/headerConfig";
 import { BRAND_DATA, NAVIGATION_MENU } from "@/lib/siteData";
+import Logo from "./sections/common/Logo";
 
 const STYLE = {
   headerPC: `
@@ -59,7 +60,6 @@ const STYLE = {
   `,
   languageSeparatorMobile: "w-[1px] h-[1.2rem] bg-white/20",
   menuWrap: "relative h-full flex-1 max-w-[20rem]",
-  logo: "w-full h-[2.4rem]",
   mobileTopRow: "flex w-full items-center justify-between",
   mobileRightControls: "flex items-center gap-[1rem]",
   menuToggleButton:
@@ -259,14 +259,7 @@ export default function Header() {
             style={{ height: mobileHeaderHeight }}
           >
             <Link href="/" onClick={() => setIsMenuOpen(false)}>
-              <Image
-                src={BRAND_DATA.logoSrc}
-                alt={BRAND_DATA.logoAlt}
-                width={120}
-                height={24}
-                priority
-                className={STYLE.logo}
-              />
+              <Logo />
             </Link>
 
             <div className={STYLE.mobileRightControls}>
@@ -397,14 +390,7 @@ export default function Header() {
         />
 
         <Link href="/">
-          <Image
-            src={BRAND_DATA.logoSrc}
-                alt={BRAND_DATA.logoAlt}
-            width={120}
-            height={24}
-            priority
-            className={STYLE.logo}
-          />
+          <Logo />
         </Link>
 
         <nav className={STYLE.nav}>

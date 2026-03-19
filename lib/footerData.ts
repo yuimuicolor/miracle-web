@@ -6,15 +6,11 @@ export interface FooterItem {
 }
 
 export interface FooterData {
-  logoSrc: string;
-  logoAlt: string;
   items: FooterItem[];
   policyText: string;
 }
 
 export const FOOTER_DATA: FooterData = {
-  logoSrc: BRAND_DATA.logoSrc,
-  logoAlt: BRAND_DATA.logoAlt,
   items: [
     { label: "대표이사", value: STORE_DATA.ownerName },
     { label: "사업자등록번호", value: STORE_DATA.businessRegistrationNumber },

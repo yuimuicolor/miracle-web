@@ -5,6 +5,7 @@ import { BRAND_DATA, HOME_CONTENT } from "@/lib/siteData";
 import Image from "next/image";
 import { useState } from "react";
 import TextModal from "./TextModal";
+import Logo from "./sections/common/Logo";
 
 // 데스크탑/태블릿에서는 5개 항목을 3줄로 나눠서 보여주기 위한 인덱스 배열
 const DESKTOP_ROW_INDEXES = [[0, 1], [2], [3, 4]] as const;
@@ -26,7 +27,6 @@ const STYLE = {
     md:h-full md:px-[4rem] md:py-0
     lg:gap-[4rem] lg:px-[8rem]
   `,
-  logo: "h-[2.4rem]",
   desktopInfoWrap: "hidden flex-col gap-[1.2rem] text-[1.8rem] md:flex",
   desktopRow: "flex flex-wrap items-center gap-x-[3rem]",
   desktopItem: "flex items-center gap-[0.8rem]",
@@ -58,48 +58,36 @@ export default function Footer() {
 
   return (
     <>
-    <footer className={STYLE.root}>
-      <div className={STYLE.inner}>
-        <div>
-          <Image
-            src={BRAND_DATA.logoSrc}
-            alt={BRAND_DATA.logoAlt}
-            width={120}
-            height={24}
-            priority
-            className={STYLE.logo}
-          />
-        </div>
-
-        <div className={STYLE.desktopInfoWrap}>
-          {desktopRows.map((row, rowIndex) => (
-            <div key={rowIndex} className={STYLE.desktopRow}>
-              {row.map((item) => renderInfoItem(item.label, item.value))}
-            </div>
-          ))}
-        </div>
-
-        <div className={STYLE.mobileInfoWrap}>
-          {FOOTER_DATA.items.map((item) =>
-            renderInfoItem(item.label, item.value, true),
-          )}
-        </div>
-
-        <p className={STYLE.policy}>
-            <span 
+      <footer className={STYLE.root}>
+        <div className={STYLE.inner}>
+          <Logo />
+          <div className={STYLE.desktopInfoWrap}>
+            {desktopRows.map((row, rowIndex) => (
+              <div key={rowIndex} className={STYLE.desktopRow}>
+                {row.map((item) => renderInfoItem(item.label, item.value))}
+              </div>
+            ))}
+          </div>
+          <div className={STYLE.mobileInfoWrap}>
+            {FOOTER_DATA.items.map((item) =>
+              renderInfoItem(item.label, item.value, true),
+            )}
+          </div>
+          <p className={STYLE.policy}>
+            <span
               className="cursor-pointer border-b border-transparent hover:border-gray-400 transition-all"
               onClick={() => setIsTextModalOpen(true)}
             >
               {FOOTER_DATA.policyText}
             </span>
           </p>
-      </div>
-    </footer>
-    <TextModal
+        </div>
+      </footer>
+      <TextModal
         isOpen={isTextModalOpen}
         onClose={() => setIsTextModalOpen(false)}
         title={FOOTER_DATA.policyText}
-        content={contactSection.privacyPolicyContent} 
+        content={contactSection.privacyPolicyContent}
       />
     </>
   );
