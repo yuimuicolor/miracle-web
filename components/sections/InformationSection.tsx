@@ -10,7 +10,7 @@ const STYLE = {
   section: "w-full bg-point",
   panel: `
     w-full bg-bg-dark
-    rounded-b-[12rem] px-[4rem] pt-[10rem] pb-[8rem]
+    rounded-b-[12rem] pt-[10rem] pb-[8rem]
     md:rounded-b-[20rem] md:px-[12rem] md:pt-[14rem] md:pb-[12rem]
     lg:rounded-b-[30rem] lg:px-[16rem] lg:pt-[17rem] lg:min-h-screen 
   `,
@@ -28,15 +28,15 @@ const STYLE = {
   titleHead: "flex w-full items-center gap-[0.8rem] md:gap-[2rem] lg:gap-[4rem]",
   titleLine: "h-px flex-1 bg-white/60",
   title: `
-    font-gilda leading-[1] text-white
-    text-[4.4rem]
-    md:text-[5.4rem]
-    lg:text-[6.4rem]
+    font-gilda font-normal uppercase antialiased [text-rendering:geometricPrecision] [-webkit-font-smoothing:antialiased]
+    text-[3.4rem] leading-[1.08] tracking-[-0.01em]
+    md:text-[5.6rem] md:leading-[5.6rem] md:tracking-[-0.05em]
+    lg:text-[8rem] lg:leading-[8rem] lg:tracking-[0em]
   `,
   stars: `
     font-gilda leading-[1.2] tracking-[-0.05em] text-point-light
-    text-[5.6rem]
-    lg:mb-[3rem] lg:text-8rem
+    text-[4rem]
+    lg:mb-[3rem] lg:text-[8rem]
   `,
   body: "flex flex-col items-center gap-[4rem] lg:items-start lg:grid lg:grid-cols-[1.1fr_1fr] lg:gap-[6rem]",
   mapWrap: "w-full overflow-hidden rounded-[1.6rem] bg-white/8",
