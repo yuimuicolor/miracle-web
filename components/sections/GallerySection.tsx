@@ -8,12 +8,11 @@ import { HOME_REVEAL } from "@/components/sections/homeMotion";
 import { getGalleryImages, type GalleryImageItem } from "../../lib/galleryData";
 import MoreButton from "../MoreButton";
 import SectionTitle from "./common/SectionTitle";
-import { HOME_CONTENT } from "@/lib/siteData";
+import { HOME_CONTENT, STATIC_ASSETS } from "@/lib/siteData";
 
 const STYLE = {
   section: `
-    w-full flex flex-col items-center
-    bg-[url('/images/gallery-bg.png')] bg-cover bg-center bg-no-repeat
+    w-full flex flex-col items-center bg-cover bg-center bg-no-repeat
     px-[1.6rem] pt-[10rem] pb-[8rem]
 
     md:px-[4rem] md:pt-[14rem] md:pb-[12rem]
@@ -47,7 +46,7 @@ export default function GallerySection() {
   }, []);
 
   return (
-    <section className={STYLE.section}>
+    <section className={STYLE.section} style={{ backgroundImage: `url(${STATIC_ASSETS.galleryBg})` }}>
       <div className={STYLE.content}>
         <ScrollReveal className="w-full" {...HOME_REVEAL.sectionTitle}>
           <SectionTitle title={gallerySection.sectionTitle} color="white" />

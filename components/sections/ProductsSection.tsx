@@ -47,7 +47,6 @@ export default function ProductsSection() {
 
   const [products, setProducts] = useState<ProductItem[]>([]);
   const [settings, setSettings] = useState<SiteSettings | null>(null);
-  const [loading, setLoading] = useState(true);
 
 useEffect(() => {
     const fetchData = async () => {
@@ -61,8 +60,6 @@ useEffect(() => {
         setSettings(settingsData);
       } catch (error) {
         console.error("데이터 로딩 실패:", error);
-      } finally {
-        setLoading(false);
       }
     };
 

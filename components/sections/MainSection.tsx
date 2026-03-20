@@ -3,13 +3,13 @@
 import { ChevronDown } from 'lucide-react';
 import ScrollReveal from '@/components/ScrollReveal';
 import { HOME_REVEAL } from '@/components/sections/homeMotion';
-import { HOME_CONTENT } from '@/lib/siteData';
+import { HOME_CONTENT, STATIC_ASSETS } from '@/lib/siteData';
 
 const STYLE = {
   section:
     'relative h-screen w-full flex flex-col items-center justify-center overflow-hidden bg-bg-dark',
   background:
-    " absolute inset-0 bg-[url('/images/main-bg.png')] bg-cover bg-center opacity-60 animate-home-hero-drift",
+    " absolute inset-0  bg-cover bg-center opacity-60 animate-home-hero-drift",
   glow:
     'pointer-events-none absolute left-1/2 top-1/2 h-[44rem] w-[44rem] -translate-x-1/2 -translate-y-1/2 rounded-full bg-point/30 blur-[120px] animate-home-hero-glow md:h-[58rem] md:w-[58rem]',
   contentWrap: 'relative z-10 flex flex-col items-center gap-2 text-center',
@@ -48,7 +48,7 @@ export default function MainSection() {
 
   return (
     <section className={STYLE.section}>
-      <div className={STYLE.background} />
+      <div className={STYLE.background} style={{ backgroundImage: `url(${STATIC_ASSETS.mainBg})`}} />
       <div className={STYLE.glow} />
 
       <div className={STYLE.contentWrap}>

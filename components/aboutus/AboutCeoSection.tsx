@@ -7,13 +7,7 @@ import {
   SECTION_REVEAL_EFFECT,
 } from "@/components/aboutus/aboutPageShared";
 import { ABOUT_PAGE_CONTENT } from "@/lib/aboutPageData";
-import { STORE_DATA } from "@/lib/siteData";
 
-const CEO_SNS_MAP = {
-  IG: STORE_DATA.sns.instagram,
-  YT: STORE_DATA.sns.youtube,
-  X: STORE_DATA.sns.x,
-} as const;
 
 export default function AboutCeoSection() {
   const { ceo } = ABOUT_PAGE_CONTENT;
@@ -43,8 +37,8 @@ export default function AboutCeoSection() {
         <p className={ABOUT_PAGE_STYLE.ceoDecor}>***</p>
 
         <div className={ABOUT_PAGE_STYLE.ceoSNSChannelsWrap}>
-          {ceo.socialChannels.map((channel) => {
-            const snsItem = CEO_SNS_MAP[channel as keyof typeof CEO_SNS_MAP];
+          {Object.keys(ceo.sns).map((channel) => {
+            const snsItem = ceo.sns[channel as keyof typeof ceo.sns];
 
             if (!snsItem) return null;
 

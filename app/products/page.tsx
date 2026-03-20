@@ -3,7 +3,9 @@ import ScrollReveal from "@/components/ScrollReveal";
 import { HOME_REVEAL } from "@/components/sections/homeMotion";
 import SectionTitle from "@/components/sections/common/SectionTitle";
 import { getAllProducts } from "@/lib/productsData";
-import { BRAND_DATA, HOME_CONTENT } from "@/lib/siteData";
+import { HOME_CONTENT } from "@/lib/siteData";
+import { useSettings } from "@/context/SiteSettingsContext";
+import { getSiteSettings } from "@/lib/siteSettings";
 
 const STYLE = {
 	section: `
@@ -29,9 +31,12 @@ const STYLE = {
 	`,
 };
 
-export default async function ProductsPage() {
-	const { productsSection } = HOME_CONTENT;
-	const products = await getAllProducts();
+export default async function ProductsPage() {;
+	const settings = await getSiteSettings();
+    if (!settings) return null;
+
+    const { productsSection } = HOME_CONTENT;
+    const products = await getAllProducts();
 
 	return (
 		<section className={STYLE.section}>
@@ -39,7 +44,7 @@ export default async function ProductsPage() {
 				<ScrollReveal className={STYLE.titleWrap} {...HOME_REVEAL.sectionTitle}>
 					<SectionTitle title={productsSection.sectionTitle} color="black" />
 					<p className={STYLE.subText}>
-						<strong className="font-bold">{BRAND_DATA.name}</strong>
+						<strong className="font-bold">{settings.brandName}</strong>
 						{productsSection.description}
 					</p>
 				</ScrollReveal>

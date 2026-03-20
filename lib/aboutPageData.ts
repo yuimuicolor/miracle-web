@@ -1,3 +1,5 @@
+import { STATIC_ASSETS } from "./siteData";
+
 export interface AboutIntroRow {
   title: string;
   accent: string;
@@ -147,7 +149,26 @@ export const ABOUT_PAGE_CONTENT = {
     name: "김미라 / MIRA KIM",
     description:
       "브랜드 전략과 시각 설계를 연결하며,\n의미 있는 변화가 일어나는 디자인을 만듭니다.\nC.E.O로서 미라클의 방향성을 총괄합니다.",
-    socialChannels: ["IG", "YT", "X"],
+      sns: {
+        instagram: {
+          href: "https://www.instagram.com/mira.kim_official",
+          label: "Instagram",
+          iconSrc: STATIC_ASSETS.sns.instagram.base,
+          hoverIconSrc: STATIC_ASSETS.sns.instagram.hover,
+        },
+        youtube: {
+          href: "https://www.youtube.com/@miracle-mira",
+          label: "YouTube",
+          iconSrc: STATIC_ASSETS.sns.youtube.base,
+          hoverIconSrc: STATIC_ASSETS.sns.youtube.hover,
+        },
+        x: {
+          href: "https://twitter.com/mira_kim_official",
+          label: "X (Twitter)",
+          iconSrc: STATIC_ASSETS.sns.x.base,
+          hoverIconSrc: STATIC_ASSETS.sns.x.hover,
+        },
+      },
     imageAlt: "ceo",
   },
 } as const;
