@@ -9,8 +9,8 @@ import MoreButton from "../MoreButton";
 import SectionTitle from "./common/SectionTitle";
 import { toProductPathId, getAllProducts } from "@/lib/productsData";
 import { ProductItem } from "@/lib/productsData";
-import { getSiteSettings, SiteSettings } from "@/lib/siteSettings";
 import { HOME_CONTENT } from "@/lib/siteData";
+import { useSettings } from "@/context/SiteSettingsContext";
 
 const AUTO_SPEED = 1;
 const MOBILE_AUTO_SPEED = 0.5;
@@ -44,20 +44,18 @@ export default function ProductsSection() {
   const { productsSection } = HOME_CONTENT;
   const trackRef = useRef<HTMLDivElement | null>(null);
   const [grabbing, setGrabbing] = useState(false);
-
   const [products, setProducts] = useState<ProductItem[]>([]);
-  const [settings, setSettings] = useState<SiteSettings | null>(null);
+
+  const settings = useSettings();
+  if (!settings) {
+    return null;
+  }
 
 useEffect(() => {
     const fetchData = async () => {
       try {
-        const [productsData, settingsData] = await Promise.all([
-          getAllProducts(),
-          getSiteSettings()
-        ]);
-        
+        const productsData = await getAllProducts(); 
         setProducts(productsData);
-        setSettings(settingsData);
       } catch (error) {
         console.error("데이터 로딩 실패:", error);
       }

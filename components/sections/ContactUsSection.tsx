@@ -7,7 +7,7 @@ import { ContactData } from "@/types/contact";
 import { sendContactEmail } from "@/app/actions";
 import { HOME_CONTENT } from "@/lib/siteData";
 import TextModal from "../TextModal";
-import { getSiteSettings, SiteSettings } from "@/lib/siteSettings";
+import { useSettings } from "@/context/SiteSettingsContext";
 
 const STYLE = {
   section: `
@@ -77,15 +77,10 @@ export default function ContactUsSection() {
   const { contactSection } = HOME_CONTENT;
   const [isTextModalOpen, setIsTextModalOpen] = useState(false);
 
-  const [settings, setSettings] = useState<SiteSettings | null>(null);
-
- useEffect(() => {
-    const fetchSettings = async () => {
-      const data = await getSiteSettings();
-      setSettings(data);
-    };
-    fetchSettings();
-  }, []);
+  const settings = useSettings();
+  if (!settings) {
+    return null; // 또는 로딩 스피너 등
+  }
 
   const [formData, setFormData] = useState<ContactData>({
     name: "",
