@@ -3,7 +3,6 @@ import ScrollReveal from "@/components/ScrollReveal";
 import { HOME_REVEAL } from "@/components/sections/homeMotion";
 import SectionTitle from "@/components/sections/common/SectionTitle";
 import { getAllProducts } from "@/lib/productsData";
-import { HOME_CONTENT } from "@/lib/siteData";
 import { getSiteSettings } from "@/lib/siteSettings";
 
 const STYLE = {
@@ -33,18 +32,16 @@ const STYLE = {
 export default async function ProductsPage() {;
 	const settings = await getSiteSettings()
     if (!settings) return null;
-
-    const { productsSection } = HOME_CONTENT;
     const products = await getAllProducts();
 
 	return (
 		<section className={STYLE.section}>
 			<div className={STYLE.content}>
 				<ScrollReveal className={STYLE.titleWrap} {...HOME_REVEAL.sectionTitle}>
-					<SectionTitle title={productsSection.sectionTitle} color="black" />
+					<SectionTitle title="Products" color="black" />
 					<p className={STYLE.subText}>
 						<strong className="font-bold">{settings.brandName}</strong>
-						{productsSection.description}
+						의 제품들을 소개합니다.
 					</p>
 				</ScrollReveal>
 

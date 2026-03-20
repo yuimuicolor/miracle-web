@@ -3,9 +3,7 @@
 import { useEffect, useState, ChangeEvent, SyntheticEvent } from "react";
 import ScrollReveal from "@/components/ScrollReveal";
 import { HOME_REVEAL } from "@/components/sections/homeMotion";
-import { ContactData } from "@/types/contact";
 import { sendContactEmail } from "@/app/actions";
-import { HOME_CONTENT } from "@/lib/siteData";
 import TextModal from "../TextModal";
 import { useSettings } from "@/context/SiteSettingsContext";
 
@@ -73,73 +71,60 @@ const STYLE = {
     "self-center h-[8rem] w-full max-w-[28rem] rounded-full bg-white text-[3.2rem] font-bold text-point font-pretendard transition-colors hover:bg-white",
 };
 
+export interface ContactData {
+  name: string;
+  phone: string;
+  email: string;
+  company?: string;
+  message: string;
+  [key: string]: string | undefined;
+}
+
+const FIELDS: Array<{
+  id: string; // 👈 고유 ID 추가
+  name: keyof ContactData;
+  label: string;
+  required?: boolean;
+  type?: string;
+  isTextarea?: boolean;
+}> = [
+  { id: "contact_u_name", name: "name", label: "이름", required: true },
+  { id: "contact_u_phone", name: "phone", label: "전화번호", type: "tel" },
+  { id: "contact_u_email", name: "email", label: "이메일", type: "email", required: true },
+  { id: "contact_u_company", name: "company", label: "회사명" },
+  { id: "contact_u_msg", name: "message", label: "문의 내용", required: true, isTextarea: true },
+];
+
+
 export default function ContactUsSection() {
-  const { contactSection } = HOME_CONTENT;
   const [isTextModalOpen, setIsTextModalOpen] = useState(false);
-
-  const settings = useSettings();
-  if (!settings) {
-    return null; // 또는 로딩 스피너 등
-  }
-
   const [formData, setFormData] = useState<ContactData>({
-    name: "",
-    phone: "",
-    email: "",
-    company: "",
-    message: "",
+    name: "", phone: "", email: "", company: "", message: "",
   });
 
-  const handleChange = (
-    e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
-  ) => {
+  const settings = useSettings();
+
+const handleChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
+    setFormData(prev => ({ ...prev, [name]: value }));
   };
 
-  /**
-   * 고객 문의 폼 제출 핸들러
-   * Supabase 데이터베이스에 입력을 저장하고 사용자에게 피드백을 제공합니다.
-   */
-  const handleSubmit = async (e: SyntheticEvent<HTMLFormElement>) => {
+const handleSubmit = async (e: SyntheticEvent<HTMLFormElement>) => {
     e.preventDefault();
-
-    // 입력 데이터 전처리 및 유효성 검사 (필수 필드 공백 제거 등)
-    const submitData: ContactData = {
-      ...formData,
-      company: formData.company?.trim() || "",
-      message: formData.message.trim(),
-    };
-
-    // 필수 입력값 검증 (클라이언트측 2차 검증)
-    if (!submitData.name || !submitData.email || !submitData.message) {
-      alert("필수 입력 항목을 모두 작성해 주세요.");
-      return;
+    
+    // 유효성 검사 로직 (공백 제거 포함)
+    if (!formData.name.trim() || !formData.email.trim() || !formData.message.trim()) {
+      return alert("필수 항목을 입력해주세요.");
     }
 
     try {
-      // 🚀 1. 서버 액션 호출 (이 함수 하나가 DB저장 + 메일발송 다 함)
-      const result = await sendContactEmail(submitData);
-
-      if (!result.success) {
-        throw new Error("서버에서 처리에 실패했습니다.");
+      const result = await sendContactEmail(formData);
+      if (result.success) {
+        alert("접수되었습니다!");
+        setFormData({ name: "", phone: "", email: "", company: "", message: "" });
       }
-
-      // 2. 성공 시 UI 처리
-      alert(
-        "문의가 성공적으로 접수되었습니다. 빠른 시일 내에 연락드리겠습니다.",
-      );
-
-      setFormData({
-        name: "",
-        phone: "",
-        email: "",
-        company: "",
-        message: "",
-      });
     } catch (error) {
-      console.error("[Contact Error]:", error);
-      alert("전송 중 오류가 발생했습니다.");
+      alert("오류가 발생했습니다.");
     }
   };
 
@@ -149,9 +134,9 @@ export default function ContactUsSection() {
         <div className={STYLE.inner}>
           <ScrollReveal {...HOME_REVEAL.sectionTitle}>
             <h1 className={STYLE.title}>
-              {contactSection.title}
+              Contact Us
               <span className={STYLE.titleStar}>
-                {contactSection.titleStar}
+                *
               </span>
             </h1>
             <div className={STYLE.divider} />
@@ -159,12 +144,12 @@ export default function ContactUsSection() {
 
           <form onSubmit={handleSubmit} className={STYLE.form}>
             <div className={STYLE.formGrid}>
-              {contactSection.fields.map((field, index) => {
-                const isTextarea = field.inputType === "textarea";
+              {FIELDS.map((field, index) => {
+                const isTextarea = field.isTextarea;
 
                 return (
                   <ScrollReveal
-                    key={field.name}
+                    key={field.id}
                     delayMs={index * 70}
                     {...HOME_REVEAL.card}
                     className={
@@ -179,16 +164,17 @@ export default function ContactUsSection() {
                     </label>
                     {isTextarea ? (
                       <textarea
-                        name={field.name}
+                        id={field.id}
+                        name={String(field.name)}
                         required={field.required}
-                        rows={field.rows ?? 4}
                         value={formData[field.name]}
                         onChange={handleChange}
                         className={STYLE.textarea}
                       />
                     ) : (
                       <input
-                        name={field.name}
+                        id={field.id}
+                        name={String(field.name)}
                         type={field.type ?? "text"}
                         required={field.required}
                         value={formData[field.name]}
@@ -209,18 +195,18 @@ export default function ContactUsSection() {
               <div className={STYLE.consentContainer}>
                 <label className={STYLE.consentLabel}>
                   <input type="checkbox" required className={STYLE.checkbox} />
-                  <span>{contactSection.consentText}</span>
+                  <span>(필수) 아래 개인정보 이용 정책에 동의합니다.</span>
                 </label>
                 <span
                   className={STYLE.consentLink}
                   onClick={() => setIsTextModalOpen(true)}
                 >
-                  {contactSection.consentLinkLabel}
+                  [전문보기]
                 </span>
               </div>
 
               <button type="submit" className={STYLE.submitButton}>
-                {contactSection.submitButtonText}
+                제출
               </button>
             </ScrollReveal>
           </form>

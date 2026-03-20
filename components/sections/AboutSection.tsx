@@ -6,7 +6,6 @@ import ScrollReveal from "@/components/ScrollReveal";
 import { HOME_REVEAL } from "@/components/sections/homeMotion";
 import AboutSlider from "./AboutSlider";
 import SectionTitle from "./common/SectionTitle";
-import { HOME_CONTENT } from "@/lib/siteData";
 
 const ABOUT_SLIDER_DIR = path.join(
   process.cwd(),
@@ -88,13 +87,12 @@ const STYLE = {
 };
 
 export default function AboutSection() {
-  const { aboutSection } = HOME_CONTENT;
 
   return (
     <section className={STYLE.section}>
       <div className={STYLE.content}>
         <ScrollReveal {...HOME_REVEAL.sectionTitle}>
-          <SectionTitle title={aboutSection.sectionTitle} color="white" />
+          <SectionTitle title="About Us" color="white" />
         </ScrollReveal>
         <div className={STYLE.body}>
           <ScrollReveal className={STYLE.textWrap} delayMs={80} {...HOME_REVEAL.textBlock}>
@@ -108,10 +106,10 @@ export default function AboutSection() {
               </span>
             </p>
 
-            <p className={`${STYLE.desc} whitespace-pre-line`}>{aboutSection.description}</p>
+            <p className={`${STYLE.desc} whitespace-pre-line`}>MIRACLE은 남들과는 다른 상상력으로 당신의 일상에서 \n기적과 같은 변화를 함께 만들어 가는 친구가 되기를 꿈꿉니다.</p>
 
             <Link href="/aboutus">
-              <MoreButton text={aboutSection.moreButtonText} size="S" mode="light" />
+              <MoreButton text="MORE" size="S" mode="light" />
             </Link>
           </ScrollReveal>
 

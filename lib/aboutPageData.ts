@@ -1,13 +1,5 @@
 import { STATIC_ASSETS } from "./siteData";
 
-export interface AboutIntroRow {
-  title: string;
-  accent: string;
-  body: string;
-  imageClass: string;
-  reverse: boolean;
-}
-
 export interface AboutHistoryItem {
   year: string;
   date: string;
@@ -25,29 +17,7 @@ export interface CertificateItem {
 export const ABOUT_PAGE_CONTENT = {
   pageTitle: "ABOUT US",
   pageTitleStar: "*",
-  introRows: [
-    {
-      title: "독창적인 발상 으로",
-      accent: "일상에 기적 같은 변화 를.",
-      body: "미라클은 브랜드의 본질을 깊게 해석하고, 감각적인 시각 언어로 재구성합니다.\n작은 차이가 큰 인상을 만든다는 믿음으로 한 장면씩 완성합니다.",
-      imageClass: "rounded-full",
-      reverse: false,
-    },
-    {
-      title: "MING: 기적",
-      accent: "보이지 않는 가치를 보이게.",
-      body: "전략적 사고와 크리에이티브의 접점에서 고객의 문제를 해결합니다.\n단순히 예쁜 디자인을 넘어 성과를 만드는 브랜드 경험을 만듭니다.",
-      imageClass: "rounded-[120px]",
-      reverse: true,
-    },
-    {
-      title: "고양이는 귀엽습니다",
-      accent: "디테일은 결국 설득력이 됩니다.",
-      body: "우리는 문장, 그리드, 여백, 타이포그래피 같은 기본 요소를 집요하게 다룹니다.\n브랜드가 오래 기억되도록 감정의 밀도를 디자인합니다.",
-      imageClass: "rounded-[120px]",
-      reverse: false,
-    },
-  ] satisfies AboutIntroRow[],
+ 
   trustText: "Trust Integrity Reliability Transformation",
   history: {
     headingEn: "HISTORY",

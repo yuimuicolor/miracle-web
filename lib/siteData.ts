@@ -1,7 +1,3 @@
-import type { ContactData } from "@/types/contact";
-
-export type ContactFieldName = keyof ContactData;
-
 export interface NavigationSubmenuItem {
   label: string;
   href: string;
@@ -11,15 +7,6 @@ export interface NavigationMenuItem {
   title: string;
   href: string;
   submenus: NavigationSubmenuItem[];
-}
-
-export interface ContactFieldConfig {
-  name: ContactFieldName;
-  label: string;
-  required?: boolean;
-  type?: "text" | "email";
-  inputType?: "input" | "textarea";
-  rows?: number;
 }
 
 export const SITE_METADATA = {
@@ -85,57 +72,5 @@ export const STATIC_ASSETS = {
       base: "/images/icon/icon-sns-youtube.png",
       hover: "/images/icon/icon-sns-youtube-hover.png",
     },
-  },
-} as const;
-
-export const HOME_CONTENT = {
-  mainSection: {
-    title: {
-      firstEmphasis: "기적",
-      betweenText: "을 ",
-      secondEmphasis: "일상",
-      suffix: "으로,",
-      star: "*",
-    },
-    logoText: "Miracle",
-    subtitle: "Begins Within",
-    scrollGuide: "SCROLL\nDOWN",
-  },
-  aboutSection: {
-    sectionTitle: "About Us",
-    description:
-      "MIRACLE은 남들과는 다른 상상력으로 당신의 일상에서 \n기적과 같은 변화를 함께 만들어 가는 친구가 되기를 꿈꿉니다.",
-    moreButtonText: "MORE",
-  },
-  productsSection: {
-    sectionTitle: "Products",
-    description: "이 자랑하는 대표 제품들을 소개합니다.",
-    previousAriaLabel: "이전 제품 보기",
-    nextAriaLabel: "다음 제품 보기",
-    moreButtonText: "전체보기",
-  },
-  gallerySection: {
-    sectionTitle: "Gallery",
-    moreButtonText: "전체보기",
-  },
-  contactSection: {
-    title: "CONTACT US",
-    titleStar: "*",
-    submitButtonText: "제출",
-    consentText: "(필수) 아래 개인정보 이용 정책에 동의합니다.",
-    consentLinkLabel: "[전문보기]",
-    fields: [
-      { name: "name", label: "이름", required: true },
-      { name: "phone", label: "연락처", required: true },
-      { name: "email", label: "이메일", required: true, type: "email" },
-      { name: "company", label: "회사명" },
-      {
-        name: "message",
-        label: "내용",
-        required: true,
-        inputType: "textarea",
-        rows: 4,
-      },
-    ] satisfies ContactFieldConfig[],
   },
 } as const;

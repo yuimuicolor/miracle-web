@@ -3,7 +3,8 @@
 import { ChevronDown } from 'lucide-react';
 import ScrollReveal from '@/components/ScrollReveal';
 import { HOME_REVEAL } from '@/components/sections/homeMotion';
-import { HOME_CONTENT, STATIC_ASSETS } from '@/lib/siteData';
+import { STATIC_ASSETS } from '@/lib/siteData';
+import { useSettings } from '@/context/SiteSettingsContext';
 
 const STYLE = {
   section:
@@ -44,7 +45,9 @@ const STYLE = {
 };
 
 export default function MainSection() {
-  const { mainSection } = HOME_CONTENT;
+
+  const settings = useSettings();
+  if (!settings) return null;
 
   return (
     <section className={STYLE.section}>
@@ -54,22 +57,22 @@ export default function MainSection() {
       <div className={STYLE.contentWrap}>
         <ScrollReveal delayMs={80} {...HOME_REVEAL.heroTitle}>
           <h3 className={STYLE.title}>
-            <b>{mainSection.title.firstEmphasis}</b>{mainSection.title.betweenText}<b>{mainSection.title.secondEmphasis}</b>{mainSection.title.suffix}
-            <span className={STYLE.titleStar}>{mainSection.title.star}</span>
+            <b>기적</b>을 <b>일상</b>으로,
+            <span className={STYLE.titleStar}>*</span>
           </h3>
         </ScrollReveal>
 
         <ScrollReveal delayMs={220} {...HOME_REVEAL.heroLogo}>
           <div className={STYLE.logoWrap}>
             <span className={STYLE.logoText}>
-              {mainSection.logoText}
+              {settings.brandName}
             </span>
           </div>
         </ScrollReveal>
 
         <ScrollReveal delayMs={340} {...HOME_REVEAL.heroSubtitle}>
           <h3 className={STYLE.subtitle}>
-            {mainSection.subtitle}
+            Begins Within
           </h3>
         </ScrollReveal>
       </div>
@@ -79,12 +82,7 @@ export default function MainSection() {
         delayMs={340}
       >
         <span className={STYLE.scrollGuideText}>
-          {mainSection.scrollGuide.split('\n').map((line, index, array) => (
-            <span key={`${line}-${index}`}>
-              {line}
-              {index < array.length - 1 ? <br /> : null}
-            </span>
-          ))}
+          SCROLL<br />DOWN
         </span>
         <ChevronDown className={STYLE.scrollGuideIcon} size={20} />
       </ScrollReveal>

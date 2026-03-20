@@ -8,7 +8,7 @@ import { HOME_REVEAL } from "@/components/sections/homeMotion";
 import { getGalleryImages, type GalleryImageItem } from "../../lib/galleryData";
 import MoreButton from "../MoreButton";
 import SectionTitle from "./common/SectionTitle";
-import { HOME_CONTENT, STATIC_ASSETS } from "@/lib/siteData";
+import { STATIC_ASSETS } from "@/lib/siteData";
 
 const STYLE = {
   section: `
@@ -33,7 +33,6 @@ const STYLE = {
 };
 
 export default function GallerySection() {
-  const { gallerySection } = HOME_CONTENT;
   const [galleryImages, setGalleryImages] = useState<GalleryImageItem[]>([]);
 
   useEffect(() => {
@@ -49,7 +48,7 @@ export default function GallerySection() {
     <section className={STYLE.section} style={{ backgroundImage: `url(${STATIC_ASSETS.galleryBg})` }}>
       <div className={STYLE.content}>
         <ScrollReveal className="w-full" {...HOME_REVEAL.sectionTitle}>
-          <SectionTitle title={gallerySection.sectionTitle} color="white" />
+          <SectionTitle title="Gallery" color="white" />
         </ScrollReveal>
 
         <div className={STYLE.grid}>
@@ -75,7 +74,7 @@ export default function GallerySection() {
         >
           <Link href="/gallery">
             <MoreButton
-              text={gallerySection.moreButtonText}
+              text="MORE"
               size="L"
               mode="light"
             />

@@ -6,7 +6,6 @@ import ScrollReveal from "@/components/ScrollReveal";
 import { HOME_REVEAL } from "@/components/sections/homeMotion";
 import SectionTitle from "@/components/sections/common/SectionTitle";
 import { type GalleryImageItem, getGalleryImages } from "../../lib/galleryData";
-import { HOME_CONTENT } from "@/lib/siteData";
 
 const STYLE = {
   section: `
@@ -22,7 +21,6 @@ const STYLE = {
 };
 
 export default function GalleryPage() {
-  const { gallerySection } = HOME_CONTENT;
   const [galleryImages, setGalleryImages] = useState<GalleryImageItem[]>([]);
 
   // 2. 페이지 로드 시 데이터 가져오기
@@ -43,7 +41,7 @@ return (
       <div className={STYLE.content}>
         {/* 섹션 타이틀 */}
         <ScrollReveal className="w-full" {...HOME_REVEAL.sectionTitle}>
-          <SectionTitle title={gallerySection.sectionTitle} color="white" />
+          <SectionTitle title="Gallery" color="white" />
         </ScrollReveal>
 
         {/* 갤러리 그리드 - 데이터가 로드된 후에만 렌더링 */}

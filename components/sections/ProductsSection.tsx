@@ -9,7 +9,6 @@ import MoreButton from "../MoreButton";
 import SectionTitle from "./common/SectionTitle";
 import { toProductPathId, getAllProducts } from "@/lib/productsData";
 import { ProductItem } from "@/lib/productsData";
-import { HOME_CONTENT } from "@/lib/siteData";
 import { useSettings } from "@/context/SiteSettingsContext";
 
 const AUTO_SPEED = 1;
@@ -41,7 +40,6 @@ const STYLE = {
 export default function ProductsSection() {
   const ARROW_SCROLL_DURATION = 420;
 
-  const { productsSection } = HOME_CONTENT;
   const trackRef = useRef<HTMLDivElement | null>(null);
   const [grabbing, setGrabbing] = useState(false);
   const [products, setProducts] = useState<ProductItem[]>([]);
@@ -287,10 +285,10 @@ useEffect(() => {
     <section className={STYLE.section}>
       <div className={STYLE.content}>
         <ScrollReveal className={STYLE.titleWrap} {...HOME_REVEAL.sectionTitle}>
-          <SectionTitle title={productsSection.sectionTitle} color="black" />
+          <SectionTitle title="Products" color="black" />
           <p className={STYLE.subText}>
             <strong className="font-bold">{settings?.brandUppercaseName}</strong>
-            {productsSection.description}
+            의 제품들을 소개합니다.
           </p>
         </ScrollReveal>
 
@@ -302,7 +300,7 @@ useEffect(() => {
           <button
             type="button"
             className={`${STYLE.arrowButton}`}
-            aria-label={productsSection.previousAriaLabel}
+            aria-label="이전 제품 보기"
             onClick={() => scrollByCard("prev")}
           >
             ‹
@@ -340,7 +338,7 @@ useEffect(() => {
           <button
             type="button"
             className={`${STYLE.arrowButton}`}
-            aria-label={productsSection.nextAriaLabel}
+            aria-label="다음 제품 보기"
             onClick={() => scrollByCard("next")}
           >
             ›
@@ -354,7 +352,7 @@ useEffect(() => {
         >
           <Link href="/products">
             <MoreButton
-              text={productsSection.moreButtonText}
+              text="전체보기"
               size="L"
               mode="dark"
             />
