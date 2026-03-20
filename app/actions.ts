@@ -1,8 +1,8 @@
 "use server";
 
+import { ContactData } from "@/components/sections/ContactUsSection";
 import { createClient } from "@supabase/supabase-js";
 import { Resend } from "resend";
-import { ContactData } from "@/types/contact";
 
 const resend = new Resend(process.env.RESEND_API_KEY);
 const supabase = createClient(
