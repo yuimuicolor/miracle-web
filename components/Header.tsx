@@ -2,10 +2,9 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
-import Image from "next/image";
 import { usePathname, useRouter } from "next/navigation";
 import { HEADER_CONFIG, HEADER_HEIGHTS_CSS } from "@/lib/headerConfig";
-import { BRAND_DATA, NAVIGATION_MENU } from "@/lib/siteData";
+import { NAVIGATION_MENU } from "@/lib/siteData";
 import Logo from "./sections/common/Logo";
 
 const STYLE = {
