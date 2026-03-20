@@ -106,7 +106,7 @@ export default function AboutSection() {
               </span>
             </p>
 
-            <p className={`${STYLE.desc} whitespace-pre-line`}>MIRACLE은 남들과는 다른 상상력으로 당신의 일상에서 \n기적과 같은 변화를 함께 만들어 가는 친구가 되기를 꿈꿉니다.</p>
+            <p className={`${STYLE.desc} whitespace-pre-line`}>MIRACLE은 남들과는 다른 상상력으로 당신의 일상에서<br/>기적과 같은 변화를 함께 만들어 가는 친구가 되기를 꿈꿉니다.</p>
 
             <Link href="/aboutus">
               <MoreButton text="MORE" size="S" mode="light" />

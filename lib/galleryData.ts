@@ -1,4 +1,4 @@
-import { supabase } from '@/lib/supabase';
+import { supabase } from "@/lib/supabase";
 
 export interface GalleryImageItem {
   id: number;
@@ -14,12 +14,14 @@ export interface GalleryImageItem {
 }
 
 // 2. 갤러리 이미지 리스트 로딩
-export const getGalleryImages = async (limit?: number): Promise<GalleryImageItem[]> => {
+export const getGalleryImages = async (
+  limit?: number,
+): Promise<GalleryImageItem[]> => {
   let query = supabase
-    .from('gallery')
-    .select('*')
-    .eq('isVisible', true) // 노출 여부 필터링
-    .order('displayOrder', { ascending: true }); // 정렬 순서대로
+    .from("gallery")
+    .select("*")
+    .eq("isVisible", true) // 노출 여부 필터링
+    .order("displayOrder", { ascending: true }); // 정렬 순서대로
 
   if (limit) {
     query = query.limit(limit);
@@ -28,7 +30,7 @@ export const getGalleryImages = async (limit?: number): Promise<GalleryImageItem
   const { data, error } = await query;
 
   if (error || !data) {
-    console.error('갤러리 데이터를 불러오지 못했습니다:', error);
+    console.error("갤러리 데이터를 불러오지 못했습니다:", error);
     return [];
   }
 
@@ -43,7 +45,7 @@ export const getGalleryImages = async (limit?: number): Promise<GalleryImageItem
     isVisible: item.isVisible,
     displayOrder: item.displayOrder,
     // Supabase Storage URL 생성 (버킷명 'products' 내부의 'gallery' 폴더 기준)
-    src: `${process.env.NEXT_PUBLIC_SUPABASE_URL}/storage/v1/object/public/gallery/${item.fileName}`,
+    src: `${process.env.NEXT_PUBLIC_SUPABASE_URL}/storage/v1/object/public/gallery/${encodeURIComponent(item.fileName)}`,
     alt: `MIRACLE gallery ${item.mainTitle}`,
   }));
 };
