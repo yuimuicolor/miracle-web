@@ -1,7 +1,13 @@
 import Link from "next/link";
 import { ReactNode } from "react";
+import { getServerSession } from "next-auth";
+import LogoutButton from "./LogoutButton";
 
-export default function AdminLayout({ children }: { children: ReactNode }) {
+export default async function AdminLayout({
+  children,
+}: {
+  children: ReactNode;
+}) {
   // 사이드바 메뉴 구성
   const menuItems = [
     { name: "대시보드", href: "/admin", icon: "🏠" },
@@ -11,6 +17,8 @@ export default function AdminLayout({ children }: { children: ReactNode }) {
     { name: "사이트 설정", href: "/admin/settings", icon: "⚙️" },
   ];
 
+  const session = await getServerSession();
+
   return (
     <div className="flex min-h-screen bg-gray-100">
       {/* 사이드바 */}
@@ -18,7 +26,7 @@ export default function AdminLayout({ children }: { children: ReactNode }) {
         <div className="p-6 text-2xl font-bold border-b border-slate-800">
           <Link href="/">MIRACLE ADMIN</Link>
         </div>
-        
+
         <nav className="flex-1 p-4 space-y-2">
           {menuItems.map((item) => (
             <Link
@@ -37,21 +45,18 @@ export default function AdminLayout({ children }: { children: ReactNode }) {
         </div>
       </aside>
 
-      {/* 메인 콘텐츠 영역 */}
       <main className="flex-1 flex flex-col">
-        {/* 상단바 (현재 관리자 이름이나 로그아웃 버튼용) */}
         <header className="h-16 bg-white border-b flex items-center justify-between px-8">
-          <h2 className="text-xl font-semibold text-gray-800">관리자 모드</h2>
+          <h2 className="text-xl font-semibold">관리자 모드</h2>
           <div className="flex items-center gap-4">
-            <span className="text-sm font-medium text-gray-600">유이 누나님</span>
-            <button className="text-sm text-red-500 hover:underline">로그아웃</button>
+            {/* 세션에 저장된 이름 표시: 세션 있을 때만 렌더 */}
+            {session && session.user?.name && (
+              <span className="text-sm font-medium">{session.user.name}님</span>
+            )}
+            <LogoutButton />
           </div>
         </header>
-
-        {/* 페이지별 실제 내용이 들어가는 곳 */}
-        <div className="p-8 overflow-y-auto">
-          {children}
-        </div>
+        <div className="p-8">{children}</div>
       </main>
     </div>
   );
