@@ -15,10 +15,10 @@ const MOBILE_AUTO_SPEED = 0.5;
 
 const STYLE = {
   section: `
-    w-full min-h-screen bg-bg-light
+    w-full bg-bg-light
     px-[1.6rem] pt-[10rem] pb-[8rem]
     md:px-[4rem] md:pt-[14rem] md:pb-[12rem]
-    lg:px-[8rem] lg:pt-[17rem] lg:pb-[8rem]
+    lg:px-[8rem] lg:pt-[17rem] lg:pb-[8rem] lg:min-h-screen
   `,
   content: "mx-auto flex w-full flex-col gap-[6rem]",
   titleWrap: "flex flex-col gap-[0.8rem] md:gap-[0rem] lg:gap-[2rem]",

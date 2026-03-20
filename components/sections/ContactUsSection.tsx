@@ -10,10 +10,10 @@ import TextModal from "../TextModal";
 
 const STYLE = {
   section: `
-    min-h-screen bg-point
+    bg-point
     px-[1.6rem] pt-[10rem] pb-[8rem]
     md:px-[4rem] md:pt-[14rem]
-    lg:px-[8rem] lg:pt-[17rem]
+    lg:px-[8rem] lg:pt-[17rem] lg:min-h-screen
   `,
   inner: "mx-auto",
   title: `

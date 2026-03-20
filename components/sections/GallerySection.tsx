@@ -9,12 +9,12 @@ import { HOME_CONTENT } from "@/lib/siteData";
 
 const STYLE = {
   section: `
-    w-full min-h-screen flex flex-col items-center
+    w-full flex flex-col items-center
     bg-[url('/images/gallery-bg.png')] bg-cover bg-center bg-no-repeat
     px-[1.6rem] pt-[10rem] pb-[8rem]
 
     md:px-[4rem] md:pt-[14rem] md:pb-[12rem]
-    lg:px-[8rem] lg:pt-[17rem] lg:pb-[8rem]
+    lg:px-[8rem] lg:pt-[17rem] lg:pb-[8rem] lg:min-h-screen
   `,
   content: `
     z-10 flex w-full flex-col items-center justify-center
