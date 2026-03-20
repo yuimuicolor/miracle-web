@@ -4,7 +4,6 @@ export interface GalleryImageItem {
   id: number;
   createdAt?: string;
   fileName: string;
-  storagePath: string;
   subtitle: string;
   mainTitle: string;
   isVisible: boolean;
