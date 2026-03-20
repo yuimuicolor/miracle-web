@@ -136,12 +136,14 @@ export default function ProductDetailTop({ product }: ProductDetailTopProps) {
   const dragStartXRef = useRef<number | null>(null);
 
   const thumbnails =
-    product.thumbnailImages.length > 0
+    (product.thumbnailImages || []).length > 0
       ? product.thumbnailImages
       : [product.image];
 
   const detailImages =
-    product.detailImages.length > 0 ? product.detailImages : [product.image];
+    (product?.detailImages?.length ?? 0) > 0
+      ? product.detailImages
+      : [product.image];
 
   // 1. 마운트 상태 관리
   useEffect(() => {
@@ -227,9 +229,8 @@ export default function ProductDetailTop({ product }: ProductDetailTopProps) {
               alt={`${product.brandKo} 썸네일 ${activeIndex + 1}`}
               fill
               priority={activeIndex === 0}
-              quality={75}
               draggable={false}
-              sizes="50vw"
+              unoptimized={true}
               className={STYLE.thumbnailImage}
             />
 
@@ -287,11 +288,11 @@ export default function ProductDetailTop({ product }: ProductDetailTopProps) {
               <Image
                 src={src}
                 alt={`${product.brandKo} 상세 이미지 ${index + 1}`}
-                width={0}
-                height={0}
-                sizes="50vw"
+                width={1500}
+                height={1000}
+                className="w-full h-auto object-contain"
+                unoptimized={true}
                 draggable={false}
-                style={{ width: "100%", height: "auto" }}
               />
             </div>
           ))}
@@ -350,12 +351,11 @@ export default function ProductDetailTop({ product }: ProductDetailTopProps) {
                 onClick={(event) => event.stopPropagation()}
               >
                 <Image
-                width={500}
-                height={500}
+                  width={500}
+                  height={500}
                   src={modalSrc}
                   alt={modalAlt}
                   className={STYLE.modalImage}
-                  
                 />
                 <button
                   type="button"

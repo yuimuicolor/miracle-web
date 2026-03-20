@@ -1,9 +1,13 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import MoreButton from "@/components/MoreButton";
-import { PRODUCTS, toProductPathId } from "@/lib/productsData";
+import {
+  getAllProducts,
+  toProductPathId,
+  ProductItem,
+} from "@/lib/productsData";
 import ProductBox from "./ProductBox";
 
 const STYLE = {
@@ -45,17 +49,33 @@ interface OtherProductsSliderProps {
   currentProductId: string;
 }
 
-export default function OtherProductsSlider({ currentProductId }: OtherProductsSliderProps) {
+export default function OtherProductsSlider({
+  currentProductId,
+}: OtherProductsSliderProps) {
   const ARROW_SCROLL_DURATION = 420;
 
-  const products = useMemo(
-    () => PRODUCTS.filter((item) => item.id !== currentProductId),
-    [currentProductId],
-  );
+  const [products, setProducts] = useState<ProductItem[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  // Data fetching: Supabase에서 제품 데이터 불러오기
+  useEffect(() => {
+    const fetchOtherProducts = async () => {
+      try {
+        const allData = await getAllProducts();
+        const filtered = allData.filter((item) => item.id !== currentProductId);
+        setProducts(filtered);
+      } catch (error) {
+        console.error("다른 상품 로드 실패:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchOtherProducts();
+  }, [currentProductId]);
 
   const trackRef = useRef<HTMLDivElement | null>(null);
   const [grabbing, setGrabbing] = useState(false);
-
   const halfRef = useRef(0);
   const isDragging = useRef(false);
   const dragStartX = useRef(0);
@@ -79,13 +99,10 @@ export default function OtherProductsSlider({ currentProductId }: OtherProductsS
 
     const ro = new ResizeObserver(() => calcHalf(container));
     ro.observe(container);
-
     requestAnimationFrame(() => calcHalf(container));
 
     return () => {
-      if (arrowAnimRef.current) {
-        cancelAnimationFrame(arrowAnimRef.current);
-      }
+      if (arrowAnimRef.current) cancelAnimationFrame(arrowAnimRef.current);
       ro.disconnect();
     };
   }, [products]);
@@ -125,10 +142,13 @@ export default function OtherProductsSlider({ currentProductId }: OtherProductsS
     const container = trackRef.current;
     if (!container) return;
 
-    const firstCard = container.querySelector<HTMLElement>("[data-product-card='true']");
+    const firstCard = container.querySelector<HTMLElement>(
+      "[data-product-card='true']",
+    );
     if (!firstCard) return;
 
-    const gap = Number.parseFloat(getComputedStyle(container).columnGap || "0") || 0;
+    const gap =
+      Number.parseFloat(getComputedStyle(container).columnGap || "0") || 0;
     const step = firstCard.offsetWidth + gap;
     animateScrollBy(direction === "next" ? step : -step);
   };
@@ -179,9 +199,8 @@ export default function OtherProductsSlider({ currentProductId }: OtherProductsS
     stopDrag();
   };
 
-  if (products.length === 0) {
-    return null;
-  }
+  if (!loading && products.length === 0) return null;
+
 
   return (
     <section className={STYLE.section}>
@@ -211,8 +230,12 @@ export default function OtherProductsSlider({ currentProductId }: OtherProductsS
             onMouseUp={stopDrag}
             onMouseLeave={handleTrackMouseLeave}
           >
-            {[...products, ...products].map((item, index) => (
-              <div key={`${item.id}-${index}`} data-product-card="true" className={STYLE.cardWrap}>
+            {products.length > 0 && [...products, ...products].map((item, index) => (
+              <div
+                key={`${item.id}-${index}`}
+                data-product-card="true"
+                className={STYLE.cardWrap}
+              >
                 <Link
                   href={`/products/${toProductPathId(item.id)}`}
                   className={STYLE.cardLink}
@@ -239,7 +262,12 @@ export default function OtherProductsSlider({ currentProductId }: OtherProductsS
 
         <div className={STYLE.buttonWrap}>
           <Link href="/products">
-            <MoreButton text="목록으로" size="L" mode="dark" icon="chevron-right" />
+            <MoreButton
+              text="목록으로"
+              size="L"
+              mode="dark"
+              icon="chevron-right"
+            />
           </Link>
         </div>
       </div>

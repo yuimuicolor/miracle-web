@@ -45,17 +45,21 @@ export default function ProductBox({ item, index }: ProductBoxProps) {
 
   return (
     <article className={STYLE.card}>
-      <Image
-        src={item.image}
-        alt={item.brandKo}
-        fill
-        draggable={false}
-        priority={isFirstImage}
-        loading={isFirstImage ? "eager" : "lazy"}
-        quality={60}
-        sizes="(max-width: 767px) 75vw, (max-width: 1023px) 40vw, 24vw"
-        className={STYLE.image}
-      />
+      {item.image ? (
+        <Image
+          src={item.image}
+          alt={item.brandKo}
+          fill
+          draggable={false}
+          priority={isFirstImage}
+          loading={isFirstImage ? "eager" : "lazy"}
+          quality={60}
+          sizes="(max-width: 767px) 75vw, (max-width: 1023px) 40vw, 24vw"
+          className={STYLE.image}
+        />
+      ) : (
+        <div className={STYLE.image} style={{ backgroundColor: "#f3f4f6" }} />
+      )}
       <div className={STYLE.overlay} />
       <div className={STYLE.hoverTint} />
       <div className={STYLE.plusWrap}>

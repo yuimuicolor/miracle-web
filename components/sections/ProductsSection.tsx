@@ -7,7 +7,8 @@ import ScrollReveal from "@/components/ScrollReveal";
 import { HOME_REVEAL } from "@/components/sections/homeMotion";
 import MoreButton from "../MoreButton";
 import SectionTitle from "./common/SectionTitle";
-import { PRODUCTS, toProductPathId } from "@/lib/productsData";
+import { toProductPathId, getAllProducts } from "@/lib/productsData";
+import { ProductItem } from "@/lib/productsData";
 import { BRAND_DATA, HOME_CONTENT } from "@/lib/siteData";
 
 const AUTO_SPEED = 1;
@@ -42,6 +43,23 @@ export default function ProductsSection() {
   const { productsSection } = HOME_CONTENT;
   const trackRef = useRef<HTMLDivElement | null>(null);
   const [grabbing, setGrabbing] = useState(false);
+  const [products, setProducts] = useState<ProductItem[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchProducts = async () => {
+      try {
+        const data = await getAllProducts();
+        setProducts(data);
+      } catch (error) {
+        console.error("상품을 불러오지 못했습니다.", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchProducts();
+  }, []);
 
   const rafRef = useRef<number>(0);
   const halfRef = useRef(0);
@@ -67,8 +85,11 @@ export default function ProductsSection() {
   };
 
   const calcHalf = (container: HTMLDivElement) => {
-    const cards = container.querySelectorAll<HTMLElement>("[data-product-card='true']");
-    halfRef.current = cards[PRODUCTS.length]?.offsetLeft ?? container.scrollWidth / 2;
+    const cards = container.querySelectorAll<HTMLElement>(
+      "[data-product-card='true']",
+    );
+    halfRef.current =
+      cards[products.length]?.offsetLeft ?? container.scrollWidth / 2;
   };
 
   useEffect(() => {
@@ -110,7 +131,8 @@ export default function ProductsSection() {
             }
           } else if (autoScrollEnabledRef.current) {
             autoCarryRef.current += autoSpeedRef.current;
-            const movePx = autoCarryRef.current >= 1 ? Math.floor(autoCarryRef.current) : 0;
+            const movePx =
+              autoCarryRef.current >= 1 ? Math.floor(autoCarryRef.current) : 0;
             if (movePx > 0) {
               container.scrollLeft = normalizeScroll(
                 container.scrollLeft + movePx,
@@ -137,7 +159,7 @@ export default function ProductsSection() {
       cancelAnimationFrame(rafRef.current);
       ro.disconnect();
     };
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const stopArrowAnimation = () => {
@@ -174,10 +196,13 @@ export default function ProductsSection() {
   const scrollByCard = (direction: "prev" | "next") => {
     const container = trackRef.current;
     if (!container) return;
-    const firstCard = container.querySelector<HTMLElement>("[data-product-card='true']");
+    const firstCard = container.querySelector<HTMLElement>(
+      "[data-product-card='true']",
+    );
     if (!firstCard) return;
 
-    const gap = Number.parseFloat(getComputedStyle(container).columnGap || "0") || 0;
+    const gap =
+      Number.parseFloat(getComputedStyle(container).columnGap || "0") || 0;
     const step = firstCard.offsetWidth + gap;
 
     // 화살표를 누른 뒤에는 자동 흐름을 멈추고 수동 인터랙션 중심으로 전환한다.
@@ -262,11 +287,16 @@ export default function ProductsSection() {
         <ScrollReveal className={STYLE.titleWrap} {...HOME_REVEAL.sectionTitle}>
           <SectionTitle title={productsSection.sectionTitle} color="black" />
           <p className={STYLE.subText}>
-            <strong className="font-bold">{BRAND_DATA.uppercaseName}</strong>{productsSection.description}
+            <strong className="font-bold">{BRAND_DATA.uppercaseName}</strong>
+            {productsSection.description}
           </p>
         </ScrollReveal>
 
-        <ScrollReveal className={STYLE.sliderArea} delayMs={120} {...HOME_REVEAL.sectionBody}>
+        <ScrollReveal
+          className={STYLE.sliderArea}
+          delayMs={120}
+          {...HOME_REVEAL.sectionBody}
+        >
           <button
             type="button"
             className={`${STYLE.arrowButton}`}
@@ -285,8 +315,12 @@ export default function ProductsSection() {
             onMouseUp={stopDrag}
             onMouseLeave={handleTrackMouseLeave}
           >
-            {[...PRODUCTS, ...PRODUCTS].map((item, index) => (
-              <div key={index} data-product-card="true" className={STYLE.cardWrap}>
+            {[...products, ...products].map((item, index) => (
+              <div
+                key={index}
+                data-product-card="true"
+                className={STYLE.cardWrap}
+              >
                 <Link
                   href={`/products/${toProductPathId(item.id)}`}
                   className={STYLE.cardLink}
@@ -295,7 +329,7 @@ export default function ProductsSection() {
                   onClick={handleCardClick}
                   onDragStart={handleNativeDragStart}
                 >
-                  <ProductBox item={item} index={index}/>
+                  <ProductBox item={item} index={index} />
                 </Link>
               </div>
             ))}
@@ -311,9 +345,17 @@ export default function ProductsSection() {
           </button>
         </ScrollReveal>
 
-        <ScrollReveal className={STYLE.buttonWrap} delayMs={220} {...HOME_REVEAL.button}>
+        <ScrollReveal
+          className={STYLE.buttonWrap}
+          delayMs={220}
+          {...HOME_REVEAL.button}
+        >
           <Link href="/products">
-            <MoreButton text={productsSection.moreButtonText} size="L" mode="dark" />
+            <MoreButton
+              text={productsSection.moreButtonText}
+              size="L"
+              mode="dark"
+            />
           </Link>
         </ScrollReveal>
       </div>

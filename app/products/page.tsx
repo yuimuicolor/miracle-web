@@ -2,7 +2,7 @@ import ProductsPageGrid from "@/components/products/ProductsPageGrid";
 import ScrollReveal from "@/components/ScrollReveal";
 import { HOME_REVEAL } from "@/components/sections/homeMotion";
 import SectionTitle from "@/components/sections/common/SectionTitle";
-import { PRODUCTS } from "@/lib/productsData";
+import { getAllProducts } from "@/lib/productsData";
 import { BRAND_DATA, HOME_CONTENT } from "@/lib/siteData";
 
 const STYLE = {
@@ -29,8 +29,9 @@ const STYLE = {
 	`,
 };
 
-export default function ProductsPage() {
+export default async function ProductsPage() {
 	const { productsSection } = HOME_CONTENT;
+	const products = await getAllProducts();
 
 	return (
 		<section className={STYLE.section}>
@@ -44,7 +45,7 @@ export default function ProductsPage() {
 				</ScrollReveal>
 
 				<ScrollReveal className="w-full" delayMs={120} {...HOME_REVEAL.sectionBody}>
-					<ProductsPageGrid products={PRODUCTS} />
+					<ProductsPageGrid products={products} />
 				</ScrollReveal>
 			</div>
 		</section>
