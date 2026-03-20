@@ -85,11 +85,8 @@ export default function ProductsSection() {
   };
 
   const calcHalf = (container: HTMLDivElement) => {
-    const cards = container.querySelectorAll<HTMLElement>(
-      "[data-product-card='true']",
-    );
-    halfRef.current =
-      cards[products.length]?.offsetLeft ?? container.scrollWidth / 2;
+    if (products.length === 0) return;
+    halfRef.current = container.scrollWidth / 2;
   };
 
   useEffect(() => {
@@ -105,62 +102,64 @@ export default function ProductsSection() {
       window.removeEventListener("resize", updateAutoSpeed);
     };
   }, []);
+  
+useEffect(() => {
+  const container = trackRef.current;
+  if (!container || products.length === 0) return; 
 
-  useEffect(() => {
-    const container = trackRef.current;
-    if (!container) return;
+  // 1. 데이터가 로드되자마자 절반 지점(half) 계산
+  calcHalf(container);
 
-    const ro = new ResizeObserver(() => calcHalf(container));
-    ro.observe(container);
+  // 2. 화면 크기 바뀔 때마다 다시 계산 (반응형 대응)
+  const ro = new ResizeObserver(() => calcHalf(container));
+  ro.observe(container);
 
-    const loop = () => {
-      if (!isDragging.current && !isHoverPauseRef.current) {
-        const half = halfRef.current;
-        if (half > 0) {
-          if (modeRef.current === "momentum") {
-            momentumVRef.current *= 0.86;
-            if (Math.abs(momentumVRef.current) < 0.8) {
-              modeRef.current = "auto";
-              momentumVRef.current = 0;
-              autoCarryRef.current = 0;
-            } else {
-              container.scrollLeft = normalizeScroll(
-                container.scrollLeft - momentumVRef.current,
-                half,
-              );
-            }
-          } else if (autoScrollEnabledRef.current) {
-            autoCarryRef.current += autoSpeedRef.current;
-            const movePx =
-              autoCarryRef.current >= 1 ? Math.floor(autoCarryRef.current) : 0;
-            if (movePx > 0) {
-              container.scrollLeft = normalizeScroll(
-                container.scrollLeft + movePx,
-                half,
-              );
-              autoCarryRef.current -= movePx;
-            }
+  const loop = () => {
+    if (!isDragging.current && !isHoverPauseRef.current) {
+      const half = halfRef.current;
+      if (half > 0) {
+        if (container.scrollLeft >= half) {
+          container.scrollLeft -= half;
+        }
+
+        if (modeRef.current === "momentum") {
+          momentumVRef.current *= 0.86;
+          if (Math.abs(momentumVRef.current) < 0.8) {
+            modeRef.current = "auto";
+            momentumVRef.current = 0;
+            autoCarryRef.current = 0;
+          } else {
+            container.scrollLeft = normalizeScroll(
+              container.scrollLeft - momentumVRef.current,
+              half,
+            );
+          }
+        } else if (autoScrollEnabledRef.current) {
+          autoCarryRef.current += autoSpeedRef.current;
+          const movePx =
+            autoCarryRef.current >= 1 ? Math.floor(autoCarryRef.current) : 0;
+          if (movePx > 0) {
+            container.scrollLeft = normalizeScroll(
+              container.scrollLeft + movePx,
+              half,
+            );
+            autoCarryRef.current -= movePx;
           }
         }
       }
-      rafRef.current = requestAnimationFrame(loop);
-    };
+    }
+    rafRef.current = requestAnimationFrame(loop);
+  };
 
-    // 레이아웃 완료 후 half 계산 뒤 루프 시작
-    requestAnimationFrame(() => {
-      calcHalf(container);
-      rafRef.current = requestAnimationFrame(loop);
-    });
+  // 루프 시작
+  rafRef.current = requestAnimationFrame(loop);
 
-    return () => {
-      if (arrowAnimRef.current) {
-        cancelAnimationFrame(arrowAnimRef.current);
-      }
-      cancelAnimationFrame(rafRef.current);
-      ro.disconnect();
-    };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  return () => {
+    if (arrowAnimRef.current) cancelAnimationFrame(arrowAnimRef.current);
+    cancelAnimationFrame(rafRef.current);
+    ro.disconnect();
+  };
+}, [products]);
 
   const stopArrowAnimation = () => {
     if (!arrowAnimRef.current) return;

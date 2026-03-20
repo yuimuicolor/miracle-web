@@ -52,9 +52,8 @@ export default function ProductBox({ item, index }: ProductBoxProps) {
           fill
           draggable={false}
           priority={isFirstImage}
-          loading={isFirstImage ? "eager" : "lazy"}
-          quality={60}
-          sizes="(max-width: 767px) 75vw, (max-width: 1023px) 40vw, 24vw"
+          loading="eager"
+          sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
           className={STYLE.image}
         />
       ) : (

@@ -37,8 +37,10 @@ const STYLE = {
     transition-colors duration-300
     group-hover:text-hover
   `,
-  brandKo: "font-noto font-semibold text-[2rem] leading-none tracking-[-0.04em]",
-  brandEn: "font-noto font-medium text-[1.8rem] leading-[1.3] tracking-[0.2em] uppercase",
+  brandKo:
+    "font-noto font-semibold text-[2rem] leading-none tracking-[-0.04em]",
+  brandEn:
+    "font-noto font-medium text-[1.8rem] leading-[1.3] tracking-[0.2em] uppercase",
   plusButton: `
     flex h-[2rem] w-[2rem] items-center justify-center text-black
     transition-all duration-300
@@ -67,6 +69,7 @@ export default function ProductsPageBox({ item }: ProductsPageBoxProps) {
             src={item.image}
             alt={item.brandKo}
             fill
+            loading="eager"
             sizes="(max-width: 767px) 100vw, (max-width: 1023px) 50vw, 33vw"
             className={STYLE.image}
           />

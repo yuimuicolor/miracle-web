@@ -88,10 +88,10 @@ export default function OtherProductsSlider({
     return ((value % half) + half) % half;
   };
 
-  const calcHalf = (container: HTMLDivElement) => {
-    const cards = container.querySelectorAll<HTMLElement>("[data-product-card='true']");
-    halfRef.current = cards[products.length]?.offsetLeft ?? container.scrollWidth / 2;
-  };
+const calcHalf = (container: HTMLDivElement) => {
+  if (products.length === 0) return;
+  halfRef.current = container.scrollWidth / 2;
+};
 
   useEffect(() => {
     const container = trackRef.current;
