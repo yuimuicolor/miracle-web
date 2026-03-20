@@ -39,7 +39,6 @@ export const getGalleryImages = async (
     id: item.id,
     createdAt: item.createdAt,
     fileName: item.fileName,
-    storagePath: item.storagePath,
     subtitle: item.subtitle || "MIRACLE ARCHIVE",
     mainTitle: item.mainTitle || "",
     isVisible: item.isVisible,
