@@ -33,6 +33,8 @@ export const getGalleryImages = async (
     return [];
   }
 
+  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL?.trim();
+
   // 3. 데이터 맵핑 (프론트에서 쓰기 편하게 가공)
   return data.map((item) => ({
     id: item.id,
@@ -42,8 +44,7 @@ export const getGalleryImages = async (
     mainTitle: item.mainTitle || "",
     isVisible: item.isVisible,
     displayOrder: item.displayOrder,
-    // Supabase Storage URL 생성 (버킷명 'products' 내부의 'gallery' 폴더 기준)
-    src: `${process.env.NEXT_PUBLIC_SUPABASE_URL}/storage/v1/object/public/gallery/${encodeURIComponent(item.fileName)}`,
+    src: `${supabaseUrl}/storage/v1/object/public/gallery/${encodeURIComponent(item.fileName)}`,
     alt: `MIRACLE gallery ${item.mainTitle}`,
   }));
 };
