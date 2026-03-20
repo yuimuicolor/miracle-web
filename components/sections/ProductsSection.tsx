@@ -9,7 +9,8 @@ import MoreButton from "../MoreButton";
 import SectionTitle from "./common/SectionTitle";
 import { toProductPathId, getAllProducts } from "@/lib/productsData";
 import { ProductItem } from "@/lib/productsData";
-import { BRAND_DATA, HOME_CONTENT } from "@/lib/siteData";
+import { getSiteSettings, SiteSettings } from "@/lib/siteSettings";
+import { HOME_CONTENT } from "@/lib/siteData";
 
 const AUTO_SPEED = 1;
 const MOBILE_AUTO_SPEED = 0.5;
@@ -43,22 +44,29 @@ export default function ProductsSection() {
   const { productsSection } = HOME_CONTENT;
   const trackRef = useRef<HTMLDivElement | null>(null);
   const [grabbing, setGrabbing] = useState(false);
+
   const [products, setProducts] = useState<ProductItem[]>([]);
+  const [settings, setSettings] = useState<SiteSettings | null>(null);
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    const fetchProducts = async () => {
+useEffect(() => {
+    const fetchData = async () => {
       try {
-        const data = await getAllProducts();
-        setProducts(data);
+        const [productsData, settingsData] = await Promise.all([
+          getAllProducts(),
+          getSiteSettings()
+        ]);
+        
+        setProducts(productsData);
+        setSettings(settingsData);
       } catch (error) {
-        console.error("상품을 불러오지 못했습니다.", error);
+        console.error("데이터 로딩 실패:", error);
       } finally {
         setLoading(false);
       }
     };
 
-    fetchProducts();
+    fetchData();
   }, []);
 
   const rafRef = useRef<number>(0);
@@ -286,7 +294,7 @@ useEffect(() => {
         <ScrollReveal className={STYLE.titleWrap} {...HOME_REVEAL.sectionTitle}>
           <SectionTitle title={productsSection.sectionTitle} color="black" />
           <p className={STYLE.subText}>
-            <strong className="font-bold">{BRAND_DATA.uppercaseName}</strong>
+            <strong className="font-bold">{settings?.brandUppercaseName}</strong>
             {productsSection.description}
           </p>
         </ScrollReveal>

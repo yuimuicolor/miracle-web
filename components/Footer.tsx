@@ -1,19 +1,10 @@
 "use client";
 
-import { FOOTER_DATA } from "@/lib/footerData";
-import { BRAND_DATA, HOME_CONTENT } from "@/lib/siteData";
-import Image from "next/image";
 import { useState } from "react";
+import { useSettings } from "@/context/SiteSettingsContext";
+import { getDesktopRows, getFooterData } from "@/lib/footerData";
 import TextModal from "./TextModal";
 import Logo from "./sections/common/Logo";
-
-// 데스크탑/태블릿에서는 5개 항목을 3줄로 나눠서 보여주기 위한 인덱스 배열
-const DESKTOP_ROW_INDEXES = [[0, 1], [2], [3, 4]] as const;
-
-const getDesktopRows = () =>
-  DESKTOP_ROW_INDEXES.map((row) =>
-    row.map((index) => FOOTER_DATA.items[index]).filter(Boolean),
-  );
 
 const STYLE = {
   root: `
@@ -42,8 +33,11 @@ const STYLE = {
 
 export default function Footer() {
   const [isTextModalOpen, setIsTextModalOpen] = useState(false);
-  const desktopRows = getDesktopRows();
-  const { contactSection } = HOME_CONTENT;
+  const settings = useSettings();
+  if (!settings) return null;
+
+  const footerData = getFooterData(settings);
+  const desktopRows = getDesktopRows(footerData.items);
 
   const renderInfoItem = (label: string, value: string, mobile = false) => (
     <div key={label} className={mobile ? STYLE.mobileItem : STYLE.desktopItem}>
@@ -55,7 +49,7 @@ export default function Footer() {
       </span>
     </div>
   );
-
+  
   return (
     <>
       <footer className={STYLE.root}>
@@ -69,7 +63,7 @@ export default function Footer() {
             ))}
           </div>
           <div className={STYLE.mobileInfoWrap}>
-            {FOOTER_DATA.items.map((item) =>
+            {footerData.items.map((item) =>
               renderInfoItem(item.label, item.value, true),
             )}
           </div>
@@ -78,7 +72,7 @@ export default function Footer() {
               className="cursor-pointer border-b border-transparent hover:border-gray-400 transition-all"
               onClick={() => setIsTextModalOpen(true)}
             >
-              {FOOTER_DATA.policyText}
+              개인정보처리방침
             </span>
           </p>
         </div>
@@ -86,8 +80,8 @@ export default function Footer() {
       <TextModal
         isOpen={isTextModalOpen}
         onClose={() => setIsTextModalOpen(false)}
-        title={FOOTER_DATA.policyText}
-        content={contactSection.privacyPolicyContent}
+        title="개인정보처리방침"
+        content={ settings.privacyPolicyText || "개인정보처리방침 내용이 없습니다." }
       />
     </>
   );

@@ -17,6 +17,7 @@ const STYLE = {
 };
 
 export default function Home() {
+  
   const sectionFallback = (
     <section className={STYLE.sectionFallback} aria-hidden="true" />
   );

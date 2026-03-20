@@ -27,55 +27,6 @@ export const SITE_METADATA = {
   description: "miracle web demo site",
 } as const;
 
-export const BRAND_DATA = {
-  name: "Miracle",
-  uppercaseName: "MIRACLE",
-  logoSrc: "/images/miracle-main-logo.png",
-  logoAlt: "Miracle",
-} as const;
-
-export const STORE_DATA = {
-  businessName: "자연도소금빵 성수점",
-  address: "대한민국 서울특별시 성동구 연무장길 56-1",
-  phone: "010-2555-2555",
-  email: "miracle@email.com",
-  businessHours: "월-금 09시-18시 (공휴일/주말 휴무)",
-  mapQuery: "자연도소금빵 성수점 대한민국 서울특별시 성동구 연무장길 56-1",
-  mapLink:
-    "https://www.google.com/maps/place/%EC%9E%90%EC%97%B0%EB%8F%84%EC%86%8C%EA%B8%88%EB%B9%B5+%EC%84%B1%EC%88%98%EC%A0%90/@37.5423025,127.0553657,21z/data=!4m6!3m5!1s0x357ca58daad46ea9:0x4922f006043fcb1e!8m2!3d37.5423017!4d127.0554582!16s%2Fg%2F11vctr0f09",
-  ownerName: "고재우",
-  businessRegistrationNumber: "555-555-5555",
-  footerAddress: "서울시 성동구 성수이로 123, 4F",
-  footerPhone: "1555-5555",
-  footerEmail: "miracle@miracle.com",
-  privacyPolicyText: "개인정보처리방침",
-  infoIcons: {
-    location: "/images/icon/icon_location.png",
-    phone: "/images/icon/icon_phone.png",
-    email: "/images/icon/icon_round-mail.png",
-  },
-  sns: {
-    instagram: {
-      href: "https://www.instagram.com/",
-      label: "Instagram",
-      iconSrc: "/images/icon/icon-sns-instagram.png",
-      hoverIconSrc: "/images/icon/icon-sns-instagram-hover.png",
-    },
-    youtube: {
-      href: "https://www.youtube.com/",
-      label: "YouTube",
-      iconSrc: "/images/icon/icon-sns-youtube.png",
-      hoverIconSrc: "/images/icon/icon-sns-youtube-hover.png",
-    },
-    x: {
-      href: "https://x.com/",
-      label: "X",
-      iconSrc: "/images/icon/icon-sns-x.png",
-      hoverIconSrc: "/images/icon/icon-sns-x-hover.png",
-    },
-  },
-} as const;
-
 export const NAVIGATION_MENU: NavigationMenuItem[] = [
   {
     title: "ABOUT US",
@@ -107,6 +58,36 @@ export const NAVIGATION_MENU: NavigationMenuItem[] = [
   },
 ];
 
+export const STATIC_ASSETS = {
+  // 로고 및 배경
+  logo: "/images/icon/miracle-main-logo.png",
+  mainBg: "/images/icon/main-bg.png",
+  galleryBg: "/images/icon/gallery-bg.png",
+
+  // 정보 섹션 아이콘
+  info: {
+    location: "/images/icon/icon_location.png",
+    phone: "/images/icon/icon_phone.png",
+    email: "/images/icon/icon_round-mail.png",
+  },
+
+  // SNS 아이콘 (Base & Hover 세트)
+  sns: {
+    instagram: {
+      base: "/images/icon/icon-sns-instagram.png",
+      hover: "/images/icon/icon-sns-instagram-hover.png",
+    },
+    x: {
+      base: "/images/icon/icon-sns-x.png",
+      hover: "/images/icon/icon-sns-x-hover.png",
+    },
+    youtube: {
+      base: "/images/icon/icon-sns-youtube.png",
+      hover: "/images/icon/icon-sns-youtube-hover.png",
+    },
+  },
+} as const;
+
 export const HOME_CONTENT = {
   mainSection: {
     title: {
@@ -137,49 +118,16 @@ export const HOME_CONTENT = {
     sectionTitle: "Gallery",
     moreButtonText: "전체보기",
   },
-  informationSection: {
-    sectionTitle: "INFORMATION",
-    starsText: "***",
-    mapTitle: "MIRACLE 위치 지도",
-    businessHoursLabel: "영업시간",
-    locationIconAlt: "위치",
-    phoneIconAlt: "전화",
-    emailIconAlt: "이메일",
-  },
   contactSection: {
     title: "CONTACT US",
     titleStar: "*",
     submitButtonText: "제출",
     consentText: "(필수) 아래 개인정보 이용 정책에 동의합니다.",
     consentLinkLabel: "[전문보기]",
-    privacyPolicyContent: `
-[개인정보 수집 및 이용 안내]
-
-1. 수집하는 개인정보 항목
-- 필수항목: 성함, 이메일, 문의 내용
-- 선택항목: 연락처, 회사명
-
-2. 개인정보의 수집 및 이용 목적
-- 고객 문의에 대한 답변 및 본인 확인
-- 서비스 안내 및 프로젝트 상담을 위한 연락
-
-3. 개인정보의 보유 및 이용 기간
-- 원칙적으로 개인정보 수집 및 이용 목적이 달성된 후에는 해당 정보를 지체 없이 파기합니다.
-- 단, 관계 법령의 규정에 의하여 보존할 필요가 있는 경우 일정 기간 보관할 수 있습니다.
-
-4. 동의를 거부할 권리
-- 귀하는 개인정보 수집 및 이용에 동의하지 않을 권리가 있습니다. 단, 필수항목에 대한 동의를 거부하실 경우 문의 접수가 제한될 수 있습니다.
-    `.trim(),
-
     fields: [
       { name: "name", label: "이름", required: true },
       { name: "phone", label: "연락처", required: true },
-      {
-        name: "email",
-        label: "이메일",
-        required: true,
-        type: "email",
-      },
+      { name: "email", label: "이메일", required: true, type: "email" },
       { name: "company", label: "회사명" },
       {
         name: "message",

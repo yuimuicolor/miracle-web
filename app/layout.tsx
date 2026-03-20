@@ -5,13 +5,21 @@ import Footer from "@/components/Footer";
 import TopButton from "@/components/TopButton";
 import { HEADER_HEIGHTS_CSS } from "@/lib/headerConfig";
 import { SITE_METADATA } from "@/lib/siteData";
+import { getSiteSettings } from "@/lib/siteSettings";
+import { SiteSettingsProvider } from "@/context/SiteSettingsContext";
 
 export const metadata: Metadata = {
   title: SITE_METADATA.title,
   description: SITE_METADATA.description,
 };
 
-export default function RootLayout({ children }: { children: React.ReactNode }) {
+export default async function RootLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
+  const settings = await getSiteSettings();
+
   return (
     <html lang="ko">
       <body
@@ -22,12 +30,14 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           ["--header-extra-offset" as string]: HEADER_HEIGHTS_CSS.EXTRA_OFFSET,
         }}
       >
-        <div className="site-shell">
-          <Header />
-          <div className="page-content">{children}</div>
-          <Footer />
-          <TopButton />
-        </div>
+        <SiteSettingsProvider settings={settings}>
+          <div className="site-shell">
+            <Header />
+            <div className="page-content">{children}</div>
+            <Footer />
+            <TopButton />
+          </div>
+        </SiteSettingsProvider>
       </body>
     </html>
   );

@@ -1,12 +1,13 @@
 "use client";
 
-import { useState, ChangeEvent, SyntheticEvent } from "react";
+import { useEffect, useState, ChangeEvent, SyntheticEvent } from "react";
 import ScrollReveal from "@/components/ScrollReveal";
 import { HOME_REVEAL } from "@/components/sections/homeMotion";
 import { ContactData } from "@/types/contact";
 import { sendContactEmail } from "@/app/actions";
 import { HOME_CONTENT } from "@/lib/siteData";
 import TextModal from "../TextModal";
+import { getSiteSettings, SiteSettings } from "@/lib/siteSettings";
 
 const STYLE = {
   section: `
@@ -75,6 +76,16 @@ const STYLE = {
 export default function ContactUsSection() {
   const { contactSection } = HOME_CONTENT;
   const [isTextModalOpen, setIsTextModalOpen] = useState(false);
+
+  const [settings, setSettings] = useState<SiteSettings | null>(null);
+
+ useEffect(() => {
+    const fetchSettings = async () => {
+      const data = await getSiteSettings();
+      setSettings(data);
+    };
+    fetchSettings();
+  }, []);
 
   const [formData, setFormData] = useState<ContactData>({
     name: "",
@@ -226,7 +237,7 @@ export default function ContactUsSection() {
         isOpen={isTextModalOpen}
         onClose={() => setIsTextModalOpen(false)}
         title={"개인정보 이용 정책 전문"}
-        content={contactSection.privacyPolicyContent} // lib/siteData에 내용 추가 필요!
+        content={settings?.privacyPolicyText || "개인정보 이용 정책 전문을 불러올 수 없습니다."}
       />
     </>
   );

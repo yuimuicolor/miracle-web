@@ -4,7 +4,8 @@ import { ExternalLink } from "lucide-react";
 import Image from "next/image";
 import ScrollReveal from "@/components/ScrollReveal";
 import { HOME_REVEAL } from "@/components/sections/homeMotion";
-import { HOME_CONTENT, STORE_DATA } from "@/lib/siteData";
+import { HOME_CONTENT, STATIC_ASSETS } from "@/lib/siteData";
+import { useSettings } from "@/context/SiteSettingsContext";
 
 const STYLE = {
   section: "w-full bg-point",
@@ -24,7 +25,8 @@ const STYLE = {
     w-full flex flex-col items-center
     lg:gap-[2rem]
   `,
-  titleHead: "flex w-full items-center gap-[0.8rem] md:gap-[2rem] lg:gap-[4rem]",
+  titleHead:
+    "flex w-full items-center gap-[0.8rem] md:gap-[2rem] lg:gap-[4rem]",
   titleLine: "h-px flex-1 bg-white/60",
   title: `
     font-gilda font-normal uppercase antialiased [text-rendering:geometricPrecision] [-webkit-font-smoothing:antialiased]
@@ -41,7 +43,8 @@ const STYLE = {
   body: "flex flex-col items-center gap-[4rem] lg:items-start lg:grid lg:grid-cols-[1.1fr_1fr] lg:gap-[6rem]",
   mapWrap: "w-full overflow-hidden rounded-[1.6rem] bg-white/8",
   mapFrame: "h-[26rem] w-full border-0 md:h-[30rem] lg:h-[36rem]",
-  infoCol: "w-full flex flex-col items-center gap-[1.2rem] md:gap-[1.2rem] lg:items-start lg:gap-[1.6rem]",
+  infoCol:
+    "w-full flex flex-col items-center gap-[1.2rem] md:gap-[1.2rem] lg:items-start lg:gap-[1.6rem]",
   infoLink:
     "group inline-flex items-center justify-start gap-[0.8rem] text-left text-white/85 transition-all duration-200 hover:text-white hover:translate-x-[0.2rem] md:justify-center lg:justify-start",
   infoTextWrap: "flex items-center gap-[0.4rem]",
@@ -56,10 +59,8 @@ const STYLE = {
     md:mt-[0.8rem]
     lg:mt-[0.4rem]
   `,
-  chipTitle:
-    "font-noto font-bold text-[1.8rem] leading-[1.2] lg:text-[2.0rem]",
-  chipBody:
-    "font-noto text-[1.8rem] leading-[1.3] lg:text-[2.0rem]",
+  chipTitle: "font-noto font-bold text-[1.8rem] leading-[1.2] lg:text-[2.0rem]",
+  chipBody: "font-noto text-[1.8rem] leading-[1.3] lg:text-[2.0rem]",
   snsRow: `
     mt-[2rem] flex items-center gap-[2rem]
     md:gap-[4rem]
@@ -77,15 +78,19 @@ const STYLE = {
 const toDialNumber = (phone: string) => phone.replace(/[^\d+]/g, "");
 
 export default function InformationSection() {
-  const { informationSection } = HOME_CONTENT;
-  const encodedMapQuery = encodeURIComponent(STORE_DATA.mapQuery);
-  const snsEntries = Object.values(STORE_DATA.sns);
+
+ const settings = useSettings();
+  if (!settings) return null;
+
+
+  const encodedMapQuery = encodeURIComponent(settings?.mapQuery || "");
+  const mapEmbedUrl = `https://maps.google.com/maps?q=${encodedMapQuery}&t=m&z=18&ie=UTF8&iwloc=B&output=embed`;
 
   const openDirections = () => {
-    window.open(STORE_DATA.mapLink, "_blank", "noopener,noreferrer");
+    if (settings?.mapLink) {
+      window.open(settings.mapLink, "_blank", "noopener,noreferrer");
+    }
   };
-
-  const mapEmbedUrl = `https://maps.google.com/maps?hl=ko&q=${encodedMapQuery}&t=m&z=18&ie=UTF8&iwloc=B&output=embed`;
 
   return (
     <section className={STYLE.section}>
@@ -93,17 +98,21 @@ export default function InformationSection() {
         <ScrollReveal className={STYLE.titleRow} {...HOME_REVEAL.sectionTitle}>
           <div className={STYLE.titleHead}>
             <span className={STYLE.titleLine} />
-            <h2 className={STYLE.title}>{informationSection.sectionTitle}</h2>
+            <h2 className={STYLE.title}>INFORMATION</h2>
             <span className={STYLE.titleLine} />
           </div>
-          <p className={STYLE.stars}>{informationSection.starsText}</p>
+          <p className={STYLE.stars}>*****</p>
         </ScrollReveal>
 
         <div className={STYLE.content}>
           <div className={STYLE.body}>
-            <ScrollReveal className={STYLE.mapWrap} delayMs={80} {...HOME_REVEAL.mediaBlock}>
+            <ScrollReveal
+              className={STYLE.mapWrap}
+              delayMs={80}
+              {...HOME_REVEAL.mediaBlock}
+            >
               <iframe
-                title={informationSection.mapTitle}
+                title="MIRACLE 위치 지도"
                 className={STYLE.mapFrame}
                 loading="lazy"
                 referrerPolicy="no-referrer-when-downgrade"
@@ -119,14 +128,14 @@ export default function InformationSection() {
                   onClick={openDirections}
                 >
                   <Image
-                    src={STORE_DATA.infoIcons.location}
-                    alt={informationSection.locationIconAlt}
+                    src={STATIC_ASSETS.info.location}
+                    alt="위치"
                     width={40}
                     height={40}
                     className={STYLE.mainIcon}
                   />
                   <div className={STYLE.infoTextWrap}>
-                    <span className={STYLE.infoText}>{STORE_DATA.address}</span>
+                    <span className={STYLE.infoText}>{settings?.address}</span>
                     <ExternalLink className={STYLE.extIcon} />
                   </div>
                 </button>
@@ -134,34 +143,37 @@ export default function InformationSection() {
 
               <ScrollReveal delayMs={220} {...HOME_REVEAL.textBlock}>
                 <a
-                  href={`tel:${toDialNumber(STORE_DATA.phone)}`}
+                  href={`tel:${toDialNumber(settings?.phone || "")}`}
                   className={STYLE.infoLink}
                 >
                   <Image
-                    src={STORE_DATA.infoIcons.phone}
-                    alt={informationSection.phoneIconAlt}
+                    src={STATIC_ASSETS.info.phone}
+                    alt="전화"
                     width={40}
                     height={40}
                     className={STYLE.mainIcon}
                   />
                   <div className={STYLE.infoTextWrap}>
-                    <span className={STYLE.infoText}>{STORE_DATA.phone}</span>
+                    <span className={STYLE.infoText}>{settings?.phone}</span>
                     <ExternalLink className={STYLE.extIcon} />
                   </div>
                 </a>
               </ScrollReveal>
 
               <ScrollReveal delayMs={300} {...HOME_REVEAL.textBlock}>
-                <a href={`mailto:${STORE_DATA.email}`} className={STYLE.infoLink}>
+                <a
+                  href={`mailto:${settings?.email}`}
+                  className={STYLE.infoLink}
+                >
                   <Image
-                    src={STORE_DATA.infoIcons.email}
-                    alt={informationSection.emailIconAlt}
+                    src={STATIC_ASSETS.info.email}
+                    alt="이메일"
                     width={40}
                     height={40}
                     className={STYLE.mainIcon}
                   />
                   <div className={STYLE.infoTextWrap}>
-                    <span className={STYLE.infoText}>{STORE_DATA.email}</span>
+                    <span className={STYLE.infoText}>{settings?.email}</span>
                     <ExternalLink className={STYLE.extIcon} />
                   </div>
                 </a>
@@ -169,39 +181,51 @@ export default function InformationSection() {
 
               <ScrollReveal delayMs={380} {...HOME_REVEAL.card}>
                 <div className={STYLE.chip}>
-                <p className={STYLE.chipTitle}>{informationSection.businessHoursLabel}</p>
-                <p className={STYLE.chipBody}>{STORE_DATA.businessHours}</p>
+                  <p className={STYLE.chipTitle}>
+                    영업시간
+                  </p>
+                  <p className={STYLE.chipBody}>{settings?.businessHours}</p>
                 </div>
               </ScrollReveal>
 
-              <ScrollReveal className={STYLE.snsRow} delayMs={460} {...HOME_REVEAL.button}>
-                {snsEntries.map((snsItem) => (
-                  <a
-                    key={snsItem.label}
-                    href={snsItem.href}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className={`${STYLE.snsLink} group`}
-                    aria-label={snsItem.label}
-                  >
-                    <span className={STYLE.snsIconWrap}>
-                      <Image
-                        src={snsItem.iconSrc}
-                        alt={snsItem.label}
-                        width={60}
-                        height={60}
-                        className={STYLE.snsIconBase}
-                      />
-                      <Image
-                        src={snsItem.hoverIconSrc}
-                        alt={snsItem.label}
-                        width={60}
-                        height={60}
-                        className={STYLE.snsIconHover}
-                      />
-                    </span>
-                  </a>
-                ))}
+              <ScrollReveal
+                className={STYLE.snsRow}
+                delayMs={460}
+                {...HOME_REVEAL.button}
+              >
+                {Object.values(settings?.snsConfig || {}).map(
+                  (snsItem: any) => {
+                    return (
+                      <a
+                        key={snsItem.label}
+                        href={snsItem.href}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className={`${STYLE.snsLink} group`}
+                        aria-label={snsItem.label}
+                      >
+                        <span className={STYLE.snsIconWrap}>
+                          {/* 기본 아이콘 */}
+                          <Image
+                            src={STATIC_ASSETS.sns[snsItem.label as keyof typeof STATIC_ASSETS.sns].base}
+                            alt={snsItem.label}
+                            width={60}
+                            height={60}
+                            className={STYLE.snsIconBase}
+                          />
+                          {/* 호버 아이콘 */}
+                          <Image
+                            src={STATIC_ASSETS.sns[snsItem.label as keyof typeof STATIC_ASSETS.sns].hover}
+                            alt={`${snsItem.label} hover`}
+                            width={60}
+                            height={60}
+                            className={STYLE.snsIconHover}
+                          />
+                        </span>
+                      </a>
+                    );
+                  },
+                )}
               </ScrollReveal>
             </div>
           </div>
