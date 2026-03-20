@@ -1,4 +1,7 @@
+"use client";
+
 import Link from "next/link";
+import { useEffect, useState } from "react";
 import ZoomablePhotoCard from "@/components/gallery/ZoomablePhotoCard";
 import ScrollReveal from "@/components/ScrollReveal";
 import { HOME_REVEAL } from "@/components/sections/homeMotion";
@@ -32,7 +35,16 @@ const STYLE = {
 
 export default function GallerySection() {
   const { gallerySection } = HOME_CONTENT;
-  const galleryImages = getGalleryImages(6);
+  const [galleryImages, setGalleryImages] = useState<GalleryImageItem[]>([]);
+
+  useEffect(() => {
+    const fetchGalleryImages = async () => {
+      const images = await getGalleryImages(6);
+      setGalleryImages(images);
+    };
+
+    fetchGalleryImages();
+  }, []);
 
   return (
     <section className={STYLE.section}>
@@ -44,12 +56,15 @@ export default function GallerySection() {
         <div className={STYLE.grid}>
           {galleryImages.map((image: GalleryImageItem, index) => (
             <ScrollReveal
-              key={image.src}
+              key={image.id}
               className="w-full"
               delayMs={index * 70}
               {...HOME_REVEAL.card}
             >
-              <ZoomablePhotoCard src={image.src} alt={image.alt} />
+              <ZoomablePhotoCard
+              src={image.src}
+              alt={image.alt}
+               />
             </ScrollReveal>
           ))}
         </div>

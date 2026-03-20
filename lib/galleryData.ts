@@ -1,104 +1,49 @@
-import path from "node:path";
-import { readdirSync } from "node:fs";
-import { BRAND_DATA } from "@/lib/siteData";
+import { supabase } from '@/lib/supabase';
 
 export interface GalleryImageItem {
-  src: string;
-  alt: string;
+  id: number;
+  createdAt?: string;
   fileName: string;
+  storagePath: string;
   subtitle: string;
   mainTitle: string;
+  isVisible: boolean;
+  displayOrder: number;
+  src: string;
+  alt: string;
 }
 
-const GALLERY_DIR = path.join(process.cwd(), "public", "images", "gallery");
-const IMAGE_FILE_REGEX = /\.(png|jpe?g|webp|avif|gif)$/i;
+// 2. 갤러리 이미지 리스트 로딩
+export const getGalleryImages = async (limit?: number): Promise<GalleryImageItem[]> => {
+  let query = supabase
+    .from('gallery')
+    .select('*')
+    .eq('isVisible', true) // 노출 여부 필터링
+    .order('displayOrder', { ascending: true }); // 정렬 순서대로
 
-const GALLERY_TITLE_MAP: Record<string, { subtitle: string; mainTitle: string }> = {
-  "anatoly-semenov-hCA4TCLW_60-unsplash": {
-    subtitle: "ARCHIVE 01",
-    mainTitle: "Stone Frame View",
-  },
-  "edgar-7Wk3JkfoiCw-unsplash": {
-    subtitle: "ARCHIVE 02",
-    mainTitle: "Soft Light Facade",
-  },
-  "eugenia-pan-kiv-alNEmvrLNC8-unsplash": {
-    subtitle: "ARCHIVE 03",
-    mainTitle: "Quiet Window Mood",
-  },
-  "khanh-do-uovcY2G02kU-unsplash": {
-    subtitle: "ARCHIVE 04",
-    mainTitle: "Blue Roof Line",
-  },
-  "krists-luhaers-FQltYYGT7xQ-unsplash": {
-    subtitle: "ARCHIVE 05",
-    mainTitle: "Garden Texture",
-  },
-  "lightman-qian-LnmdWBiTqLQ-unsplash": {
-    subtitle: "ARCHIVE 06",
-    mainTitle: "Still Exterior Form",
-  },
-  "livio-raschle-Giq-siiMv50-unsplash": {
-    subtitle: "ARCHIVE 07",
-    mainTitle: "Open Sky Angle",
-  },
-  "pesce-huang-8qrKdwezqS0-unsplash": {
-    subtitle: "ARCHIVE 08",
-    mainTitle: "Material Contrast Study",
-  },
-  "toxic-smoker-b38cJ0CCl4w-unsplash": {
-    subtitle: "ARCHIVE 09",
-    mainTitle: "Urban Passage Cut",
-  },
-  "yuri-krupenin-wSRuljSPrwQ-unsplash": {
-    subtitle: "ARCHIVE 10",
-    mainTitle: "Symmetric Front Scene",
-  },
-};
+  if (limit) {
+    query = query.limit(limit);
+  }
 
-const formatAltFromFileName = (fileName: string) => {
-  const baseName = fileName.replace(/\.[^.]+$/, "");
-  const cleaned = baseName
-    .replace(/[-_]+/g, " ")
-    .replace(/\s+/g, " ")
-    .trim();
+  const { data, error } = await query;
 
-  return `${BRAND_DATA.uppercaseName} gallery ${cleaned}`;
-};
-
-const formatFallbackTitle = (fileName: string) => {
-  const baseName = fileName.replace(/\.[^.]+$/, "");
-  const cleaned = baseName
-    .replace(/[-_]+/g, " ")
-    .replace(/\s+/g, " ")
-    .trim();
-
-  return cleaned
-    .split(" ")
-    .slice(0, 3)
-    .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
-    .join(" ");
-};
-
-export const getGalleryImages = (limit?: number): GalleryImageItem[] => {
-  try {
-    const files = readdirSync(GALLERY_DIR)
-      .filter((fileName) => IMAGE_FILE_REGEX.test(fileName))
-      .sort((a, b) => a.localeCompare(b, undefined, { numeric: true }));
-
-    const selectedFiles = typeof limit === "number" ? files.slice(0, limit) : files;
-
-    return selectedFiles.map((fileName) => {
-      const baseName = fileName.replace(/\.[^.]+$/, "");
-      return {
-        subtitle: GALLERY_TITLE_MAP[baseName]?.subtitle ?? `${BRAND_DATA.uppercaseName} ARCHIVE`,
-        mainTitle: GALLERY_TITLE_MAP[baseName]?.mainTitle ?? formatFallbackTitle(fileName),
-        src: `/images/gallery/${fileName}`,
-        alt: formatAltFromFileName(fileName),
-        fileName,
-      };
-    });
-  } catch {
+  if (error || !data) {
+    console.error('갤러리 데이터를 불러오지 못했습니다:', error);
     return [];
   }
+
+  // 3. 데이터 맵핑 (프론트에서 쓰기 편하게 가공)
+  return data.map((item) => ({
+    id: item.id,
+    createdAt: item.createdAt,
+    fileName: item.fileName,
+    storagePath: item.storagePath,
+    subtitle: item.subtitle || "MIRACLE ARCHIVE",
+    mainTitle: item.mainTitle || "",
+    isVisible: item.isVisible,
+    displayOrder: item.displayOrder,
+    // Supabase Storage URL 생성 (버킷명 'products' 내부의 'gallery' 폴더 기준)
+    src: `${process.env.NEXT_PUBLIC_SUPABASE_URL}/storage/v1/object/public/gallery/${item.fileName}`,
+    alt: `MIRACLE gallery ${item.mainTitle}`,
+  }));
 };

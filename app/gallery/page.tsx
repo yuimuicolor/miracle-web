@@ -1,8 +1,11 @@
+"use client"; 
+
+import { useEffect, useState } from "react"; //
 import GalleryPageGrid from "../../components/gallery/GalleryPageGrid";
 import ScrollReveal from "@/components/ScrollReveal";
 import { HOME_REVEAL } from "@/components/sections/homeMotion";
 import SectionTitle from "@/components/sections/common/SectionTitle";
-import { getGalleryImages } from "../../lib/galleryData";
+import { type GalleryImageItem, getGalleryImages } from "../../lib/galleryData";
 import { HOME_CONTENT } from "@/lib/siteData";
 
 const STYLE = {
@@ -20,18 +23,36 @@ const STYLE = {
 
 export default function GalleryPage() {
   const { gallerySection } = HOME_CONTENT;
-  const galleryImages = getGalleryImages();
+  const [galleryImages, setGalleryImages] = useState<GalleryImageItem[]>([]);
 
-  return (
+  // 2. 페이지 로드 시 데이터 가져오기
+  useEffect(() => {
+    const fetchAllImages = async () => {
+      // 인자 없이 호출하면 전체 데이터를 가져오도록 설계했었지? 😤
+      const data = await getGalleryImages(); 
+      setGalleryImages(data);
+    };
+    fetchAllImages();
+  }, []);
+
+return (
     <section className={STYLE.section}>
       <div className={STYLE.bgImage} />
       <div className={STYLE.bgOverlay} />
+      
       <div className={STYLE.content}>
+        {/* 섹션 타이틀 */}
         <ScrollReveal className="w-full" {...HOME_REVEAL.sectionTitle}>
           <SectionTitle title={gallerySection.sectionTitle} color="white" />
         </ScrollReveal>
+
+        {/* 갤러리 그리드 - 데이터가 로드된 후에만 렌더링 */}
         <ScrollReveal className="w-full" delayMs={120} {...HOME_REVEAL.sectionBody}>
-          <GalleryPageGrid images={galleryImages} />
+          {galleryImages.length > 0 ? (
+            <GalleryPageGrid images={galleryImages} />
+          ) : (
+            <div className="text-white/50 py-[10rem]">사진을 불러오는 중입니다...</div>
+          )}
         </ScrollReveal>
       </div>
     </section>
