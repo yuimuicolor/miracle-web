@@ -1,22 +1,18 @@
-import {  } from "@/lib/siteData";
+import { useSettings } from "@/context/SiteSettingsContext";
 
-interface LogoProps {
-  className?: string;
-  src?: string; 
-  alt?: string; 
-}
 
-export default function Logo({ 
-  className = "max-w-[16rem]", 
-  src = "/images/miracle-main-logo.png", // 데이터 로딩 전 보여줄 기본값
-  alt = "Miracle" 
-}: LogoProps) {
+export default  function Logo() {
+  const settings = useSettings();
+
+  if (!settings) {
+    return null; // 설정이 없으면 로고를 렌더링하지 않음
+  }
+
   return (
-    <div className={`w-full ${className}`}>
+    <div className={`w-full`}>
       <img
-        src={src}
-        alt={alt}
-        className="h-auto w-full"
+        src={settings?.brandLogoSrc}
+        alt={settings?.brandLogoAlt}
         loading="eager"
       />
     </div>

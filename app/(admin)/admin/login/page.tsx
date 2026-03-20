@@ -30,7 +30,7 @@ export default function AdminLoginPage() {
   };
 
 return (
-    <div className="flex min-h-screen items-center justify-center bg-slate-100 text-black">
+    <div className="flex h-full items-center justify-center bg-slate-100 text-black font-noto tracking-tight">
       <div className="w-full max-w-xl p-8 bg-white rounded-2xl shadow-xl">
         <h1 className="text-2xl font-bold text-center mb-8">MIRACLE ADMIN</h1>
         <form onSubmit={handleLogin} className="space-y-4">

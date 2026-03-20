@@ -2,6 +2,8 @@ import Link from "next/link";
 import { ReactNode } from "react";
 import { getServerSession } from "next-auth";
 import LogoutButton from "./LogoutButton";
+import Logo from "@/components/sections/common/Logo";
+import { getSiteSettings } from "@/lib/siteSettings";
 
 export default async function AdminLayout({
   children,
@@ -18,16 +20,18 @@ export default async function AdminLayout({
   ];
 
   const session = await getServerSession();
+  const settings = await getSiteSettings(); // 사이트 설정 가져오기 (예: 사이트 이름)
 
   return (
-    <div className="flex min-h-screen bg-gray-100">
+    <div className="flex min-h-screen bg-gray-100 font-noto tracking-tight text-black">
       {/* 사이드바 */}
-      <aside className="w-64 bg-slate-900 text-white flex flex-col">
-        <div className="p-6 text-2xl font-bold border-b border-slate-800">
-          <Link href="/">MIRACLE ADMIN</Link>
+      <aside className="w-100 bg-slate-900 text-white flex flex-col">
+        <div className="p-10 text-4xl flex flex-col gap-6 border-b border-slate-800">
+            <Logo />
+            <Link href="/">관리자</Link>
         </div>
 
-        <nav className="flex-1 p-4 space-y-2">
+        <nav className="flex-1 px-4 py-6 space-y-4">
           {menuItems.map((item) => (
             <Link
               key={item.href}
@@ -41,12 +45,12 @@ export default async function AdminLayout({
         </nav>
 
         <div className="p-4 border-t border-slate-800 text-sm text-slate-400">
-          © 2026 Miracle Web
+          © 2026 {settings?.brandName} Web
         </div>
       </aside>
 
       <main className="flex-1 flex flex-col">
-        <header className="h-16 bg-white border-b flex items-center justify-between px-8">
+        <header className="h-20 bg-white border-b flex items-center justify-between px-8">
           <h2 className="text-xl font-semibold">관리자 모드</h2>
           <div className="flex items-center gap-4">
             {/* 세션에 저장된 이름 표시: 세션 있을 때만 렌더 */}
@@ -56,7 +60,7 @@ export default async function AdminLayout({
             <LogoutButton />
           </div>
         </header>
-        <div className="p-8">{children}</div>
+        <div className="flex-1 p-8">{children}</div>
       </main>
     </div>
   );
