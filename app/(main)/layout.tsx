@@ -1,0 +1,41 @@
+import type { Metadata } from "next";
+import Header from "@/components/Header";
+import Footer from "@/components/Footer";
+import TopButton from "@/components/TopButton";
+import { HEADER_HEIGHTS_CSS } from "@/lib/headerConfig";
+import { SITE_METADATA } from "@/lib/siteData";
+import { getSiteSettings } from "@/lib/siteSettings";
+import { SiteSettingsProvider } from "@/context/SiteSettingsContext";
+
+export const metadata: Metadata = {
+  title: SITE_METADATA.title,
+  description: SITE_METADATA.description,
+};
+
+export default async function RootLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
+  const settings = await getSiteSettings();
+
+  return (
+      <div
+        style={{
+          ["--header-height-mobile" as string]: HEADER_HEIGHTS_CSS.MOBILE,
+          ["--header-height-tablet" as string]: HEADER_HEIGHTS_CSS.TABLET,
+          ["--header-height-desktop" as string]: HEADER_HEIGHTS_CSS.PC,
+          ["--header-extra-offset" as string]: HEADER_HEIGHTS_CSS.EXTRA_OFFSET,
+        }}
+      >
+        <SiteSettingsProvider settings={settings}>
+          <div className="site-shell">
+            <Header />
+            <div className="page-content">{children}</div>
+            <Footer />
+            <TopButton />
+          </div>
+        </SiteSettingsProvider>
+      </div>
+  );
+}

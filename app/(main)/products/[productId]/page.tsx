@@ -4,7 +4,7 @@ import OtherProductsSlider from "@/components/products/OtherProductsSlider";
 import {
   getProductByPathId,
   toProductPathId,
-  getAllProducts, // 1. 모든 상품 가져오는 함수 추가
+  getAllProducts,
 } from "@/lib/productsData";
 
 const STYLE = {
@@ -21,7 +21,7 @@ interface ProductDetailPageProps {
 }
 
 export async function generateStaticParams() {
-  const products = await getAllProducts(); // DB에서 모든 상품 리스트 가져오기
+  const products = await getAllProducts();
   
   return products.map((product) => ({
     productId: toProductPathId(product.id),

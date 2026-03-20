@@ -1,11 +1,11 @@
 "use client"; 
 
 import { useEffect, useState } from "react"; //
-import GalleryPageGrid from "../../components/gallery/GalleryPageGrid";
+import GalleryPageGrid from "../../../components/gallery/GalleryPageGrid";
 import ScrollReveal from "@/components/ScrollReveal";
 import { HOME_REVEAL } from "@/components/sections/homeMotion";
 import SectionTitle from "@/components/sections/common/SectionTitle";
-import { type GalleryImageItem, getGalleryImages } from "../../lib/galleryData";
+import { type GalleryImageItem, getGalleryImages } from "../../../lib/galleryData";
 
 const STYLE = {
   section: `
