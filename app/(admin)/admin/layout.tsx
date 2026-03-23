@@ -1,11 +1,9 @@
-"use client";
-
 import Link from "next/link";
 import { ReactNode } from "react";
 import { getServerSession } from "next-auth";
 import LogoutButton from "./LogoutButton";
 import Logo from "@/components/sections/common/Logo";
-import { useSettings } from "@/context/SiteSettingsContext";
+import { getSiteSettings } from "@/lib/siteSettings";
 
 export default async function AdminLayout({
   children,
@@ -22,7 +20,7 @@ export default async function AdminLayout({
   ];
 
   const session = await getServerSession();
-  const settings = useSettings();
+  const settings = await getSiteSettings();
 
   return (
     <div className="flex min-h-screen bg-gray-100 font-noto tracking-tight text-black">
@@ -46,18 +44,18 @@ export default async function AdminLayout({
           ))}
         </nav>
 
-        <div className="p-4 border-t border-slate-800 text-sm text-slate-400">
+        <div className="p-4 border-t border-slate-800 text-2xl text-slate-400">
           © 2026 {settings?.brandName} Web
         </div>
       </aside>
 
       <main className="flex-1 flex flex-col">
         <header className="h-20 bg-white border-b flex items-center justify-between px-8">
-          <h2 className="text-xl font-semibold">관리자 모드</h2>
+          <h2 className="text-2xl font-semibold">관리자 모드</h2>
           <div className="flex items-center gap-4">
             {/* 세션에 저장된 이름 표시: 세션 있을 때만 렌더 */}
             {session && session.user?.name && (
-              <span className="text-sm font-medium">{session.user.name}님</span>
+              <span className="text-2xl font-medium">{session.user.name}님</span>
             )}
             <LogoutButton />
           </div>

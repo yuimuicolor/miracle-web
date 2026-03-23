@@ -1,5 +1,3 @@
-"use client";
-
 import { useState } from "react";
 import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
@@ -56,7 +54,7 @@ return (
               required
             />
           </div>
-          {error && <p className="text-red-500 text-xl">{error}</p>}
+          {error && <p className="text-red-500 text-2xl">{error}</p>}
           <button
             type="submit"
             className="w-full bg-slate-900 text-white p-3 rounded-lg font-bold hover:bg-slate-800 transition-colors"
