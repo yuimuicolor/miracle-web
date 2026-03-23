@@ -9,12 +9,13 @@ const FILTER_OPTIONS = ["전체", ...CONTACT_STATUS_OPTIONS];
 type FilterStatus = "전체" | ContactStatus;
 
 export default function AdminContactsPage() {
-  const router = useRouter()
+  const router = useRouter();
   const searchParams = useSearchParams();
   const initialStatus = searchParams.get("status") as FilterStatus;
   const [contacts, setContacts] = useState<any[]>([]);
   const [filter, setFilter] = useState<FilterStatus>(initialStatus || "전체");
   const [loading, setLoading] = useState(true);
+  const [expandedIds, setExpandedIds] = useState<number[]>([]);
 
   // 페이징 & 정렬
   const [sortOrder, setSortOrder] = useState<"asc" | "desc">("desc");
@@ -53,22 +54,22 @@ export default function AdminContactsPage() {
     }
   };
 
-const handleFilterChange = (newStatus: FilterStatus) => {
-  setFilter(newStatus); // 1. 내부 상태 변경 (fetchContacts가 자동으로 돌 거예요)
+  const handleFilterChange = (newStatus: FilterStatus) => {
+    setFilter(newStatus); // 1. 내부 상태 변경 (fetchContacts가 자동으로 돌 거예요)
 
-  // 2. 주소창 URL 조용히 변경 (404 방지)
-  const params = new URLSearchParams(window.location.search);
-  
-  if (newStatus === "전체") {
-    params.delete("status");
-  } else {
-    params.set("status", newStatus);
-  }
+    // 2. 주소창 URL 조용히 변경 (404 방지)
+    const params = new URLSearchParams(window.location.search);
 
-  // 주소창의 쿼리 스트링만 업데이트 (페이지 이동 없음)
-  const newPath = `${window.location.pathname}${params.toString() ? "?" + params.toString() : ""}`;
-  window.history.replaceState(null, "", newPath);
-};
+    if (newStatus === "전체") {
+      params.delete("status");
+    } else {
+      params.set("status", newStatus);
+    }
+
+    // 주소창의 쿼리 스트링만 업데이트 (페이지 이동 없음)
+    const newPath = `${window.location.pathname}${params.toString() ? "?" + params.toString() : ""}`;
+    window.history.replaceState(null, "", newPath);
+  };
 
   const updateStatus = async (id: number, newStatus: ContactStatus) => {
     const { error } = await supabase
@@ -102,8 +103,6 @@ const handleFilterChange = (newStatus: FilterStatus) => {
       fetchContacts();
     }
   };
-
-  
 
   useEffect(() => {
     setCurrentPage(1);
@@ -205,7 +204,7 @@ const handleFilterChange = (newStatus: FilterStatus) => {
                   setSortOrder((prev) => (prev === "asc" ? "desc" : "asc"))
                 }
               >
-                날짜 
+                날짜
                 <span className="text-admin-small text-blue-600">
                   {sortOrder === "asc" ? "▲" : "▼"}
                 </span>
@@ -240,12 +239,14 @@ const handleFilterChange = (newStatus: FilterStatus) => {
                   />
                 </td>
 
+                {/* 날짜 */}
                 <td
                   className={`${colBase} ${colDate} text-admin-body text-gray-400 font-medium pt-8`}
                 >
                   {contact.created_at?.split("T")[0]}
                 </td>
 
+                {/* 이름(회사) */}
                 <td className={`${colBase} ${colName} gap-2 pt-8`}>
                   <div className="font-bold text-admin-body text-gray-900">
                     {contact.name}
@@ -255,25 +256,63 @@ const handleFilterChange = (newStatus: FilterStatus) => {
                   </div>
                 </td>
 
+                {/* 연락처 */}
                 <td
                   className={`${colBase} ${colPhone} text-admin-body font-medium text-blue-600 pt-8`}
                 >
                   {contact.phone}
                 </td>
 
+                {/* 이메일 */}
                 <td
                   className={`${colBase} ${colEmail} text-admin-small text-gray-600 break-all pt-8`}
                 >
                   {contact.email}
                 </td>
 
-                {/* 👈 문의내용: break-all과 whitespace-pre-wrap으로 가로 폭주 방지 */}
+                {/* 문의내용 */}
                 <td
-                  className={`${colBase} ${colContent} text-admin-body whitespace-pre-wrap break-all leading-relaxed text-gray-700 pt-8`}
+                  className={`${colBase} ${colContent} text-admin-body leading-relaxed text-gray-700 pt-8`}
                 >
-                  {contact.message}
+                  {/* 1. 컨테이너를 block으로 두되, 내부 텍스트는 inline으로 흐르게 합니다. */}
+                  <div className="block">
+                    <span className="inline whitespace-pre-wrap break-all">
+                      {!expandedIds.includes(contact.id) &&
+                      contact.message?.length > 60
+                        ? `${contact.message.slice(0, 60)}... `
+                        : contact.message}
+                    </span>
+
+                    {/* 2. '더보기' 버튼을 inline-block으로 설정해서 글자 바로 옆에 붙입니다. */}
+                    {contact.message?.length > 60 &&
+                      !expandedIds.includes(contact.id) && (
+                        <button
+                          onClick={() =>
+                            setExpandedIds([...expandedIds, contact.id])
+                          }
+                          className="inline-block ml-1 text-blue-600 hover:text-blue-800 font-semibold cursor-pointer"
+                        >
+                          더보기
+                        </button>
+                      )}
+
+                    {/* 3. 접기 버튼도 필요하면 똑같이 inline-block으로! */}
+                    {expandedIds.includes(contact.id) && (
+                      <button
+                        onClick={() =>
+                          setExpandedIds(
+                            expandedIds.filter((id) => id !== contact.id),
+                          )
+                        }
+                        className="inline-block ml-2 text-gray-300 hover:text-gray-500 text-admin-small underline"
+                      >
+                        접기
+                      </button>
+                    )}
+                  </div>
                 </td>
 
+                {/* 상태 */}
                 <td className={`${colBase} ${colStatus} items-center! pt-7`}>
                   <select
                     value={contact.status}
@@ -290,6 +329,7 @@ const handleFilterChange = (newStatus: FilterStatus) => {
                   </select>
                 </td>
 
+                {/* 관리자 메모 */}
                 <td className={`${colBase} ${colMemo} gap-3 pt-7`}>
                   {editingMemoId === contact.id ? (
                     <div className="w-full flex flex-col gap-3">

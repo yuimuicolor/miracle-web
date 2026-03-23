@@ -51,7 +51,7 @@ export default async function AdminLayout({
 
       <main className="flex-1 flex flex-col">
         <header className="h-24 bg-white border-b flex items-center justify-between px-8">
-          <h2 className="text-admin-title font-semibold">관리자 모드</h2>
+          <h2 className="text-admin-title font-semibold">{settings?.brandName} Admin</h2>
           <div className="flex items-center gap-4">
             {/* 세션에 저장된 이름 표시: 세션 있을 때만 렌더 */}
             {session && session.user?.name && (
