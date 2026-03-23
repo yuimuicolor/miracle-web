@@ -1,9 +1,11 @@
+"use client";
+
 import Link from "next/link";
 import { ReactNode } from "react";
 import { getServerSession } from "next-auth";
 import LogoutButton from "./LogoutButton";
 import Logo from "@/components/sections/common/Logo";
-import { getSiteSettings } from "@/lib/siteSettings";
+import { useSettings } from "@/context/SiteSettingsContext";
 
 export default async function AdminLayout({
   children,
@@ -20,7 +22,7 @@ export default async function AdminLayout({
   ];
 
   const session = await getServerSession();
-  const settings = await getSiteSettings(); // 사이트 설정 가져오기 (예: 사이트 이름)
+  const settings = useSettings();
 
   return (
     <div className="flex min-h-screen bg-gray-100 font-noto tracking-tight text-black">

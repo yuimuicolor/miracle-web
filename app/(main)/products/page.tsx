@@ -30,8 +30,7 @@ const STYLE = {
 };
 
 export default async function ProductsPage() {;
-	const settings = await getSiteSettings()
-    if (!settings) return null;
+	const settings = await getSiteSettings();
     const products = await getAllProducts();
 
 	return (
@@ -40,7 +39,7 @@ export default async function ProductsPage() {;
 				<ScrollReveal className={STYLE.titleWrap} {...HOME_REVEAL.sectionTitle}>
 					<SectionTitle title="Products" color="black" />
 					<p className={STYLE.subText}>
-						<strong className="font-bold">{settings.brandName}</strong>
+						<strong className="font-bold">{settings?.brandName}</strong>
 						의 제품들을 소개합니다.
 					</p>
 				</ScrollReveal>

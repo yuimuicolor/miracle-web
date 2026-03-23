@@ -4,8 +4,6 @@ import Footer from "@/components/Footer";
 import TopButton from "@/components/TopButton";
 import { HEADER_HEIGHTS_CSS } from "@/lib/headerConfig";
 import { SITE_METADATA } from "@/lib/siteData";
-import { getSiteSettings } from "@/lib/siteSettings";
-import { SiteSettingsProvider } from "@/context/SiteSettingsContext";
 
 export const metadata: Metadata = {
   title: SITE_METADATA.title,
@@ -17,7 +15,6 @@ export default async function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const settings = await getSiteSettings();
 
   return (
       <div
@@ -28,14 +25,12 @@ export default async function RootLayout({
           ["--header-extra-offset" as string]: HEADER_HEIGHTS_CSS.EXTRA_OFFSET,
         }}
       >
-        <SiteSettingsProvider settings={settings}>
           <div className="site-shell">
             <Header />
             <div className="page-content">{children}</div>
             <Footer />
             <TopButton />
           </div>
-        </SiteSettingsProvider>
       </div>
   );
 }

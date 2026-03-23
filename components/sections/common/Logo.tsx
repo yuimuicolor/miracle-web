@@ -1,11 +1,9 @@
-import { getSiteSettings } from "@/lib/siteSettings";
+"use client";
 
-export default async function Logo() {
-  const settings = await getSiteSettings();
-  
-  if (!settings) {
-    return null; // 설정이 없으면 로고를 렌더링하지 않음
-  }
+import { useSettings } from "@/context/SiteSettingsContext";
+
+export default function Logo() {
+  const settings = useSettings();
 
   return (
     <div className={`w-full`}>
