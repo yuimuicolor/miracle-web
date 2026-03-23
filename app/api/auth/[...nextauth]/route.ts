@@ -14,7 +14,7 @@ const handler = NextAuth({
           credentials?.username === process.env.ADMIN_USER &&
           credentials?.password === process.env.ADMIN_PASSWORD
         ) {
-          return { id: "1", name: "Yui Noona", email: "admin@miracle.com" };
+          return { id: "1", name: "admin", email: "admin@miracle.com" };
         }
         // 로그인 실패
         return null;

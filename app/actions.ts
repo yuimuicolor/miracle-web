@@ -22,7 +22,7 @@ export async function sendContactEmail(submitData: ContactData) {
     // 2. 이메일 알림 발송
     await resend.emails.send({
       from: "onboarding@resend.dev", // 무료 플랜 기본 발신자
-      to: "yuimuicolor@gmail.com", // 알림 받을 누나 메일!
+      to: "yuimuicolor@gmail.com", // 실제 관리자 이메일로 변경
       subject: `[문의등록] ${submitData.name}님의 메시지`,
       html: `
         <h3>새 문의가 왔어요!</h3>
