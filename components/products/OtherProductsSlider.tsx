@@ -57,7 +57,6 @@ export default function OtherProductsSlider({
   const [products, setProducts] = useState<ProductItem[]>([]);
   const [loading, setLoading] = useState(true);
 
-  // Data fetching: Supabase에서 제품 데이터 불러오기
   useEffect(() => {
     const fetchOtherProducts = async () => {
       try {

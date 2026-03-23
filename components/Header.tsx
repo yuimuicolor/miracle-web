@@ -249,7 +249,7 @@ export default function Header() {
         <header
           className={`
           ${STYLE.headerMobile} 
-          ${isMenuOpen ? "fixed inset-0 h-[100dvh] flex flex-col bg-point" : "bg-linear-to-b from-[#767676] to-transparent"}
+          ${isMenuOpen ? "fixed inset-0 h-dvh flex flex-col bg-point" : "bg-linear-to-b from-[#767676] to-transparent"}
         `}
         >
           {/* 1. 상단 로고 & 버튼 영역 (높이 고정) */}
@@ -440,7 +440,9 @@ export default function Header() {
         <div className={STYLE.languageSelector}>
           <button className={STYLE.languageButton}>KR</button>
           <span className={STYLE.languageSeparator} />
-          <button className={STYLE.languageButton}>EN</button>
+          <Link href="/admin" className={STYLE.languageButton}>
+            EN
+          </Link>
         </div>
       </header>
       {routeLoadingOverlay}

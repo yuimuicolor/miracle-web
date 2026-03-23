@@ -1,11 +1,12 @@
 "use client";
 
-import { useEffect, useState, ChangeEvent, SyntheticEvent } from "react";
+import { useState, ChangeEvent, SyntheticEvent } from "react";
 import ScrollReveal from "@/components/ScrollReveal";
 import { HOME_REVEAL } from "@/components/sections/homeMotion";
 import { sendContactEmail } from "@/app/actions";
 import TextModal from "../TextModal";
 import { useSettings } from "@/context/SiteSettingsContext";
+import { ContactData } from "@/lib/contactsData";
 
 const STYLE = {
   section: `
@@ -70,19 +71,9 @@ const STYLE = {
   submitButton:
     "self-center h-[8rem] w-full max-w-[28rem] rounded-full bg-white text-[3.2rem] font-bold text-point font-pretendard transition-colors hover:bg-white",
 };
-
-export interface ContactData {
-  name: string;
-  phone: string;
-  email: string;
-  company?: string;
-  message: string;
-  [key: string]: string | undefined;
-}
-
 const FIELDS: Array<{
-  id: string; // 👈 고유 ID 추가
-  name: keyof ContactData;
+  id: string; 
+  name: keyof ContactInput;
   label: string;
   required?: boolean;
   type?: string;
@@ -96,24 +87,40 @@ const FIELDS: Array<{
 ];
 
 
+type ContactInput = Pick<
+  ContactData,
+  "name" | "phone" | "email" | "company" | "message"
+>;
+
+
 export default function ContactUsSection() {
   const [isTextModalOpen, setIsTextModalOpen] = useState(false);
-  const [formData, setFormData] = useState<ContactData>({
-    name: "", phone: "", email: "", company: "", message: "",
+  // 2. 초기값에는 사용자 입력 항목만 넣기
+  const [formData, setFormData] = useState<ContactInput>({
+    name: "",
+    phone: "",
+    email: "",
+    company: "",
+    message: "",
   });
-
   const settings = useSettings();
 
-const handleChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    const { name, value } = e.target;
-    setFormData(prev => ({ ...prev, [name]: value }));
-  };
+const handleChange = (
+  e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+) => {
+  const { name, value } = e.target;
+  setFormData((prev) => ({ ...prev, [name as keyof ContactInput]: value }));
+};
 
-const handleSubmit = async (e: SyntheticEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: SyntheticEvent<HTMLFormElement>) => {
     e.preventDefault();
-    
+
     // 유효성 검사 로직 (공백 제거 포함)
-    if (!formData.name.trim() || !formData.email.trim() || !formData.message.trim()) {
+    if (
+      !formData.name.trim() ||
+      !formData.email.trim() ||
+      !formData.message.trim()
+    ) {
       return alert("필수 항목을 입력해주세요.");
     }
 
@@ -121,7 +128,13 @@ const handleSubmit = async (e: SyntheticEvent<HTMLFormElement>) => {
       const result = await sendContactEmail(formData);
       if (result.success) {
         alert("접수되었습니다!");
-        setFormData({ name: "", phone: "", email: "", company: "", message: "" });
+        setFormData({
+          name: "",
+          phone: "",
+          email: "",
+          company: "",
+          message: "",
+        });
       }
     } catch (error) {
       alert("오류가 발생했습니다.");
@@ -135,9 +148,7 @@ const handleSubmit = async (e: SyntheticEvent<HTMLFormElement>) => {
           <ScrollReveal {...HOME_REVEAL.sectionTitle}>
             <h1 className={STYLE.title}>
               Contact Us
-              <span className={STYLE.titleStar}>
-                *
-              </span>
+              <span className={STYLE.titleStar}>*</span>
             </h1>
             <div className={STYLE.divider} />
           </ScrollReveal>
@@ -218,7 +229,10 @@ const handleSubmit = async (e: SyntheticEvent<HTMLFormElement>) => {
         isOpen={isTextModalOpen}
         onClose={() => setIsTextModalOpen(false)}
         title={"개인정보 이용 정책 전문"}
-        content={settings?.privacyPolicyText || "개인정보 이용 정책 전문을 불러올 수 없습니다."}
+        content={
+          settings?.privacyPolicyText ||
+          "개인정보 이용 정책 전문을 불러올 수 없습니다."
+        }
       />
     </>
   );

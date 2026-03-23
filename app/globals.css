@@ -38,8 +38,12 @@
 }
 
 @keyframes marquee {
-  from { transform: translateX(0); }
-  to   { transform: translateX(-50%); }
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
 }
 
 @keyframes home-hero-drift {
@@ -86,10 +90,17 @@
     --page-bottom-padding-tablet: 10rem;
     --page-bottom-padding-desktop: 16rem;
     --header-height-current: var(--header-height-mobile);
-    --page-offset-top: calc(var(--header-height-current) + var(--header-extra-offset));
+    --page-offset-top: calc(
+      var(--header-height-current) + var(--header-extra-offset)
+    );
     --page-bottom-padding-current: var(--page-bottom-padding-mobile);
     --screen-minus-header: calc(100dvh - var(--header-height-current));
     --screen-minus-page-offset: calc(100dvh - var(--page-offset-top));
+
+    --admin-font-title: 3.5rem; /* 35px */
+    --admin-font-subtitle: 3rem; /* 30px */
+    --admin-font-body: 2rem; /* 20px */
+    --admin-font-small: 1.6rem; /* 16px */
   }
 
   button {
@@ -119,27 +130,27 @@
     background-color: var(--color-bg-dark);
   }
 
-@media (min-width: 1024px) {
-  html:has(.home-snap),
-  html:has(.snap-container) {
-    scroll-snap-type: y mandatory;
-    scroll-behavior: smooth;
-    background-color: var(--color-bg-dark);
-  }
+  @media (min-width: 1024px) {
+    html:has(.home-snap),
+    html:has(.snap-container) {
+      scroll-snap-type: y mandatory;
+      scroll-behavior: smooth;
+      background-color: var(--color-bg-dark);
+    }
 
-  html:has(.home-snap) .site-shell,
-  html:has(.home-snap) .home-snap,
-  html:has(.snap-container) .site-shell,
-  html:has(.snap-container) .snap-container {
-    display: contents;
-  }
+    html:has(.home-snap) .site-shell,
+    html:has(.home-snap) .home-snap,
+    html:has(.snap-container) .site-shell,
+    html:has(.snap-container) .snap-container {
+      display: contents;
+    }
 
-  html:has(.home-snap) footer,
-  html:has(.snap-container) footer{
-    scroll-snap-align: start;
-    scroll-snap-stop: always;
+    html:has(.home-snap) footer,
+    html:has(.snap-container) footer {
+      scroll-snap-align: start;
+      scroll-snap-stop: always;
+    }
   }
-}
 
   @media (min-width: 768px) {
     :root {
@@ -183,7 +194,7 @@
     padding-bottom: var(--page-bottom-padding-current);
   }
 
- .page-content > .no-footer-offset:last-child {
+  .page-content > .no-footer-offset:last-child {
     padding-bottom: 0 !important;
   }
 
@@ -213,7 +224,8 @@
   }
 
   .animate-home-hero-drift {
-    animation: home-hero-drift 18s cubic-bezier(0.22, 1, 0.36, 1) infinite alternate;
+    animation: home-hero-drift 18s cubic-bezier(0.22, 1, 0.36, 1) infinite
+      alternate;
     will-change: transform;
   }
 
