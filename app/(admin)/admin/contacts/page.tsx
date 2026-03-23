@@ -3,13 +3,17 @@
 import { CONTACT_STATUS_OPTIONS, ContactStatus } from "@/lib/contactsData";
 import { supabase } from "@/lib/supabase";
 import { useState, useEffect } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
 
 const FILTER_OPTIONS = ["전체", ...CONTACT_STATUS_OPTIONS];
 type FilterStatus = "전체" | ContactStatus;
 
 export default function AdminContactsPage() {
+  const router = useRouter()
+  const searchParams = useSearchParams();
+  const initialStatus = searchParams.get("status") as FilterStatus;
   const [contacts, setContacts] = useState<any[]>([]);
-  const [filter, setFilter] = useState<FilterStatus>("전체");
+  const [filter, setFilter] = useState<FilterStatus>(initialStatus || "전체");
   const [loading, setLoading] = useState(true);
 
   // 페이징 & 정렬
@@ -18,7 +22,7 @@ export default function AdminContactsPage() {
   const [itemsPerPage, setItemsPerPage] = useState(30);
   const [totalCount, setTotalCount] = useState(0);
 
-  // 선택 & 메모 편집 (복구!)
+  // 선택 & 메모 편집
   const [selectedIds, setSelectedIds] = useState<number[]>([]);
   const [editingMemoId, setEditingMemoId] = useState<number | null>(null);
   const [tempMemo, setTempMemo] = useState("");
@@ -48,6 +52,23 @@ export default function AdminContactsPage() {
       setLoading(false);
     }
   };
+
+const handleFilterChange = (newStatus: FilterStatus) => {
+  setFilter(newStatus); // 1. 내부 상태 변경 (fetchContacts가 자동으로 돌 거예요)
+
+  // 2. 주소창 URL 조용히 변경 (404 방지)
+  const params = new URLSearchParams(window.location.search);
+  
+  if (newStatus === "전체") {
+    params.delete("status");
+  } else {
+    params.set("status", newStatus);
+  }
+
+  // 주소창의 쿼리 스트링만 업데이트 (페이지 이동 없음)
+  const newPath = `${window.location.pathname}${params.toString() ? "?" + params.toString() : ""}`;
+  window.history.replaceState(null, "", newPath);
+};
 
   const updateStatus = async (id: number, newStatus: ContactStatus) => {
     const { error } = await supabase
@@ -82,6 +103,8 @@ export default function AdminContactsPage() {
     }
   };
 
+  
+
   useEffect(() => {
     setCurrentPage(1);
   }, [filter, sortOrder, itemsPerPage]);
@@ -97,7 +120,7 @@ export default function AdminContactsPage() {
   const colName = "w-[10%] shrink-0 flex flex-col";
   const colPhone = "w-[11%] shrink-0 flex flex-col";
   const colEmail = "w-[15%] shrink-0 flex flex-col";
-  const colContent = "w-[25%] shrink-0 flex flex-col"; // 👈 문의내용 비율 고정
+  const colContent = "w-[25%] shrink-0 flex flex-col";
   const colStatus = "w-[9%] shrink-0 flex flex-col";
   const colMemo = "w-[17%] shrink-0 flex flex-col";
 
@@ -112,7 +135,7 @@ export default function AdminContactsPage() {
           {FILTER_OPTIONS.map((status) => (
             <button
               key={status}
-              onClick={() => setFilter(status as FilterStatus)}
+              onClick={() => handleFilterChange(status as FilterStatus)}
               className={`px-8 py-2 rounded-full text-admin-body font-semibold transition-all shadow-sm ${
                 filter === status
                   ? "bg-blue-600 text-white"
