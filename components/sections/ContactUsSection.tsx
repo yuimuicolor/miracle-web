@@ -43,7 +43,7 @@ const STYLE = {
   label: `
     flex gap-[0.4rem] font-normal tracking-[-0.01em]
     text-[1.8rem]
-    lg:w-[8rem] lg:shrink-0 lg:text-[2rem]
+    lg:w-[10rem] lg:shrink-0 lg:text-[2rem]
   `,
   required: "text-point-green",
   input: `
@@ -92,7 +92,7 @@ const FIELDS: Array<{
   { id: "contact_u_phone", name: "phone", label: "전화번호", type: "tel" },
   { id: "contact_u_email", name: "email", label: "이메일", type: "email", required: true },
   { id: "contact_u_company", name: "company", label: "회사명" },
-  { id: "contact_u_msg", name: "message", label: "문의 내용", required: true, isTextarea: true },
+  { id: "contact_u_msg", name: "message", label: "문의내용", required: true, isTextarea: true },
 ];
 
 

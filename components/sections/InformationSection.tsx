@@ -16,7 +16,7 @@ const STYLE = {
     lg:rounded-b-[30rem] lg:pt-[17rem] lg:min-h-screen 
   `,
   content: `
-    mx-auto flex max-w-[1000px] xl:max-w-[1200px] flex-col
+    mx-auto flex max-w-[900px] xl:max-w-[1200px] flex-col
     gap-[4rem] px-[1.6rem]
     md:gap-[5rem] md:px-[4rem]
     lg:gap-[6rem] lg:px-0
