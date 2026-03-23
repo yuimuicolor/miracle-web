@@ -26,12 +26,12 @@ export default async function AdminLayout({
     <div className="flex min-h-screen bg-gray-100 font-noto tracking-tight text-black">
       {/* 사이드바 */}
       <aside className="w-100 bg-slate-900 text-white flex flex-col">
-        <div className="p-10 text-4xl flex flex-col gap-6 border-b border-slate-800">
+        <div className="p-10 text-admin-title flex flex-col gap-6 border-b border-slate-800">
             <Logo />
             <Link href="/">관리자</Link>
         </div>
 
-        <nav className="flex-1 px-4 py-6 space-y-4">
+        <nav className="text-admin-body flex-1 px-4 py-6 space-y-4">
           {menuItems.map((item) => (
             <Link
               key={item.href}
@@ -44,18 +44,18 @@ export default async function AdminLayout({
           ))}
         </nav>
 
-        <div className="p-4 border-t border-slate-800 text-2xl text-slate-400">
+        <div className="p-4 border-t border-slate-800 text-admin-small text-slate-400">
           © 2026 {settings?.brandName} Web
         </div>
       </aside>
 
       <main className="flex-1 flex flex-col">
-        <header className="h-20 bg-white border-b flex items-center justify-between px-8">
-          <h2 className="text-2xl font-semibold">관리자 모드</h2>
+        <header className="h-24 bg-white border-b flex items-center justify-between px-8">
+          <h2 className="text-admin-title font-semibold">관리자 모드</h2>
           <div className="flex items-center gap-4">
             {/* 세션에 저장된 이름 표시: 세션 있을 때만 렌더 */}
             {session && session.user?.name && (
-              <span className="text-2xl font-medium">{session.user.name}님</span>
+              <span className="text-admin-body font-medium">{session.user.name} 님</span>
             )}
             <LogoutButton />
           </div>

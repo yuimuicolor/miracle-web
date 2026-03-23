@@ -31,11 +31,11 @@ export default function AdminLoginPage() {
 
 return (
     <div className="flex h-full items-center justify-center bg-slate-100 text-black font-noto tracking-tight">
-      <div className="w-full max-w-xl p-8 bg-white rounded-2xl shadow-xl">
-        <h1 className="text-2xl font-bold text-center mb-8">MIRACLE ADMIN</h1>
-        <form onSubmit={handleLogin} className="space-y-4">
+      <div className="w-full max-w-2xl p-8 bg-white rounded-2xl shadow-xl">
+        <h1 className="text-admin-title font-bold text-center mb-8">ADMIN</h1>
+        <form onSubmit={handleLogin} className="space-y-6 text-admin-body">
           <div>
-            <label className="block text-2xl font-medium mb-1">아이디</label>
+            <label className="block text-admin-subtitle font-medium mb-1">아이디</label>
             <input
               type="text"
               value={userId}
@@ -46,7 +46,7 @@ return (
             />
           </div>
           <div>
-            <label className="block text-2xl font-medium mb-1">비밀번호</label>
+            <label className="block text-admin-subtitle font-medium mb-1">비밀번호</label>
             <input
               type="password"
               value={password}
@@ -56,10 +56,10 @@ return (
               required
             />
           </div>
-          {error && <p className="text-red-500 text-2xl">{error}</p>}
+          {error && <p className="text-red-500 text-admin-small">{error}</p>}
           <button
             type="submit"
-            className="w-full bg-slate-900 text-white p-3 rounded-lg font-bold hover:bg-slate-800 transition-colors"
+            className="w-full bg-slate-900 text-white p-3 rounded-lg font-semibold hover:bg-slate-800 transition-colors"
           >
             로그인하기
           </button>
