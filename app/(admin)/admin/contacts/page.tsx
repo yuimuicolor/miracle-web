@@ -126,7 +126,7 @@ export default function AdminContactsPage() {
   const colBase = "p-6 items-start justify-start"; // 공통 패딩 & 상단정렬
 
   return (
-    <div className="min-h-screen p-10 text-black">
+    <div className="min-h-screen text-black">
       <h2 className="text-admin-title font-bold mb-10">문의 내역 관리</h2>
 
       <div className="flex justify-between items-end mb-10">
