@@ -1,7 +1,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import { Plus } from "lucide-react";
-import { toProductPathId, type ProductItem } from "@/lib/productsData";
+import { type ProductItem } from "@/lib/productsData";
 
 interface ProductsPageBoxProps {
   item: ProductItem;
@@ -59,7 +59,7 @@ const STYLE = {
 };
 
 export default function ProductsPageBox({ item }: ProductsPageBoxProps) {
-  const productPath = `/products/${toProductPathId(item.id)}`;
+  const productPath = `/products/${item.id}`;
 
   return (
     <Link href={productPath} aria-label={`${item.brandKo} 상세페이지 이동`}>

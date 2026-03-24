@@ -21,16 +21,19 @@ interface GalleryItem {
   displayOrder: number;
   isDeleted?: boolean; // 삭제 예정 상태 관리용
   isNew?: boolean; // 신규 아이템 여부 (DB에 아직 없는 아이템 구분용)
+  previewUrl?: string; // 교체 시 미리보기용 URL
+  tempFile?: File; // 교체 시 임시 파일 저장용 (미리보기)
 }
 
 export default function AdminGalleryPage() {
   const [items, setItems] = useState<GalleryItem[]>([]);
   const [loading, setLoading] = useState(true);
-  const [deletedFileNames, setDeletedFileNames] = useState<string[]>([]);
   const [isSaving, setIsSaving] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const fileInputRefs = useRef<{ [key: number]: HTMLInputElement | null }>({});
+  const bottomRef = useRef<HTMLDivElement | null>(null);
 
-  // 1. 데이터 불러오기
+  // 데이터 불러오기
   const fetchGallery = async () => {
     const { data } = await supabase
       .from("gallery")
@@ -50,139 +53,160 @@ export default function AdminGalleryPage() {
     return data.publicUrl;
   };
 
-  // 2. 사진 추가 (업로드 + DB에 임시 아이템 추가)
+  // 사진 교체 (파일명 유지 + 임시 URL로 미리보기)
+  const handleReplaceImage = (id: number, file: File) => {
+    const previewUrl = URL.createObjectURL(file);
+
+    setItems(prev =>
+      prev.map(item =>
+        item.id === id
+          ? {
+            ...item,
+            tempFile: file,
+            previewUrl, // 미리보기용
+          }
+          : item
+      )
+    );
+  };
+
+  // 사진 추가 (업로드 + DB에 임시 아이템 추가)
   const handleAddClick = () => fileInputRef.current?.click();
+
   const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
 
     try {
-      // 1. WebP 변환 및 압축 옵션 설정
-      const options = {
-        maxSizeMB: 1, // 최대 용량 1MB
-        maxWidthOrHeight: 1920, // 최대 너비/높이
-        useWebWorker: true,
-        fileType: "image/webp", // webp로 변환
-      };
+      // 실제 업로드는 저장 시점에 처리하므로, 여기서는 미리보기용 URL과 임시 파일만 관리
+      const previewUrl = URL.createObjectURL(file);
 
-      // 2. 압축 실행
-      const compressedFile = await imageCompression(file, options);
-
-      // 3. 파일명 생성 (확장자를 .webp로 강제 변경)
-      const fileName = `${Date.now()}.webp`;
-
-      // 4. Supabase Storage 업로드
-      const { error: uploadError } = await supabase.storage
-        .from("gallery")
-        .upload(fileName, compressedFile);
-
-      if (uploadError) throw uploadError;
-
-      // 5. 리스트에 임시 아이템 추가 (DB 저장은 전체 저장 시 일괄 처리)
       const newItem: GalleryItem = {
-        id: Date.now(), // 임시 ID
-        fileName,
+        id: Date.now(),
+        fileName: "",
+        previewUrl, // 미리보기용 URL
+        tempFile: file, // 실제 파일 보관
         subtitle: "",
         mainTitle: "",
         isVisible: true,
         displayOrder: items.length + 1,
-        isNew: true, // 신규 아이템 표시
+        isNew: true
       };
-      setItems([...items, newItem]);
+
+      setItems(prev => [...prev, newItem]);
+
+      setTimeout(() => {
+        bottomRef.current?.scrollIntoView({ behavior: "smooth" });
+      }, 100);
+
       alert(
-        "이미지가 업로드되었습니다. 내용 입력 후 우측 상단의 [전체 저장] 버튼을 눌러 DB에 반영해주세요.",
+        "이미지가 추가되었습니다. 저장 버튼을 눌러야 실제로 반영됩니다."
       );
+
     } catch (err) {
       console.error(err);
-      alert("이미지 변환 및 업로드 중 오류가 발생했습니다.");
+      alert("이미지 처리 중 오류가 발생했습니다.");
     } finally {
-      e.target.value = ""; // input 초기화
+      e.target.value = "";
     }
   };
 
-  // 3. 흑백 토글 (삭제 예정 처리)
+  // 흑백 토글 (삭제 예정 처리)
   const toggleDelete = (id: number) => {
-    setItems(
-      items.map((item) =>
-        item.id === id ? { ...item, isDeleted: !item.isDeleted } : item,
-      ),
+    setItems(prev =>
+      prev.map(item =>
+        item.id === id ? { ...item, isDeleted: !item.isDeleted } : item
+      )
     );
   };
 
-  // 4. 전체 저장 (업데이트 + 삭제 일괄 처리)
+  // 전체 저장 (업데이트 + 삭제 일괄 처리)
   const handleAllSave = async () => {
-    // [검증]
-    if (items.some((item) => !item.subtitle.trim() || !item.mainTitle.trim())) {
-      alert(
-        "⚠️ 모든 사진의 서브 제목과 메인 제목을 입력해야 저장이 가능합니다.",
-      );
+    if (items.some(item => !item.subtitle.trim() || !item.mainTitle.trim())) {
+      alert("모든 항목의 서브 제목과 메인 제목을 입력해주세요.");
       return;
     }
 
     setIsSaving(true);
 
     try {
-      //  1. 삭제 대상 추출 (유저가 삭제 누른 아이템들만)
-      const itemsToDelete = items.filter((item) => item.isDeleted);
+      // 1️⃣ 삭제 대상
+      const itemsToDelete = items.filter(item => item.isDeleted);
 
-      //  2. 스토리지 삭제
-      const fileNamesToDelete = itemsToDelete.map((item) => item.fileName);
+      // storage 삭제
+      const deleteFiles = itemsToDelete
+        .filter(item => !item.isNew)
+        .map(item => item.fileName);
 
-      if (fileNamesToDelete.length > 0) {
-        const { error } = await supabase.storage
-          .from("gallery")
-          .remove(fileNamesToDelete);
-
-        if (error) throw new Error("스토리지 파일 삭제 실패");
+      if (deleteFiles.length > 0) {
+        await supabase.storage.from("gallery").remove(deleteFiles);
       }
 
-      //  3. DB 삭제 (기존 데이터만)
-      const idsToDelete = itemsToDelete
-        .filter((item) => !item.isNew)
-        .map((item) => item.id);
+      // DB 삭제
+      const deleteIds = itemsToDelete
+        .filter(item => !item.isNew)
+        .map(item => item.id);
 
-      if (idsToDelete.length > 0) {
-        const { error } = await supabase
-          .from("gallery")
-          .delete()
-          .in("id", idsToDelete);
-
-        if (error) throw new Error("DB 데이터 삭제 실패");
+      if (deleteIds.length > 0) {
+        await supabase.from("gallery").delete().in("id", deleteIds);
       }
 
-      // 4. 삭제 안된 아이템만 저장 대상으로
-      const itemsToSave = items.filter((item) => !item.isDeleted);
+      // 2️⃣ 저장 대상
+      const itemsToSave = items.filter(item => !item.isDeleted);
 
-      //  5. payload 생성 (id 분리 핵심)
-      const finalPayload = itemsToSave.map((item, index) => {
-        const baseData = {
-          fileName: item.fileName,
-          subtitle: item.subtitle,
-          mainTitle: item.mainTitle,
-          isVisible: item.isVisible,
-          displayOrder: index + 1,
-        };
+      // 3️⃣ 이미지 업로드 + 데이터 정리
+      const processedItems = await Promise.all(
+        itemsToSave.map(async (item, index) => {
+          let finalFileName = item.fileName;
 
-        if (item.isNew) {
-          return baseData; // ✅ id 없음 → DB 자동 생성
-        } else {
-          return { ...baseData, id: item.id }; // ✅ 기존 → update
-        }
-      });
+          if (item.tempFile) {
+            const compressed = await imageCompression(item.tempFile, {
+              maxSizeMB: 1,
+              maxWidthOrHeight: 1920,
+              useWebWorker: true,
+              fileType: "image/webp",
+            });
 
-      // 🔥 6. upsert
+            const newFileName = `${Date.now()}-${index}.webp`; // ⭐ 충돌 방지
+
+            const { error } = await supabase.storage
+              .from("gallery")
+              .upload(newFileName, compressed);
+
+            if (error) throw error;
+
+            finalFileName = newFileName;
+          }
+
+          const baseData = {
+            fileName: finalFileName,
+            subtitle: item.subtitle,
+            mainTitle: item.mainTitle,
+            isVisible: item.isVisible,
+            displayOrder: index + 1,
+          };
+
+          // ⭐ id 분리 핵심
+          return item.isNew ? baseData : { ...baseData, id: item.id };
+        })
+      );
+
+      // 4️⃣ upsert
       const { error: upsertError } = await supabase
         .from("gallery")
-        .upsert(finalPayload, { onConflict: "id", defaultToNull: false });
+        .upsert(processedItems, {
+          onConflict: "id",
+          defaultToNull: false,
+        });
 
       if (upsertError) throw upsertError;
 
-      // ✅ 완료
       alert("✅ 변경사항 저장 완료");
-      fetchGallery();
+      await fetchGallery();
+
     } catch (error: any) {
-      console.error("저장 오류 상세:", error);
-      alert(`❌ 저장 실패: ${error.message || "알 수 없는 오류"}`);
+      console.error("저장 오류:", error);
+      alert(`❌ 저장 실패: ${error.message}`);
     } finally {
       setIsSaving(false);
     }
@@ -220,6 +244,7 @@ export default function AdminGalleryPage() {
         tip="* 변경사항이 있을 경우 [저장] 버튼을 눌러주세요."
       />
       <div className="flex gap-3 mb-10 justify-end">
+        <input type="file" ref={fileInputRef} className="hidden" accept="image/*" onChange={handleFileUpload} />
         <AdminAddButton onClick={handleAddClick} label="사진 추가" />
         <AdminSaveButton onClick={handleAllSave} isSaving={isSaving} />
       </div>
@@ -250,10 +275,10 @@ export default function AdminGalleryPage() {
                         ref={provided.innerRef}
                         {...provided.draggableProps}
                         className={`grid grid-cols-12 gap-8 items-start py-8 border-b border-gray-100 last:border-0 transition-all ${item.isDeleted
-                            ? "bg-slate-50 grayscale opacity-40"
-                            : snapshot.isDragging
-                              ? "bg-blue-50"
-                              : "bg-white"
+                          ? "bg-slate-50 grayscale opacity-40"
+                          : snapshot.isDragging
+                            ? "bg-blue-50"
+                            : "bg-white"
                           }`}
                       >
                         {/* 1. 드래그 핸들 */}
@@ -271,13 +296,39 @@ export default function AdminGalleryPage() {
                         </div>
 
                         {/* 2. 사진 미리보기 */}
-                        <div className="col-span-2 relative aspect-video rounded-lg overflow-hidden">
+                        <div className="col-span-2 relative aspect-video rounded-lg overflow-hidden group">
+
                           <Image
-                            src={getPublicUrl(item.fileName)}
+                            src={item.previewUrl || getPublicUrl(item.fileName)}
                             alt="p"
                             fill
                             className="object-cover"
+                            loading="eager"
                             unoptimized
+                          />
+                          {/* hover overlay */}
+                          {!item.isDeleted && (
+                            <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 flex items-center justify-center transition-all">
+                              <button
+                                onClick={() => fileInputRefs.current[item.id]?.click()}
+                                className="px-4 py-2 bg-white text-black rounded-lg font-semibold text-admin-small hover:bg-gray-200"
+                              >
+                                이미지 변경
+                              </button>
+                            </div>
+                          )}
+
+                          {/* hidden input */}
+                          <input
+                            type="file"
+                            ref={(el) => {
+                              fileInputRefs.current[item.id] = el;
+                            }}
+                            onChange={(e) => {
+                              const file = e.target.files?.[0];
+                              if (file) handleReplaceImage(item.id, file);
+                            }}
+                            className="hidden"
                           />
                         </div>
 
@@ -327,6 +378,7 @@ export default function AdminGalleryPage() {
           </Droppable>
         </DragDropContext>
       </div>
+      <div ref={bottomRef} />
     </div>
   );
 }

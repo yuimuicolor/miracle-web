@@ -5,7 +5,6 @@ import { useEffect, useRef, useState } from "react";
 import MoreButton from "@/components/MoreButton";
 import {
   getAllProducts,
-  toProductPathId,
   ProductItem,
 } from "@/lib/productsData";
 import ProductBox from "./ProductBox";
@@ -46,7 +45,7 @@ const STYLE = {
 };
 
 interface OtherProductsSliderProps {
-  currentProductId: string;
+  currentProductId: number;
 }
 
 export default function OtherProductsSlider({
@@ -236,7 +235,7 @@ const calcHalf = (container: HTMLDivElement) => {
                 className={STYLE.cardWrap}
               >
                 <Link
-                  href={`/products/${toProductPathId(item.id)}`}
+                  href={`/products/${item.id}`}
                   className={STYLE.cardLink}
                   aria-label={`${item.brandKo} 상세페이지 이동`}
                   draggable={false}

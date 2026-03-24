@@ -7,7 +7,7 @@ import ScrollReveal from "@/components/ScrollReveal";
 import { HOME_REVEAL } from "@/components/sections/homeMotion";
 import MoreButton from "../MoreButton";
 import SectionTitle from "./common/SectionTitle";
-import { toProductPathId, getAllProducts } from "@/lib/productsData";
+import { getAllProducts } from "@/lib/productsData";
 import { ProductItem } from "@/lib/productsData";
 import { useSettings } from "@/context/SiteSettingsContext";
 
@@ -322,7 +322,7 @@ useEffect(() => {
                 className={STYLE.cardWrap}
               >
                 <Link
-                  href={`/products/${toProductPathId(item.id)}`}
+                  href={`/products/${item.id}`}
                   className={STYLE.cardLink}
                   aria-label={`${item.brandKo} 상세페이지 이동`}
                   draggable={false}
