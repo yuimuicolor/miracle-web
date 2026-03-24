@@ -3,13 +3,13 @@
 import { CONTACT_STATUS_OPTIONS, ContactStatus } from "@/lib/contactsData";
 import { supabase } from "@/lib/supabase";
 import { useState, useEffect } from "react";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useSearchParams } from "next/navigation";
+import { AdminHeader } from "@/components/admin/AdminHeader";
 
 const FILTER_OPTIONS = ["전체", ...CONTACT_STATUS_OPTIONS];
 type FilterStatus = "전체" | ContactStatus;
 
 export default function AdminContactsPage() {
-  const router = useRouter();
   const searchParams = useSearchParams();
   const initialStatus = searchParams.get("status") as FilterStatus;
   const [contacts, setContacts] = useState<any[]>([]);
@@ -126,10 +126,9 @@ export default function AdminContactsPage() {
   const colBase = "p-6 items-start justify-start"; // 공통 패딩 & 상단정렬
 
   return (
-    <div className="min-h-screen text-black">
-      <h2 className="text-admin-title font-bold mb-10">문의 내역 관리</h2>
-
-      <div className="flex justify-between items-end mb-10">
+    <div>
+      <AdminHeader title="문의 관리" subtitle="Contact Us를 통해 접수된 고객 문의 관리 페이지입니다. 상태를 변경하거나 메모를 추가할 수 있습니다." tip="* 별도의 저장 없이 즉시 상태/메모가 반영됩니다." />
+      <div className="flex justify-between items-end mt-6 mb-10">
         <div className="flex gap-3 overflow-x-auto">
           {FILTER_OPTIONS.map((status) => (
             <button

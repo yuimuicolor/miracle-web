@@ -1,9 +1,9 @@
+import { AdminHeader } from "@/components/admin/AdminHeader";
+
 export default function AdminSettingsPage() {
   return (
-    <div className="p-6">
-        <h1 className="text-2xl font-bold mb-4">사이트 설정</h1>
-        <p className="text-gray-600 mb-6">사이트의 기본 정보를 설정합니다.</p>
-        {/* 설정 폼 컴포넌트 */}
+    <div>
+      <AdminHeader title="사이트 설정" subtitle="사이트의 전반적인 설정을 관리하는 페이지입니다." tip="* 변경사항이 있을 경우 [저장] 버튼을 눌러주세요." />
     </div>
   );
 }

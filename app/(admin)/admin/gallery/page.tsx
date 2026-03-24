@@ -5,6 +5,9 @@ import { supabase } from "@/lib/supabase";
 import { DragDropContext, Droppable, Draggable } from "@hello-pangea/dnd";
 import Image from "next/image";
 import imageCompression from "browser-image-compression";
+import { AdminHeader } from "@/components/admin/AdminHeader";
+import AdminSaveButton from "@/components/admin/AdminSaveButton";
+import AdminAddButton from "@/components/admin/AdminAddButton";
 
 interface GalleryItem {
   id: number;
@@ -207,45 +210,15 @@ export default function AdminGalleryPage() {
     );
 
   return (
-    <div className="min-h-screen text-black">
-      <div className="flex justify-between items-end mb-10">
-        <div>
-          <h2 className="text-admin-title font-bold">갤러리 관리</h2>
-          <p className="text-admin-body text-slate-500 mt-1">
-            반드시 수정 후 우측 상단의{" "}
-            <span className="text-blue-600 font-bold">[전체 저장]</span> 버튼을
-            눌러주세요.
-            <br />
-            (삭제된 사진은 복구가 불가능합니다)
-          </p>
-        </div>
-
-        <div className="flex gap-3">
-          <input
-            type="file"
-            ref={fileInputRef}
-            className="hidden"
-            accept="image/*"
-            onChange={handleFileUpload}
-          />
-          <button
-            onClick={handleAddClick}
-            className="bg-slate-100 text-slate-700 text-admin-body px-6 py-3 rounded-xl font-semibold hover:bg-slate-200 transition-all"
-          >
-            + 사진 추가
-          </button>
-          <button
-            onClick={handleAllSave}
-            disabled={isSaving} // 저장 중엔 클릭 방지
-            className={`text-admin-body px-8 py-3 rounded-xl font-bold transition-all shadow-lg active:scale-95 ${
-              isSaving
-                ? "bg-gray-400 cursor-not-allowed text-white shadow-none"
-                : "bg-blue-600 text-white hover:bg-blue-700 shadow-blue-100"
-            }`}
-          >
-            {isSaving ? "변경사항 저장 중..." : "변경사항 저장"}
-          </button>
-        </div>
+    <div>
+      <AdminHeader
+        title="갤러리 관리"
+        subtitle="Gallery에 진열된 사진을 관리하는 페이지입니다."
+        tip="* 변경사항이 있을 경우 [저장] 버튼을 눌러주세요."
+      />
+      <div className="flex gap-3 mb-10 justify-end">
+        <AdminAddButton onClick={handleAddClick} label="사진 추가" />
+        <AdminSaveButton onClick={handleAllSave} isSaving={isSaving} />
       </div>
 
       <div className="bg-white rounded-3xl shadow-sm border border-slate-100 overflow-hidden">
