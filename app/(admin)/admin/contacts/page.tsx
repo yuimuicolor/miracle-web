@@ -1,3 +1,5 @@
+export const dynamic = "force-dynamic";
+
 "use client";
 
 import { CONTACT_STATUS_OPTIONS, ContactStatus } from "@/lib/contactsData";
@@ -11,7 +13,7 @@ type FilterStatus = "전체" | ContactStatus;
 
 export default function AdminContactsPage() {
   const searchParams = useSearchParams();
-  const initialStatus = searchParams.get("status") as FilterStatus;
+  const initialStatus = (searchParams.get("status") as FilterStatus) || "전체";
   const [contacts, setContacts] = useState<any[]>([]);
   const [filter, setFilter] = useState<FilterStatus>(initialStatus || "전체");
   const [loading, setLoading] = useState(true);
