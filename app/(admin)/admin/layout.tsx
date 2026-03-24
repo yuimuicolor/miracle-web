@@ -27,8 +27,8 @@ function AdminContent({ children }: { children: React.ReactNode }) {
   const menuItems = [
     { name: "대시보드", href: "/admin", icon: "🏠" },
     { name: "문의 관리", href: "/admin/contacts", icon: "📧" },
-    { name: "갤러리 관리", href: "/admin/gallery", icon: "🖼️" },
     { name: "상품 관리", href: "/admin/products", icon: "🛍️" },
+    { name: "갤러리 관리", href: "/admin/gallery", icon: "🖼️" },
     { name: "사이트 설정", href: "/admin/settings", icon: "⚙️" },
   ];
 
