@@ -4,13 +4,18 @@ export interface ProductItem {
   id: number;
   brandEn: string;
   brandKo: string;
-  image: string;
   desc: string;
   category: string;
   options: string[];
+  image: string;
   thumbnailImages: string[];
   detailImages: string[];
   purchaseLink: string;
+  isVisible: boolean;
+  displayOrder: number;
+
+  isDeleted?: boolean;
+  isNew?: boolean;
 }
 
 export const getProductById = async (id: number): Promise<ProductItem | null> => {
@@ -33,6 +38,9 @@ export const getProductById = async (id: number): Promise<ProductItem | null> =>
     thumbnailImages: data.thumbnailImages || [],
     detailImages: data.detailImages || [],
     purchaseLink: data.purchaseLink || "",
+    isVisible: data.isVisible ?? true,
+    displayOrder: data.displayOrder ?? 0,
+
   };
 };
 
@@ -56,5 +64,7 @@ return data.map(item => ({
     thumbnailImages: item.thumbnailImages || [],
     detailImages: item.detailImages || [],
     purchaseLink: item.purchaseLink || "",
+    isVisible: item.isVisible ?? true,
+    displayOrder: item.displayOrder ?? 0,
   }));
 };

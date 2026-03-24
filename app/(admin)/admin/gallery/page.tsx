@@ -256,7 +256,7 @@ export default function AdminGalleryPage() {
           <div className="col-span-3">서브 제목</div>
           <div className="col-span-3">메인 제목</div>
           <div className="col-span-1 text-center">진열</div>
-          <div className="col-span-2 text-center"></div>
+          <div className="col-span-2 text-center">삭제</div>
         </div>
 
         <DragDropContext onDragEnd={onDragEnd}>

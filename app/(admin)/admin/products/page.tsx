@@ -2,29 +2,14 @@
 
 import { useState, useEffect, useRef } from "react";
 import { supabase } from "@/lib/supabase";
-import Image from "next/image";
 import imageCompression from "browser-image-compression";
 import { AdminHeader } from "@/components/admin/AdminHeader";
 import AdminSaveButton from "@/components/admin/AdminSaveButton";
 import AdminAddButton from "@/components/admin/AdminAddButton";
+import { ProductItem } from "@/lib/productsData";
+import ProductItemForm from "@/components/admin/ProductItemForm";
+import { DragDropContext, Draggable, Droppable } from "@hello-pangea/dnd";
 
-interface ProductItem {
-  id?: number;
-  brandEn: string;
-  brandKo: string;
-  desc: string;
-  category: string;
-  options: string[];
-  image: string;
-  thumbnailImages: string[];
-  detailImages: string[];
-  purchaseLink: string;
-  isVisible: boolean;
-  displayOrder: number;
-
-  isDeleted?: boolean;
-  isNew?: boolean;
-}
 
 export default function AdminProductsPage() {
   const [items, setItems] = useState<ProductItem[]>([]);
@@ -47,6 +32,18 @@ export default function AdminProductsPage() {
   useEffect(() => {
     fetchProducts();
   }, []);
+
+  const onDragEnd = (result: any) => {
+    if (!result.destination) return;
+    const newItems = Array.from(items);
+    const [reorderedItem] = newItems.splice(result.source.index, 1);
+    newItems.splice(result.destination.index, 0, reorderedItem);
+
+    setItems(
+      newItems.map((item, index) => ({ ...item, displayOrder: index + 1 })),
+    );
+  };
+
 
   // 🔥 webp 업로드
   const uploadImage = async (file: File, path: string) => {
@@ -191,90 +188,74 @@ export default function AdminProductsPage() {
         <AdminSaveButton onClick={handleSave} isSaving={isSaving} />
       </div>
 
-      {items.map((item, index) => (
-        <div
-          key={index}
-          className={`border p-5 mb-6 rounded ${
-            item.isDeleted ? "opacity-40" : ""
-          }`}
-        >
-          <input
-            placeholder="brandEn"
-            value={item.brandEn}
-            onChange={(e) => updateItem(index, "brandEn", e.target.value)}
-          />
-
-          <input
-            placeholder="brandKo"
-            value={item.brandKo}
-            onChange={(e) => updateItem(index, "brandKo", e.target.value)}
-          />
-
-          <input
-            placeholder="category"
-            value={item.category}
-            onChange={(e) => updateItem(index, "category", e.target.value)}
-          />
-
-          <input
-            placeholder="purchaseLink"
-            value={item.purchaseLink}
-            onChange={(e) => updateItem(index, "purchaseLink", e.target.value)}
-          />
-
-          {/* 대표 이미지 */}
-          <div className="mt-4">
-            <input
-              type="file"
-              onChange={(e) =>
-                e.target.files &&
-                handleMainImageUpload(index, e.target.files[0])
-              }
-            />
-            {item.image && (
-              <Image src={item.image} alt="" width={200} height={200} />
-            )}
-          </div>
-
-          {/* 썸네일 */}
-          <div className="mt-4">
-            <input
-              type="file"
-              onChange={(e) =>
-                e.target.files &&
-                handleThumbnailUpload(index, e.target.files[0])
-              }
-            />
-            <div className="flex gap-2">
-              {item.thumbnailImages.map((img, i) => (
-                <Image key={i} src={img} alt="" width={80} height={80} />
-              ))}
-            </div>
-          </div>
-
-          {/* 디테일 */}
-          <div className="mt-4">
-            <input
-              type="file"
-              onChange={(e) =>
-                e.target.files && handleDetailUpload(index, e.target.files[0])
-              }
-            />
-            <div className="flex gap-2">
-              {item.detailImages.map((img, i) => (
-                <Image key={i} src={img} alt="" width={80} height={80} />
-              ))}
-            </div>
-          </div>
-
-          <button
-            onClick={() => toggleDelete(index)}
-            className="mt-4 text-red-500"
-          >
-            {item.isDeleted ? "복구" : "삭제"}
-          </button>
+      <div className="bg-white rounded-3xl shadow-sm border border-slate-100 overflow-hidden">
+        <div className="grid grid-cols-12 gap-4 py-5 bg-slate-50 border-b border-slate-100 text-admin-body font-semibold text-slate-500">
+          <div className="col-span-1 text-center">순서</div>
+          <div className="col-span-2 text-center">사진</div>
+          <div className="col-span-2 text-center">영어 제목</div>
+          <div className="col-span-2 text-center">한글 제목</div>
+          <div className="col-span-1 text-center">카테고리</div>
+          <div className="col-span-2 text-center">구매 링크</div>
+          <div className="col-span-1 text-center">진열</div>
+          <div className="col-span-1 text-center">삭제</div>
         </div>
-      ))}
+
+        <DragDropContext onDragEnd={onDragEnd}>
+          <Droppable droppableId="products-list">
+            {(provided) => (
+              <div {...provided.droppableProps} ref={provided.innerRef}>
+                {items.map((item, index) => (
+                  <Draggable
+                    key={item.id}
+                    draggableId={String(item.id)}
+                    index={index}
+                    isDragDisabled={item.isDeleted}
+                  >
+                    {(provided, snapshot) => (
+                      <div
+                        ref={provided.innerRef}
+                        {...provided.draggableProps}
+                        className={`grid grid-cols-12 gap-8 items-start py-8 border-b border-gray-100 last:border-0 transition-all ${item.isDeleted
+                          ? "bg-slate-50 grayscale opacity-40"
+                          : snapshot.isDragging
+                            ? "bg-blue-50"
+                            : "bg-white"
+                          }`}
+                      >
+                        {/* 1. 드래그 핸들 */}
+                        <div
+                          {...provided.dragHandleProps}
+                          className="col-span-1 text-center text-gray-400"
+                        >
+                          {item.isDeleted ? (
+                            "❌"
+                          ) : (
+                            <span className="text-admin-title cursor-grab">
+                              ⋮⋮
+                            </span>
+                          )}
+                        </div>
+                        <ProductItemForm
+                          key={index}
+                          item={item}
+                          index={index}
+                          updateItem={updateItem}
+                          handleMainImageUpload={handleMainImageUpload}
+                          handleThumbnailUpload={handleThumbnailUpload}
+                          handleDetailUpload={handleDetailUpload}
+                          toggleDelete={toggleDelete}
+                        />
+                      </div>
+                    )}
+                  </Draggable>
+
+                ))}
+                {provided.placeholder}
+              </div>
+            )}
+          </Droppable>
+        </DragDropContext>
+      </div>
     </div>
   );
 }
