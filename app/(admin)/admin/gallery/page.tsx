@@ -8,6 +8,9 @@ import imageCompression from "browser-image-compression";
 import { AdminHeader } from "@/components/admin/AdminHeader";
 import AdminSaveButton from "@/components/admin/AdminSaveButton";
 import AdminAddButton from "@/components/admin/AdminAddButton";
+import { AdminInput } from "@/components/admin/AdminInput";
+import { AdminToggle } from "@/components/admin/AdminToggle";
+import { AdminDeleteButton } from "@/components/admin/AdminDeleteButton";
 
 interface GalleryItem {
   id: number;
@@ -246,13 +249,12 @@ export default function AdminGalleryPage() {
                       <div
                         ref={provided.innerRef}
                         {...provided.draggableProps}
-                        className={`grid grid-cols-12 gap-8 items-start py-8 border-b border-gray-100 last:border-0 transition-all ${
-                          item.isDeleted
+                        className={`grid grid-cols-12 gap-8 items-start py-8 border-b border-gray-100 last:border-0 transition-all ${item.isDeleted
                             ? "bg-slate-50 grayscale opacity-40"
                             : snapshot.isDragging
                               ? "bg-blue-50"
                               : "bg-white"
-                        }`}
+                          }`}
                       >
                         {/* 1. 드래그 핸들 */}
                         <div
@@ -281,56 +283,39 @@ export default function AdminGalleryPage() {
 
                         {/* 3. 제목 입력 */}
                         <div className="col-span-3">
-                          <input
-                            type="text"
-                            disabled={item.isDeleted}
+                          <AdminInput
                             value={item.subtitle}
-                            onChange={(e) =>
-                              handleChange(item.id, "subtitle", e.target.value)
-                            }
-                            className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none disabled:bg-transparent disabled:border-transparent"
+                            disabled={item.isDeleted}
+                            onChange={(v) => handleChange(item.id, "subtitle", v)}
                           />
                         </div>
 
+
                         <div className="col-span-3">
-                          <input
-                            type="text"
-                            disabled={item.isDeleted}
+                          <AdminInput
                             value={item.mainTitle}
-                            onChange={(e) =>
-                              handleChange(item.id, "mainTitle", e.target.value)
-                            }
-                            className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none font-semibold disabled:bg-transparent disabled:border-transparent"
+                            disabled={item.isDeleted}
+                            onChange={(v) => handleChange(item.id, "mainTitle", v)}
                           />
                         </div>
 
                         {/* 4. 진열 상태 */}
                         <div className="col-span-1 flex justify-center">
-                          <button
+                          <AdminToggle
+                            value={item.isVisible}
                             disabled={item.isDeleted}
-                            onClick={() =>
-                              handleChange(
-                                item.id,
-                                "isVisible",
-                                !item.isVisible,
-                              )
-                            }
-                            className={`w-24 h-12 flex items-center rounded-full p-1 transition-colors ${item.isVisible ? "bg-green-500" : "bg-slate-300"}`}
-                          >
-                            <div
-                              className={`bg-white w-10 h-10 rounded-full shadow-md transform transition-transform ${item.isVisible ? "translate-x-12" : "translate-x-0"}`}
-                            />
-                          </button>
+                            onToggle={() => handleChange(item.id, "isVisible", !item.isVisible)}
+                          />
                         </div>
 
                         {/* 5. 삭제/복구 버튼 */}
                         <div className="col-span-2 flex justify-center">
-                          <button
-                            onClick={() => toggleDelete(item.id)}
-                            className={`px-4 py-2 rounded-lg font-bold text-admin-small transition-all ${item.isDeleted ? "bg-blue-100 text-blue-600" : "bg-red-50 text-red-500 hover:bg-red-100"}`}
-                          >
-                            {item.isDeleted ? "복구" : "삭제"}
-                          </button>
+                          <AdminDeleteButton
+                            isDeleted={item.isDeleted}
+                            onDelete={() => toggleDelete(item.id)}
+                            onRestore={() => toggleDelete(item.id)}
+                            canRestore
+                          />
                         </div>
                       </div>
                     )}
