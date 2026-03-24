@@ -69,15 +69,15 @@ export default function AdminProductsPage() {
   };
 
   // 썸네일 선택
-  const handleThumbnailUpload = (index: number, file: File) => {
+  const handleThumbnailUpload = (index: number, files: File[]) => {
     const existing = items[index].tempThumbnailFiles || [];
-    updateItem(index, "tempThumbnailFiles", [...existing, file]);
+    updateItem(index, "tempThumbnailFiles", [...existing, ...files]);
   };
 
   // 상세 이미지 선택
-  const handleDetailUpload = (index: number, file: File) => {
+  const handleDetailUpload = (index: number, files: File[]) => {
     const existing = items[index].tempDetailFiles || [];
-    updateItem(index, "tempDetailFiles", [...existing, file]);
+    updateItem(index, "tempDetailFiles", [...existing, ...files]);
   };
 
 

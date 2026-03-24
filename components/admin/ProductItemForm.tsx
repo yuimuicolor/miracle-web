@@ -10,8 +10,8 @@ type ProductItemFormProps = {
     index: number;
     updateItem: (index: number, field: keyof ProductItem, value: any) => void;
     handleMainImageUpload: (index: number, file: File) => void;
-    handleThumbnailUpload: (index: number, file: File) => void;
-    handleDetailUpload: (index: number, file: File) => void;
+    handleThumbnailUpload: (index: number, files: File[]) => void;
+    handleDetailUpload: (index: number, files: File[]) => void;
     removeMainImage: (index: number) => void;
     removeThumbnailImage: (index: number, thumbIndex: number) => void;
     removeDetailImage: (index: number, detailIndex: number) => void;

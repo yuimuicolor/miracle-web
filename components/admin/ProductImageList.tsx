@@ -10,8 +10,8 @@ type ProductImageListProps = {
     detailImages: string[];
     tempDetailFiles?: File[];
     handleMainImageUpload: (index: number, file: File) => void;
-    handleThumbnailUpload: (index: number, file: File) => void;
-    handleDetailUpload: (index: number, file: File) => void;
+    handleThumbnailUpload: (index: number, files: File[]) => void;
+    handleDetailUpload: (index: number, files: File[]) => void;
     removeMainImage?: (index: number) => void;
     removeThumbnailImage?: (index: number, i: number) => void;
     removeDetailImage?: (index: number, i: number) => void;
@@ -109,7 +109,7 @@ export function ProductImageList({
               onChange={(e) => {
                 if (!e.target.files) return;
                 const files = Array.from(e.target.files);
-                files.forEach(f => handleThumbnailUpload(index, f)); // items state 업데이트
+                handleThumbnailUpload(index, files); // items state 업데이트
                 setThumbList(prev => [...prev, ...files]); // UI용 로컬 state 업데이트
               }}
             />
@@ -163,7 +163,7 @@ export function ProductImageList({
               onChange={(e) => {
                 if (!e.target.files) return;
                 const files = Array.from(e.target.files);
-                files.forEach(f => handleDetailUpload(index, f)); // items state 업데이트
+                handleDetailUpload(index, files);
                 setDetailList(prev => [...prev, ...files]); // UI용 로컬 state 업데이트
               }}
             />
