@@ -16,8 +16,6 @@ export default function AdminProductsPage() {
   const [loading, setLoading] = useState(true);
   const [isSaving, setIsSaving] = useState(false);
 
-  const fileInputRef = useRef<HTMLInputElement>(null);
-
   // 🔥 fetch
   const fetchProducts = async () => {
     const { data } = await supabase
@@ -45,35 +43,10 @@ export default function AdminProductsPage() {
   };
 
 
-  // 🔥 webp 업로드
-  const uploadImage = async (file: File, path: string) => {
-    const options = {
-      maxSizeMB: 1,
-      maxWidthOrHeight: 1920,
-      useWebWorker: true,
-      fileType: "image/webp",
-    };
-
-    const compressedFile = await imageCompression(file, options);
-
-    const fileName = `${Date.now()}.webp`;
-
-    const { error } = await supabase.storage
-      .from("products")
-      .upload(`${path}/${fileName}`, compressedFile);
-
-    if (error) throw error;
-
-    const { data } = supabase.storage
-      .from("products")
-      .getPublicUrl(`${path}/${fileName}`);
-
-    return data.publicUrl;
-  };
-
   // 🔥 상품 추가
   const handleAddProduct = () => {
     const newItem: ProductItem = {
+      id: Date.now(),
       brandEn: "",
       brandKo: "",
       desc: "",
@@ -90,89 +63,184 @@ export default function AdminProductsPage() {
 
     setItems([...items, newItem]);
   };
-
-  // 🔥 대표 이미지 업로드
-  const handleMainImageUpload = async (index: number, file: File) => {
-    const url = await uploadImage(file, `product-${Date.now()}`);
-    updateItem(index, "image", url);
+  // 대표 이미지 선택
+  const handleMainImageUpload = (index: number, file: File) => {
+    updateItem(index, "tempMainImage", file);
   };
 
-  // 🔥 썸네일 추가
-  const handleThumbnailUpload = async (index: number, file: File) => {
-    const url = await uploadImage(file, `thumb`);
-    const newList = [...items[index].thumbnailImages, url];
-    updateItem(index, "thumbnailImages", newList);
+  // 썸네일 선택
+  const handleThumbnailUpload = (index: number, file: File) => {
+    const existing = items[index].tempThumbnailFiles || [];
+    updateItem(index, "tempThumbnailFiles", [...existing, file]);
   };
 
-  // 🔥 디테일 추가
-  const handleDetailUpload = async (index: number, file: File) => {
-    const url = await uploadImage(file, `detail`);
-    const newList = [...items[index].detailImages, url];
-    updateItem(index, "detailImages", newList);
+  // 상세 이미지 선택
+  const handleDetailUpload = (index: number, file: File) => {
+    const existing = items[index].tempDetailFiles || [];
+    updateItem(index, "tempDetailFiles", [...existing, file]);
   };
 
-  // 🔥 값 변경
+
+  const removeMainImage = (index: number) => {
+    updateItem(index, "tempMainImage", undefined);
+    updateItem(index, "image", "");
+  };
+
+  const removeThumbnailImage = (index: number, i: number) => {
+    updateItem(index, "tempThumbnailFiles", [
+      ...(items[index].tempThumbnailFiles?.filter((_, idx) => idx !== i) || [])
+    ]);
+
+    updateItem(index, "thumbnailImages", [
+      ...items[index].thumbnailImages.filter((_, idx) => idx !== i)
+    ]);
+  };
+
+  const removeDetailImage = (index: number, i: number) => {
+    updateItem(index, "tempDetailFiles", [
+      ...(items[index].tempDetailFiles?.filter((_, idx) => idx !== i) || [])
+    ]);
+
+    updateItem(index, "detailImages", [
+      ...items[index].detailImages.filter((_, idx) => idx !== i)
+    ]);
+  };
+  // 값 변경
   const updateItem = (index: number, field: keyof ProductItem, value: any) => {
     const newItems = [...items];
     newItems[index] = { ...newItems[index], [field]: value };
     setItems(newItems);
   };
 
-  // 🔥 삭제
-  const toggleDelete = (index: number) => {
-    const newItems = [...items];
-    newItems[index].isDeleted = !newItems[index].isDeleted;
-    setItems(newItems);
+  // 흑백 토글 (삭제 예정 처리)
+  const toggleDelete = (id: number) => {
+    setItems(prev =>
+      prev.map(item =>
+        item.id === id ? { ...item, isDeleted: !item.isDeleted } : item
+      )
+    );
   };
 
-  // 🔥 저장
+
+  // webp 파일로 변경 옵션
+  const options = {
+    maxSizeMB: 1,
+    maxWidthOrHeight: 1920,
+    useWebWorker: true,
+    fileType: "image/webp",
+  };
+
+  // 저장
   const handleSave = async () => {
+    if (items.some(item => !item.brandEn || !item.brandKo)) {
+      alert("영문 제목과 한글 제목은 필수입니다.");
+      return;
+    }
+
     setIsSaving(true);
 
     try {
-      const itemsToDelete = items.filter((i) => i.isDeleted);
-
-      const idsToDelete = itemsToDelete
-        .filter((i) => !i.isNew)
-        .map((i) => i.id);
+      // 1️⃣ 삭제 처리
+      const itemsToDelete = items.filter(i => i.isDeleted);
+      const idsToDelete = itemsToDelete.filter(i => !i.isNew).map(i => i.id);
 
       if (idsToDelete.length > 0) {
         await supabase.from("products").delete().in("id", idsToDelete);
       }
 
-      const itemsToSave = items.filter((i) => !i.isDeleted);
+      // 2️⃣ 저장 대상
+      const itemsToSave = items.filter(i => !i.isDeleted);
+      // 3️⃣ 이미지 업로드 및 URL 처리
+      const processedItems = await Promise.all(
+        itemsToSave.map(async (item, index) => {
+          let finalImage = item.image || "";
+          let finalThumbnailImages: string[] = [];
+          let finalDetailImages: string[] = [];
 
-      const finalPayload = itemsToSave.map((item, index) => {
-        const base = {
-          brandEn: item.brandEn,
-          brandKo: item.brandKo,
-          desc: item.desc,
-          category: item.category,
-          options: item.options,
-          image: item.image,
-          thumbnailImages: item.thumbnailImages,
-          detailImages: item.detailImages,
-          purchaseLink: item.purchaseLink,
-          isVisible: item.isVisible,
-          displayOrder: index + 1,
-        };
+          // ✅ 메인 이미지
+          if (item.tempMainImage) {
+            const compressedFile = await imageCompression(item.tempMainImage, options);
+            const mainFilePath = `product-${String(item.id).padStart(2, '0')}.webp`;
+            const { error: uploadError } = await supabase.storage.from("products").upload(mainFilePath, compressedFile, { upsert: true });
+            if (uploadError) throw uploadError;
+            const { data } = supabase.storage.from("products").getPublicUrl(mainFilePath);
+            if (!data?.publicUrl) throw new Error("대표 이미지 URL 가져오기 실패");
+            finalImage = data.publicUrl;
+          }
 
-        if (item.isNew) return base;
-        return { ...base, id: item.id };
-      });
+          // ✅ 썸네일 이미지
+          if (item.tempThumbnailFiles?.length) {
+            for (let i = 0; i < item.tempThumbnailFiles.length; i++) {
+              const file = item.tempThumbnailFiles[i];
+              const compressedFile = await imageCompression(file, options);
+              const filePath = `product-${String(item.id).padStart(2, '0')}/thumb/${String(i + 1).padStart(2, '0')}.webp`;
 
-      const { error } = await supabase.from("products").upsert(finalPayload, {
+              const { error: uploadError } = await supabase.storage.from("products").upload(filePath, compressedFile, { upsert: true });
+              if (uploadError) throw uploadError;
+
+              const { data } = supabase.storage.from("products").getPublicUrl(filePath);
+              if (!data?.publicUrl) throw new Error("썸네일 URL 가져오기 실패");
+
+              finalThumbnailImages.push(data.publicUrl);
+            }
+          } else {
+            // temp가 없으면 기존 URL 그대로
+            finalThumbnailImages = [...item.thumbnailImages];
+          }
+
+
+          if (item.tempDetailFiles?.length) {
+            for (let i = 0; i < item.tempDetailFiles.length; i++) {
+              const file = item.tempDetailFiles[i];
+              const filePath = `product-${String(item.id).padStart(2, '0')}/detail/${String(i + 1).padStart(2, '0')}.webp`;
+              const compressedFile = await imageCompression(file, options);
+
+              const { error: uploadError } = await supabase.storage.from("products").upload(filePath, compressedFile, { upsert: true });
+              if (uploadError) throw uploadError;
+
+              const { data } = supabase.storage.from("products").getPublicUrl(filePath);
+              if (!data?.publicUrl) throw new Error("상세 이미지 URL 가져오기 실패");
+
+              finalDetailImages.push(data.publicUrl);
+            }
+          } else {
+            // temp가 없으면 기존 URL 그대로
+            finalDetailImages = [...item.detailImages];
+          }
+
+
+          // 4️⃣ DB 업로드 데이터 구성
+          const baseData = {
+            brandEn: item.brandEn,
+            brandKo: item.brandKo,
+            desc: item.desc || "",
+            category: item.category || "",
+            options: item.options || [],
+            image: finalImage,
+            thumbnailImages: finalThumbnailImages,
+            detailImages: finalDetailImages,
+            purchaseLink: item.purchaseLink || "",
+            isVisible: item.isVisible ?? true,
+            displayOrder: index + 1, // UI 순서 기준
+          };
+
+          return item.isNew ? baseData : { ...baseData, id: item.id };
+        })
+      );
+
+      // 5️⃣ DB upsert
+      const { error } = await supabase.from("products").upsert(processedItems, {
         onConflict: "id",
         defaultToNull: false,
       });
-
       if (error) throw error;
 
       alert("✅ 저장 완료");
       fetchProducts();
+
     } catch (e: any) {
       console.error(e);
-      alert("❌ 저장 실패");
+      alert(`❌ 저장 실패: ${e.message}`);
     } finally {
       setIsSaving(false);
     }
@@ -182,20 +250,17 @@ export default function AdminProductsPage() {
 
   return (
     <div>
-      <AdminHeader title="상품 관리" subtitle="상품을 관리하는 페이지입니다." tip="* 변경사항이 있을 경우 [저장] 버튼을 눌러주세요." />
+      <AdminHeader title="상품 관리" subtitle="상품을 관리하는 페이지입니다. 이미지 파일은 webp 형식으로 업로드됩니다." tip="* 변경사항이 있을 경우 [저장] 버튼을 눌러주세요." />
       <div className="flex gap-3 mb-10 justify-end">
         <AdminAddButton onClick={handleAddProduct} label="상품 추가" />
         <AdminSaveButton onClick={handleSave} isSaving={isSaving} />
       </div>
 
       <div className="bg-white rounded-3xl shadow-sm border border-slate-100 overflow-hidden">
-        <div className="grid grid-cols-12 gap-4 py-5 bg-slate-50 border-b border-slate-100 text-admin-body font-semibold text-slate-500">
+        <div className="grid grid-cols-12 gap-20 py-5 bg-slate-50 border-b border-slate-100 text-admin-body font-semibold text-slate-500">
           <div className="col-span-1 text-center">순서</div>
-          <div className="col-span-2 text-center">사진</div>
-          <div className="col-span-2 text-center">영어 제목</div>
-          <div className="col-span-2 text-center">한글 제목</div>
-          <div className="col-span-1 text-center">카테고리</div>
-          <div className="col-span-2 text-center">구매 링크</div>
+          <div className="col-span-3 text-center">사진</div>
+          <div className="col-span-6 text-center">상품 정보</div>
           <div className="col-span-1 text-center">진열</div>
           <div className="col-span-1 text-center">삭제</div>
         </div>
@@ -215,7 +280,7 @@ export default function AdminProductsPage() {
                       <div
                         ref={provided.innerRef}
                         {...provided.draggableProps}
-                        className={`grid grid-cols-12 gap-8 items-start py-8 border-b border-gray-100 last:border-0 transition-all ${item.isDeleted
+                        className={`grid grid-cols-12 gap-20 items-start py-8 border-b border-gray-300 last:border-0 transition-all ${item.isDeleted
                           ? "bg-slate-50 grayscale opacity-40"
                           : snapshot.isDragging
                             ? "bg-blue-50"
@@ -243,6 +308,9 @@ export default function AdminProductsPage() {
                           handleMainImageUpload={handleMainImageUpload}
                           handleThumbnailUpload={handleThumbnailUpload}
                           handleDetailUpload={handleDetailUpload}
+                          removeMainImage={removeMainImage}
+                          removeThumbnailImage={removeThumbnailImage}
+                          removeDetailImage={removeDetailImage}
                           toggleDelete={toggleDelete}
                         />
                       </div>

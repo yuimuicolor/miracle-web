@@ -13,9 +13,12 @@ export interface ProductItem {
   purchaseLink: string;
   isVisible: boolean;
   displayOrder: number;
-
   isDeleted?: boolean;
   isNew?: boolean;
+
+  tempMainImage?: File;
+  tempThumbnailFiles?: File[];
+  tempDetailFiles?: File[];
 }
 
 export const getProductById = async (id: number): Promise<ProductItem | null> => {
@@ -40,7 +43,6 @@ export const getProductById = async (id: number): Promise<ProductItem | null> =>
     purchaseLink: data.purchaseLink || "",
     isVisible: data.isVisible ?? true,
     displayOrder: data.displayOrder ?? 0,
-
   };
 };
 
