@@ -13,7 +13,7 @@ export interface ProductItem {
   desc: string;
   category: string;
   options: string[];
-  image: string; // 메인 이미지 URL
+  image: string; // 메인 이미지 슬롯 (최대 1개) - 기존 URL 또는 새 파일 둘 다 허용
   tempMainFile?: File; // 메인 이미지로 새로 업로드할 파일
 
   thumbnailImages: ImageSlot[];
@@ -68,7 +68,7 @@ return data.map(item => ({
     desc: item.desc|| "",
     category: item.category || "",
     options: item.options || [],
-    image: item.image || "",
+    image: item.image || { id: "", url: "" },
     thumbnailImages: item.thumbnailImages || [],
     detailImages: item.detailImages || [],
     purchaseLink: item.purchaseLink || "",

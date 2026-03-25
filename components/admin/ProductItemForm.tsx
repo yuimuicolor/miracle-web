@@ -5,6 +5,7 @@ import { ProductImageList } from "./ProductImageList";
 import { AdminDeleteButton } from "./AdminDeleteButton";
 import { DropResult } from "@hello-pangea/dnd";
 import { useRef, useState } from "react";
+import Image from "next/image";
 
 type ProductItemFormProps = {
   item: ProductItem;
@@ -47,7 +48,7 @@ export default function ProductItemForm({
   // 1. 메인 이미지 변경 (무조건 1개)
   const handleMainChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
-      updateItem(index, "tempMainFile", e.target.files[0]);
+      updateItem(index, "tempMainFile", URL.createObjectURL(e.target.files[0]));
     }
   };
 
@@ -89,9 +90,12 @@ export default function ProductItemForm({
           <div className="relative w-full aspect-video bg-slate-100 rounded-xl overflow-hidden border-2 border-dashed border-slate-200 hover:border-blue-400 transition-colors">
             <label className="absolute inset-0 cursor-pointer flex flex-col items-center justify-center">
               {item.tempMainFile || item.image ? (
-                <img
+                <Image
                   src={item.tempMainFile ? URL.createObjectURL(item.tempMainFile) : item.image}
                   className="w-full h-full object-cover"
+                  fill
+                  unoptimized={true}
+                  alt="Main Product Image"
                 />
               ) : (
                 <span className="text-slate-400 text-admin-small">이미지 업로드</span>

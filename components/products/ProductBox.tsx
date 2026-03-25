@@ -49,6 +49,7 @@ export default function ProductBox({ item, index }: ProductBoxProps) {
         <Image
           src={item.image}
           alt={item.mainTitle}
+          unoptimized={true}
           fill
           draggable={false}
           priority={isFirstImage}

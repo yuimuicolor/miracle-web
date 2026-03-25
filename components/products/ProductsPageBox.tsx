@@ -69,6 +69,7 @@ export default function ProductsPageBox({ item }: ProductsPageBoxProps) {
             src={item.image}
             alt={item.mainTitle}
             fill
+            unoptimized={true}
             loading="eager"
             sizes="(max-width: 767px) 100vw, (max-width: 1023px) 50vw, 33vw"
             className={STYLE.image}
