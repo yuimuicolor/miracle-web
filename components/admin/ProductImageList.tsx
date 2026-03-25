@@ -24,8 +24,8 @@ export function ProductImageList({ type, images, onUpload, onRemove, onReorder }
   return (
     <div className="space-y-2">
       <div className="flex justify-between items-center">
-        <span className="text-xs font-bold text-slate-500 uppercase">{type}</span>
-        <label className="cursor-pointer text-[11px] bg-slate-100 px-2 py-1 rounded hover:bg-slate-200">
+        <span className="text-admin-small font-bold">{type === "thumbnail" ? "썸네일" : "상세 이미지"}</span>
+        <label className="cursor-pointer text-[14px] font-semibold bg-slate-100 px-2 py-1 rounded hover:bg-slate-200">
           추가
           <input 
             type="file" 
@@ -55,7 +55,7 @@ export function ProductImageList({ type, images, onUpload, onRemove, onReorder }
                         alt="preview"
                         onError={(e) => (e.currentTarget.src = "https://via.placeholder.com/80")}
                       />
-                      <span className="flex-1 text-[11px] truncate text-slate-600">
+                      <span className="flex-1 text-[1.4rem] truncate text-slate-600">
                         {img.file ? img.file.name : getFileName(img.url || "")}
                       </span>
                       <button 
