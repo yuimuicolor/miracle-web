@@ -37,9 +37,9 @@ const STYLE = {
     transition-colors duration-300
     group-hover:text-hover
   `,
-  brandKo:
+  mainTitle:
     "font-noto font-semibold text-[2rem] leading-none tracking-[-0.04em]",
-  brandEn:
+  subTitle:
     "font-noto font-medium text-[1.8rem] leading-[1.3] tracking-[0.2em] uppercase",
   plusButton: `
     flex h-[2rem] w-[2rem] items-center justify-center text-black
@@ -62,12 +62,12 @@ export default function ProductsPageBox({ item }: ProductsPageBoxProps) {
   const productPath = `/products/${item.id}`;
 
   return (
-    <Link href={productPath} aria-label={`${item.brandKo} 상세페이지 이동`}>
+    <Link href={productPath} aria-label={`${item.mainTitle} 상세페이지 이동`}>
       <article className={STYLE.card}>
         <div className={STYLE.imageWrap}>
           <Image
             src={item.image}
-            alt={item.brandKo}
+            alt={item.mainTitle}
             fill
             loading="eager"
             sizes="(max-width: 767px) 100vw, (max-width: 1023px) 50vw, 33vw"
@@ -82,8 +82,8 @@ export default function ProductsPageBox({ item }: ProductsPageBoxProps) {
 
         <div className={STYLE.titleRow}>
           <div className={STYLE.titleTextWrap}>
-            <p className={STYLE.brandKo}>{item.brandKo}</p>
-            <p className={STYLE.brandEn}>{item.brandEn}</p>
+            <p className={STYLE.mainTitle}>{item.mainTitle}</p>
+            <p className={STYLE.subTitle}>{item.subTitle}</p>
           </div>
 
           <span aria-hidden="true" className={STYLE.plusButton}>

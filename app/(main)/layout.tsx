@@ -29,7 +29,6 @@ export default async function RootLayout({
             <Header />
             <div className="page-content">{children}</div>
             <Footer />
-            <TopButton />
           </div>
       </div>
   );

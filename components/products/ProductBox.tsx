@@ -48,7 +48,7 @@ export default function ProductBox({ item, index }: ProductBoxProps) {
       {item.image ? (
         <Image
           src={item.image}
-          alt={item.brandKo}
+          alt={item.mainTitle}
           fill
           draggable={false}
           priority={isFirstImage}
@@ -67,10 +67,10 @@ export default function ProductBox({ item, index }: ProductBoxProps) {
 
       <div className={STYLE.textWrap}>
         <p className={STYLE.category} style={TWO_LINE_CLAMP_STYLE}>
-          {item.brandEn}
+          {item.subTitle}
         </p>
         <p className={STYLE.name} style={TWO_LINE_CLAMP_STYLE}>
-          {item.brandKo}
+          {item.mainTitle}
         </p>
       </div>
     </article>

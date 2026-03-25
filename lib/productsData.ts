@@ -8,8 +8,8 @@ export interface ImageSlot {
 
 export interface ProductItem {
   id: number;
-  brandEn: string;
-  brandKo: string;
+  subTitle: string;
+  mainTitle: string;
   desc: string;
   category: string;
   options: string[];
@@ -38,8 +38,8 @@ export const getProductById = async (id: number): Promise<ProductItem | null> =>
 
   return {
     id: data.id,
-    brandEn: data.brandEn || "",
-    brandKo: data.brandKo || "",
+    subTitle: data.subTitle || "",
+    mainTitle: data.mainTitle || "",
     desc: data.desc || data.description || "",
     category: data.category || "",
     options: data.options || [],
@@ -63,8 +63,8 @@ export const getAllProducts = async (): Promise<ProductItem[]> => {
   
 return data.map(item => ({
     id: item.id,
-    brandEn: item.brandEn || "",
-    brandKo: item.brandKo || "",
+    subTitle: item.subTitle || "",
+    mainTitle: item.mainTitle || "",
     desc: item.desc|| "",
     category: item.category || "",
     options: item.options || [],

@@ -52,8 +52,8 @@ export const useProductManager = () => {
   const handleAddProduct = () => {
     const newItem: ProductItem = {
       id: Date.now(), // 임시 ID
-      brandEn: "",
-      brandKo: "",
+      subTitle: "",
+      mainTitle: "",
       desc: "",
       category: "",
       options: [],
@@ -112,8 +112,8 @@ export const useProductManager = () => {
   const handleSave = async () => {
     // 삭제되지 않은 아이템들만 제목 체크 (삭제 처리할 건 제목 없어도 통과!)
     const activeItems = items.filter((i) => !i.isDeleted);
-    if (activeItems.some((i) => !i.brandEn || !i.brandKo)) {
-      return alert("제목(브랜드명)은 필수입니다.");
+    if (activeItems.some((i) => !i.mainTitle)) {
+      return alert("제목은 필수입니다.");
     }
 
     setIsSaving(true);
@@ -133,11 +133,12 @@ export const useProductManager = () => {
 
       // 2. 저장할 아이템들 가공
       const itemsToSave = items.filter((i) => !i.isDeleted);
+
       const processedItems = await Promise.all(
         itemsToSave.map(async (item, idx) => {
-          const folder = `product-${item.isNew ? "new-" + idx : String(item.id).slice(-4)}`;
+          const folder = `product-${String(item.id).slice(-6)}`;
 
-          // 이미지 업로드 로직
+          // 메인 이미지 업로드
           let finalMain = item.image;
           if (item.tempMainFile) {
             finalMain = await uploadAndGetUrl(
@@ -146,6 +147,7 @@ export const useProductManager = () => {
             );
           }
 
+          // 리스트 이미지 처리 함수
           const processList = async (list: ImageSlot[], type: string) => {
             return Promise.all(
               list.map(async (slot, i) => {
@@ -165,10 +167,11 @@ export const useProductManager = () => {
 
           // ✅ 1. 기본 저장 객체 (id 제외)
           const saveObject: any = {
-            brandEn: item.brandEn,
-            brandKo: item.brandKo,
+            subTitle: item.subTitle,
+            mainTitle: item.mainTitle,
             desc: item.desc,
             category: item.category,
+            options: item.options,
             image: finalMain,
             thumbnailImages: finalThumbs,
             detailImages: finalDetails,

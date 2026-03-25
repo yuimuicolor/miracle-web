@@ -4,6 +4,7 @@ import { AdminInput } from "./AdminInput";
 import { ProductImageList } from "./ProductImageList";
 import { AdminDeleteButton } from "./AdminDeleteButton";
 import { DropResult } from "@hello-pangea/dnd";
+import { useRef, useState } from "react";
 
 type ProductItemFormProps = {
   item: ProductItem;
@@ -18,7 +19,31 @@ export default function ProductItemForm({
   updateItem,
   toggleDelete,
 }: ProductItemFormProps) {
-  
+
+  const [tempOptionInput, setTempOptionInput] = useState("");
+  const inputRef = useRef<HTMLInputElement>(null);
+
+  // 1. 옵션 추가 함수
+  const handleAddOption = (newOption: string) => {
+    // 공백만 입력하거나 빈 값인 경우 방지
+    if (!newOption || newOption.trim() === "") return;
+
+    const trimmedOption = newOption.trim();
+    const currentOptions = Array.isArray(item.options) ? item.options : [];
+    const nextOptions = [...currentOptions, trimmedOption];
+
+    // 기존 옵션 배열에 새 값 추가
+    updateItem(index, "options", nextOptions);
+    setTempOptionInput("");
+    inputRef.current?.focus();
+  };
+
+  // 2. 옵션 삭제 함수
+  const handleRemoveOption = (optIdx: number) => {
+    const newOptions = item.options.filter((_, i) => i !== optIdx);
+    updateItem(index, "options", newOptions);
+  };
+
   // 1. 메인 이미지 변경 (무조건 1개)
   const handleMainChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
@@ -41,6 +66,8 @@ export default function ProductItemForm({
     updateItem(index, field, filtered);
   };
 
+
+
   // 4. 리스트 내 순서 변경 (DnD)
   const handleReorder = (field: "thumbnailImages" | "detailImages", result: DropResult) => {
     if (!result.destination) return;
@@ -49,6 +76,8 @@ export default function ProductItemForm({
     list.splice(result.destination.index, 0, moved);
     updateItem(index, field, list);
   };
+
+
 
   return (
     <>
@@ -60,9 +89,9 @@ export default function ProductItemForm({
           <div className="relative w-full aspect-video bg-slate-100 rounded-xl overflow-hidden border-2 border-dashed border-slate-200 hover:border-blue-400 transition-colors">
             <label className="absolute inset-0 cursor-pointer flex flex-col items-center justify-center">
               {item.tempMainFile || item.image ? (
-                <img 
-                  src={item.tempMainFile ? URL.createObjectURL(item.tempMainFile) : item.image} 
-                  className="w-full h-full object-cover" 
+                <img
+                  src={item.tempMainFile ? URL.createObjectURL(item.tempMainFile) : item.image}
+                  className="w-full h-full object-cover"
                 />
               ) : (
                 <span className="text-slate-400 text-sm">이미지 업로드</span>
@@ -93,29 +122,100 @@ export default function ProductItemForm({
 
       {/* 3. 정보 입력 섹션 */}
       <div className="col-span-6 flex flex-col gap-4 px-4">
+
         <div className="grid grid-cols-2 gap-4">
           <div className="space-y-2">
-            <span className="text-admin-body font-semibold">브랜드(EN)</span>
+            <span className="text-admin-body font-semibold">서브 제목</span>
             <AdminInput
-              value={item.brandEn}
+              value={item.subTitle}
+              placeholder="서브 제목을 입력하세요."
               disabled={item.isDeleted}
-              onChange={(v) => updateItem(index, "brandEn", v)}
+              onChange={(v) => updateItem(index, "subTitle", v)}
             />
           </div>
           <div className="space-y-2">
-            <span className="text-admin-body font-semibold">브랜드(KO)</span>
+            <span className="text-admin-body font-semibold">메인 제목 <span className="text-blue-600">*</span></span>
             <AdminInput
-              value={item.brandKo}
+              value={item.mainTitle}
+              placeholder="메인 제목을 입력하세요."
               disabled={item.isDeleted}
-              onChange={(v) => updateItem(index, "brandKo", v)}
+              onChange={(v) => updateItem(index, "mainTitle", v)}
             />
           </div>
+          <div className="space-y-2">
+            <span className="text-admin-body font-semibold">카테고리</span>
+            <AdminInput
+              value={item.category}
+              placeholder="카테고리를 입력하세요."
+              disabled={item.isDeleted}
+              onChange={(v) => updateItem(index, "category", v)}
+            />
+          </div>
+
+
+          <div className="space-y-2">
+            {/* 상단: 입력부 */}
+            <div className="flex flex-col">
+              <span className="text-admin-body font-bold">옵션</span>
+              <div className="flex items-center gap-2">
+                <AdminInput
+                  ref={inputRef}
+                  placeholder="입력 후 [추가] 버튼을 눌러주세요."
+                  disabled={item.isDeleted}
+                  value={tempOptionInput || ""}
+                  onChange={(v) => setTempOptionInput(v)}
+                />
+                <button
+                  type="button"
+                  onClick={() => {
+                    if (tempOptionInput) {
+                      handleAddOption(tempOptionInput);
+                    }
+                  }}
+                  className="px-4 py-3 bg-blue-500 text-white rounded-lg text-admin-small font-bold hover:bg-blue-600 transition-colors"
+                >
+                  추가
+                </button>
+              </div>
+            </div>
+
+            {/* 하단: 옵션 리스트 (칩 모양) */}
+            <div className="flex flex-wrap gap-2">
+              {item.options?.map((opt, optIdx) => (
+                <div
+                  key={optIdx}
+                  className="flex items-center gap-2 bg-slate-100 border border-slate-200 px-3 py-1.5 rounded-full w-fit hover:bg-white hover:border-blue-400 transition-all group"
+                >
+                  {/* 텍스트 내용만큼만 딱 줄어듬 */}
+                  <span className="text-admin-small text-slate-700 leading-none">
+                    {opt}
+                  </span>
+
+                  {/* 삭제 X 버튼 */}
+                  <button
+                    type="button"
+                    onClick={() => handleRemoveOption(optIdx)}
+                    className="w-8 h-8 flex items-center justify-center rounded-full bg-slate-400 text-white group-hover:bg-red-400 transition-colors"
+                  >
+                    <span className="text-[12px] leading-none">✕</span>
+                  </button>
+                </div>
+              ))}
+
+              {/* 빈 상태 메시지 */}
+              {(!item.options || item.options.length === 0) && (
+                <p className="text-[14px] text-slate-400 italic">등록된 옵션이 없습니다.</p>
+              )}
+            </div>
+          </div>
+
         </div>
 
         <div className="space-y-2">
           <span className="text-admin-body font-semibold">구매 링크</span>
           <AdminInput
             value={item.purchaseLink}
+            placeholder="구매 링크를 입력하세요."
             disabled={item.isDeleted}
             onChange={(v) => updateItem(index, "purchaseLink", v)}
           />
@@ -126,6 +226,7 @@ export default function ProductItemForm({
           <AdminInput
             value={item.desc}
             disabled={item.isDeleted}
+            placeholder="상품 설명을 입력하세요."
             onChange={(v) => updateItem(index, "desc", v)}
             textarea
           />

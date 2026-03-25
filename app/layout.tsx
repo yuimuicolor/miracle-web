@@ -1,4 +1,5 @@
 
+import TopButton from "@/components/TopButton";
 import "./globals.css";
 import { SiteSettingsProvider } from "@/context/SiteSettingsContext";
 import { getSiteSettings } from "@/lib/siteSettings";
@@ -9,7 +10,10 @@ export default async function RootLayout({ children }: { children: React.ReactNo
   return (
     <html lang="ko">
       <SiteSettingsProvider settings={settings}>
-        <body className="antialiased">{children}</body>
+        <body className="antialiased">
+          {children}
+          <TopButton />
+        </body>
       </SiteSettingsProvider>
     </html>
   );

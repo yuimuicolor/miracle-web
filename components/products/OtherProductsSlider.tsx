@@ -237,7 +237,7 @@ const calcHalf = (container: HTMLDivElement) => {
                 <Link
                   href={`/products/${item.id}`}
                   className={STYLE.cardLink}
-                  aria-label={`${item.brandKo} 상세페이지 이동`}
+                  aria-label={`${item.mainTitle} 상세페이지 이동`}
                   draggable={false}
                   onClick={handleCardClick}
                   onDragStart={handleNativeDragStart}

@@ -67,20 +67,20 @@ const STYLE = {
   `,
 
   brandCol: "flex flex-col gap-[0.8rem]",
-  brandEn: `
+  subTitle: `
     font-noto font-medium uppercase text-black tracking-[0.2em] leading-[130%]
     text-[1.6rem]
     md:text-[1.8rem]
     lg:text-[2.2rem]
   `,
-  brandKoWrap: "relative overflow-hidden",
-  brandKo: `
+  mainTitleWrap: "relative overflow-hidden",
+  mainTitle: `
     font-noto font-bold text-black
     text-[3.2rem] leading-[120%] tracking-[-0.05em]
     md:text-[4.8rem] md:leading-[130%] md:tracking-[-0.04em]
     lg:text-[5.6rem]
   `,
-  brandKoHighlight: "inline bg-point-light px-[1rem]",
+  mainTitleHighlight: "inline bg-point-light px-[1rem]",
   divider: `
     bg-black rounded-full
     w-[8rem] h-[0.2rem]
@@ -226,7 +226,7 @@ export default function ProductDetailTop({ product }: ProductDetailTopProps) {
           >
             <Image
               src={thumbnails[activeIndex]}
-              alt={`${product.brandKo} 썸네일 ${activeIndex + 1}`}
+              alt={`${product.mainTitle} 썸네일 ${activeIndex + 1}`}
               fill
               priority={activeIndex === 0}
               draggable={false}
@@ -245,7 +245,7 @@ export default function ProductDetailTop({ product }: ProductDetailTopProps) {
               onClick={() =>
                 openZoomModal(
                   thumbnails[activeIndex],
-                  `${product.brandKo} 썸네일 ${activeIndex + 1}`,
+                  `${product.mainTitle} 썸네일 ${activeIndex + 1}`,
                 )
               }
             />
@@ -287,7 +287,7 @@ export default function ProductDetailTop({ product }: ProductDetailTopProps) {
             <div key={`${src}-${index}`} className={STYLE.detailImageWrap}>
               <Image
                 src={src}
-                alt={`${product.brandKo} 상세 이미지 ${index + 1}`}
+                alt={`${product.mainTitle} 상세 이미지 ${index + 1}`}
                 width={1500}
                 height={1000}
                 className="w-full h-auto object-contain"
@@ -303,10 +303,10 @@ export default function ProductDetailTop({ product }: ProductDetailTopProps) {
         <p className={STYLE.category}>{product.category}</p>
 
         <div className={STYLE.brandCol}>
-          <p className={STYLE.brandEn}>{product.brandEn}</p>
-          <div className={STYLE.brandKoWrap}>
-            <h1 className={STYLE.brandKo}>
-              <span className={STYLE.brandKoHighlight}>{product.brandKo}</span>
+          <p className={STYLE.subTitle}>{product.subTitle}</p>
+          <div className={STYLE.mainTitleWrap}>
+            <h1 className={STYLE.mainTitle}>
+              <span className={STYLE.mainTitleHighlight}>{product.mainTitle}</span>
             </h1>
           </div>
         </div>
