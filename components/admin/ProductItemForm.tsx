@@ -85,7 +85,7 @@ export default function ProductItemForm({
       <div className="col-span-3 flex flex-col gap-6">
         {/* 메인 이미지 (1개만) */}
         <div className="space-y-2">
-          <span className="text-admin-small font-bold uppercase">Main Image</span>
+          <span className="text-admin-small font-bold uppercase">Main Image <span className="text-blue-600">*</span></span>
           <div className="relative w-full aspect-video bg-slate-100 rounded-xl overflow-hidden border-2 border-dashed border-slate-200 hover:border-blue-400 transition-colors">
             <label className="absolute inset-0 cursor-pointer flex flex-col items-center justify-center">
               {item.tempMainFile || item.image ? (

@@ -112,8 +112,23 @@ export const useProductManager = () => {
   const handleSave = async () => {
     // 삭제되지 않은 아이템들만 제목 체크 (삭제 처리할 건 제목 없어도 통과!)
     const activeItems = items.filter((i) => !i.isDeleted);
-    if (activeItems.some((i) => !i.mainTitle)) {
-      return alert("제목은 필수입니다.");
+
+    // 1. 유효하지 않은 아이템 찾기 (대표 이미지, 제목이 없는 경우)
+    const invalidItem = activeItems.find(
+      (i) => (!i.image && !i.tempMainFile) || !i.mainTitle,
+    );
+
+    if (invalidItem) {
+      // 2. 제목이 없는 경우 우선 순위로 체크
+      if (!invalidItem.mainTitle) {
+        alert("❌ 모든 상품은 메인 제목이 필요합니다.");
+      }
+      // 3. 이미지 둘 다 없는 경우 체크
+      else if (!invalidItem.image && !invalidItem.tempMainFile) {
+        alert("❌ 모든 상품은 메인 이미지가 필요합니다.");
+      }
+
+      return; // 검사 걸리면 중단
     }
 
     setIsSaving(true);
