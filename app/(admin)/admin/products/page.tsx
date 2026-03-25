@@ -6,7 +6,7 @@ import AdminSaveButton from "@/components/admin/AdminSaveButton";
 import AdminAddButton from "@/components/admin/AdminAddButton";
 import ProductItemForm from "@/components/admin/ProductItemForm";
 import { DragDropContext, Droppable, Draggable } from "@hello-pangea/dnd";
-import { useEffect, useRef } from "react";
+import { useRef } from "react";
 
 
 export default function AdminProductsPage() {
@@ -101,6 +101,9 @@ export default function AdminProductsPage() {
             )}
           </Droppable>
         </DragDropContext>
+      </div>
+      <div className="flex justify-center mt-10">
+        <AdminSaveButton size="large" onClick={handleSave} isSaving={isSaving} />
       </div>
       <div ref={scrollRef} /> 
     </div>

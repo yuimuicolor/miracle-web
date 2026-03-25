@@ -378,6 +378,9 @@ export default function AdminGalleryPage() {
           </Droppable>
         </DragDropContext>
       </div>
+      <div className="flex justify-center mt-10">
+        <AdminSaveButton size="large" onClick={handleAllSave} isSaving={isSaving} />
+      </div>
       <div ref={bottomRef} />
     </div>
   );
