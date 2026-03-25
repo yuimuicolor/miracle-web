@@ -124,15 +124,7 @@ export default function ProductItemForm({
       <div className="col-span-6 flex flex-col gap-4 px-4">
 
         <div className="grid grid-cols-2 gap-4">
-          <div className="space-y-2">
-            <span className="text-admin-body font-semibold">서브 제목</span>
-            <AdminInput
-              value={item.subTitle}
-              placeholder="서브 제목을 입력하세요."
-              disabled={item.isDeleted}
-              onChange={(v) => updateItem(index, "subTitle", v)}
-            />
-          </div>
+        
           <div className="space-y-2">
             <span className="text-admin-body font-semibold">메인 제목 <span className="text-blue-600">*</span></span>
             <AdminInput
@@ -140,6 +132,15 @@ export default function ProductItemForm({
               placeholder="메인 제목을 입력하세요."
               disabled={item.isDeleted}
               onChange={(v) => updateItem(index, "mainTitle", v)}
+            />
+          </div>
+            <div className="space-y-2">
+            <span className="text-admin-body font-semibold">서브 제목</span>
+            <AdminInput
+              value={item.subTitle}
+              placeholder="서브 제목을 입력하세요."
+              disabled={item.isDeleted}
+              onChange={(v) => updateItem(index, "subTitle", v)}
             />
           </div>
           <div className="space-y-2">
@@ -215,7 +216,7 @@ export default function ProductItemForm({
           <span className="text-admin-body font-semibold">구매 링크</span>
           <AdminInput
             value={item.purchaseLink}
-            placeholder="구매 링크를 입력하세요."
+            placeholder="https:// 형태의 구매 링크를 입력하세요."
             disabled={item.isDeleted}
             onChange={(v) => updateItem(index, "purchaseLink", v)}
           />

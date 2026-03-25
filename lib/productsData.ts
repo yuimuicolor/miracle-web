@@ -57,7 +57,7 @@ export const getAllProducts = async (): Promise<ProductItem[]> => {
   const { data, error } = await supabase
     .from('products')
     .select('*')
-    .order('id', { ascending: true });
+    .order('displayOrder', { ascending: true });
 
  if (error || !data) return [];
   

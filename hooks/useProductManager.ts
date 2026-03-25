@@ -196,7 +196,7 @@ export const useProductManager = () => {
             detailImages: finalDetails,
             purchaseLink: item.purchaseLink,
             isVisible: item.isVisible,
-            displayOrder: idx + 1,
+            displayOrder: item.displayOrder,
           };
 
           // ✅ 2. 기존 상품일 때만 id를 "추가"한다
