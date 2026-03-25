@@ -1,5 +1,11 @@
 ﻿import { supabase } from '@/lib/supabase';
-// 1. 타입은 그대로 유지
+
+export interface ImageSlot {
+  id: string; // 로컬 프리뷰 및 DnD를 위한 고유 키
+  file?: File; // 새로 업로드할 파일
+  url?: string; // 기존 DB에 저장된 URL
+}
+
 export interface ProductItem {
   id: number;
   brandEn: string;
@@ -7,18 +13,18 @@ export interface ProductItem {
   desc: string;
   category: string;
   options: string[];
-  image: string;
-  thumbnailImages: string[];
-  detailImages: string[];
+  image: string; // 메인 이미지 URL
+  tempMainFile?: File; // 메인 이미지로 새로 업로드할 파일
+
+  thumbnailImages: ImageSlot[];
+  detailImages: ImageSlot[];
+
   purchaseLink: string;
   isVisible: boolean;
   displayOrder: number;
+  
   isDeleted?: boolean;
   isNew?: boolean;
-
-  tempMainImage?: File;
-  tempThumbnailFiles?: File[];
-  tempDetailFiles?: File[];
 }
 
 export const getProductById = async (id: number): Promise<ProductItem | null> => {

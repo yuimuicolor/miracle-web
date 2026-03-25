@@ -1,218 +1,78 @@
-import { useEffect, useState } from "react";
 import { DragDropContext, Droppable, Draggable, DropResult } from "@hello-pangea/dnd";
+import { ImageSlot } from "@/lib/productsData";
 
-type ProductImageListProps = {
-    index: number;
-    mainImage?: string;
-    tempMainImage?: File;
-    thumbnailImages: string[];
-    tempThumbnailFiles?: File[];
-    detailImages: string[];
-    tempDetailFiles?: File[];
-    handleMainImageUpload: (index: number, file: File) => void;
-    handleThumbnailUpload: (index: number, files: File[]) => void;
-    handleDetailUpload: (index: number, files: File[]) => void;
-    removeMainImage?: (index: number) => void;
-    removeThumbnailImage?: (index: number, i: number) => void;
-    removeDetailImage?: (index: number, i: number) => void;
+interface Props {
+  type: "thumbnail" | "detail";
+  images: ImageSlot[];
+  onUpload: (files: File[]) => void;
+  onRemove: (id: string) => void;
+  onReorder: (result: DropResult) => void;
+}
+
+export function ProductImageList({ type, images, onUpload, onRemove, onReorder }: Props) {
+
+  const getFileName = (url: string) => {
+  try {
+    const decodeUrl = decodeURIComponent(url); // 한글 파일명 대응
+    const parts = decodeUrl.split("/");
+    return parts[parts.length - 1].split("?")[0]; // 쿼리 스트링 제거 후 파일명만 반환
+  } catch (e) {
+    return "기존 이미지";
+  }
 };
 
-export function ProductImageList({
-    index,
-    mainImage,
-    tempMainImage,
-    thumbnailImages,
-    tempThumbnailFiles,
-    detailImages,
-    tempDetailFiles,
-    handleMainImageUpload,
-    handleThumbnailUpload,
-    handleDetailUpload,
-    removeMainImage,
-    removeThumbnailImage,
-    removeDetailImage,
-}: ProductImageListProps) {
-    const [previewImage, setPreviewImage] = useState<string | null | undefined>(null);
+  return (
+    <div className="space-y-2">
+      <div className="flex justify-between items-center">
+        <span className="text-xs font-bold text-slate-500 uppercase">{type}</span>
+        <label className="cursor-pointer text-[11px] bg-slate-100 px-2 py-1 rounded hover:bg-slate-200">
+          추가
+          <input 
+            type="file" 
+            multiple 
+            className="hidden" 
+            onChange={(e) => e.target.files && onUpload(Array.from(e.target.files))} 
+          />
+        </label>
+      </div>
 
-    // **UI 렌더용 로컬 state**
-    const [thumbList, setThumbList] = useState<(string | File)[]>([]);
-    const [detailList, setDetailList] = useState<(string | File)[]>([]);
-
-    // props가 바뀔 때 로컬 state 초기화
-    useEffect(() => {
-        setThumbList(tempThumbnailFiles?.length ? tempThumbnailFiles : thumbnailImages);
-    }, [tempThumbnailFiles, thumbnailImages]);
-
-    useEffect(() => {
-        setDetailList(tempDetailFiles?.length ? tempDetailFiles : detailImages);
-    }, [tempDetailFiles, detailImages]);
-
-
-    const getFileName = (url: string | undefined) => url?.split("/").pop();
-
-
-    // 드래그 후 순서 변경 처리
-    const handleDragEnd = (
-        result: DropResult,
-        list: (string | File)[],
-        setList: (newList: (string | File)[]) => void
-    ) => {
-        if (!result.destination) return;
-        const updated = Array.from(list);
-        const [moved] = updated.splice(result.source.index, 1);
-        updated.splice(result.destination.index, 0, moved);
-        setList(updated);
-    };
-
-    return (
-        <div className="col-span-3 flex flex-col gap-4">
-            {/* 대표 이미지 */}
-            <div className="border-b border-slate-200 pb-2">
-                <div className="flex justify-between items-center">
-                    <span className="text-admin-small font-semibold">대표 이미지</span>
-                    <label className="cursor-pointer px-2 py-1 bg-purple-600 text-white rounded text-admin-small hover:bg-purple-700 transition">
-                        사진 선택
-                        <input
-                            type="file"
-                            className="hidden"
-                            onChange={(e) => e.target.files && handleMainImageUpload(index, e.target.files[0])}
-                        />
-                    </label>
-                </div>
-
-                {(mainImage || tempMainImage) && (
-                    <div className="flex items-center gap-2 mt-1">
-                        <img
-                            src={tempMainImage ? URL.createObjectURL(tempMainImage) : mainImage}
-                            alt="preview"
-                            className="w-5 h-5 object-cover cursor-pointer rounded"
-                        />
-                        <span className="text-admin-small">
-                            {tempMainImage ? tempMainImage.name : getFileName(mainImage)}
-                        </span>
-                        {removeMainImage && (
-                            <button className="text-red-500 text-admin-small" onClick={() => removeMainImage(index)}>X</button>
-                        )}
+      <DragDropContext onDragEnd={onReorder}>
+        <Droppable droppableId={`list-${type}`}>
+          {(provided) => (
+            <div {...provided.droppableProps} ref={provided.innerRef} className="space-y-1">
+              {images.map((img, i) => (
+                <Draggable key={img.id} draggableId={img.id} index={i}>
+                  {(prov) => (
+                    <div
+                      ref={prov.innerRef}
+                      {...prov.draggableProps}
+                      {...prov.dragHandleProps}
+                      className="group flex items-center gap-2 bg-slate-50 p-1.5 rounded-md border border-transparent hover:border-slate-200"
+                    >
+                      <img 
+                        src={img.file ? URL.createObjectURL(img.file) : img.url} 
+                        className="w-8 h-8 object-cover rounded shadow-sm" 
+                        alt="preview"
+                        onError={(e) => (e.currentTarget.src = "https://via.placeholder.com/80")}
+                      />
+                      <span className="flex-1 text-[11px] truncate text-slate-600">
+                        {img.file ? img.file.name : getFileName(img.url || "")}
+                      </span>
+                      <button 
+                        onClick={() => onRemove(img.id)}
+                        className="text-red-400 opacity-0 group-hover:opacity-100 transition-opacity px-1"
+                      >
+                        ✕
+                      </button>
                     </div>
-                )}
+                  )}
+                </Draggable>
+              ))}
+              {provided.placeholder}
             </div>
-      {/* 썸네일 이미지 */}
-      <div className="border-b border-slate-200 pb-2">
-        <div className="flex justify-between items-center">
-          <span className="text-admin-small font-semibold">썸네일 이미지</span>
-          <label className="ml-auto cursor-pointer px-2 py-1 bg-slate-200 rounded text-admin-small hover:bg-slate-300 transition">
-            사진 선택
-            <input
-              type="file"
-              className="hidden"
-              multiple
-              onChange={(e) => {
-                if (!e.target.files) return;
-                const files = Array.from(e.target.files);
-                handleThumbnailUpload(index, files); // items state 업데이트
-                setThumbList(prev => [...prev, ...files]); // UI용 로컬 state 업데이트
-              }}
-            />
-          </label>
-        </div>
-
-        <DragDropContext onDragEnd={(res) => handleDragEnd(res, thumbList, setThumbList)}>
-          <Droppable droppableId={`thumb-${index}`} direction="vertical">
-            {(provided) => (
-              <div ref={provided.innerRef} {...provided.droppableProps} className="flex flex-col gap-1 mt-1">
-                {thumbList.map((fileOrUrl, i) => (
-                  <Draggable key={i} draggableId={`thumb-${index}-${i}`} index={i}>
-                    {(prov) => (
-                      <div ref={prov.innerRef} {...prov.draggableProps} {...prov.dragHandleProps}
-                        className="flex items-center gap-2 text-admin-small">
-                        <img
-                          src={fileOrUrl instanceof File ? URL.createObjectURL(fileOrUrl) : fileOrUrl}
-                          className="w-5 h-5 object-cover cursor-pointer rounded"
-                        />
-                        <span>{fileOrUrl instanceof File ? fileOrUrl.name : getFileName(fileOrUrl)}</span>
-                        {removeThumbnailImage && (
-                          <button
-                            className="text-red-500 text-admin-small"
-                            onClick={() => {
-                              removeThumbnailImage(index, i);
-                              setThumbList(prev => prev.filter((_, idx) => idx !== i));
-                            }}
-                          >X</button>
-                        )}
-                      </div>
-                    )}
-                  </Draggable>
-                ))}
-                {provided.placeholder}
-              </div>
-            )}
-          </Droppable>
-        </DragDropContext>
-      </div>
-
-      {/* 상세 이미지 */}
-      <div className="pb-2">
-        <div className="flex justify-between items-center">
-          <span className="text-admin-small font-semibold">상세 이미지</span>
-          <label className="ml-auto cursor-pointer px-2 py-1 bg-slate-200 rounded text-admin-small hover:bg-slate-300 transition">
-            사진 선택
-            <input
-              type="file"
-              className="hidden"
-              multiple
-              onChange={(e) => {
-                if (!e.target.files) return;
-                const files = Array.from(e.target.files);
-                handleDetailUpload(index, files);
-                setDetailList(prev => [...prev, ...files]); // UI용 로컬 state 업데이트
-              }}
-            />
-          </label>
-        </div>
-
-        <DragDropContext onDragEnd={(res) => handleDragEnd(res, detailList, setDetailList)}>
-          <Droppable droppableId={`detail-${index}`} direction="vertical">
-            {(provided) => (
-              <div ref={provided.innerRef} {...provided.droppableProps} className="flex flex-col gap-1 mt-1">
-                {detailList.map((fileOrUrl, i) => (
-                  <Draggable key={i} draggableId={`detail-${index}-${i}`} index={i}>
-                    {(prov) => (
-                      <div ref={prov.innerRef} {...prov.draggableProps} {...prov.dragHandleProps} className="flex items-center gap-2 text-admin-small">
-                        <img
-                          src={fileOrUrl instanceof File ? URL.createObjectURL(fileOrUrl) : fileOrUrl}
-                          alt=""
-                          className="w-5 h-5 object-cover cursor-pointer rounded"
-                          onClick={() => setPreviewImage(fileOrUrl instanceof File ? URL.createObjectURL(fileOrUrl) : fileOrUrl)}
-                        />
-                        <span>{fileOrUrl instanceof File ? fileOrUrl.name : getFileName(fileOrUrl)}</span>
-                        {removeDetailImage && (
-                          <button
-                            className="text-red-500 text-admin-small"
-                            onClick={() => {
-                              removeDetailImage(index, i);
-                              setDetailList(prev => prev.filter((_, idx) => idx !== i));
-                            }}
-                          >
-                            X
-                          </button>
-                        )}
-                      </div>
-                    )}
-                  </Draggable>
-                ))}
-                {provided.placeholder}
-              </div>
-            )}
-          </Droppable>
-        </DragDropContext>
-      </div>
-
-      {/* 이미지 모달 */}
-      {previewImage && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50" onClick={() => setPreviewImage(null)}>
-          <img src={previewImage} className="max-w-[90%] max-h-[90%] rounded" />
-        </div>
-      )}
+          )}
+        </Droppable>
+      </DragDropContext>
     </div>
   );
 }
