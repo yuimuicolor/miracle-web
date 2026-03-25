@@ -137,13 +137,10 @@ export default function ProductDetailTop({ product }: ProductDetailTopProps) {
 
   const thumbnails =
     (product.thumbnailImages || []).length > 0
-      ? product.thumbnailImages
-      : [product.image];
+      ? product.thumbnailImages.map(String)
+      : [String(product.image)];
 
-  const detailImages =
-    (product?.detailImages?.length ?? 0) > 0
-      ? product.detailImages
-      : [product.image];
+  const detailImages = product.detailImages?.map(String) || [];
 
   // 1. 마운트 상태 관리
   useEffect(() => {
@@ -160,7 +157,7 @@ export default function ProductDetailTop({ product }: ProductDetailTopProps) {
 
     [thumbnails[nextIndex], thumbnails[prevIndex]].forEach((src) => {
       const img = new window.Image();
-      img.src = src;
+      img.src = String(src);
     });
   }, [activeIndex, thumbnails]);
 
@@ -225,7 +222,7 @@ export default function ProductDetailTop({ product }: ProductDetailTopProps) {
             onMouseUp={handleMouseUp}
           >
             <Image
-              src={thumbnails[activeIndex]}
+              src={String(thumbnails[activeIndex])}
               alt={`${product.mainTitle} 썸네일 ${activeIndex + 1}`}
               fill
               priority={activeIndex === 0}
@@ -244,29 +241,32 @@ export default function ProductDetailTop({ product }: ProductDetailTopProps) {
               aria-label="썸네일 확대 보기"
               onClick={() =>
                 openZoomModal(
-                  thumbnails[activeIndex],
+                  String(thumbnails[activeIndex]),
                   `${product.mainTitle} 썸네일 ${activeIndex + 1}`,
                 )
               }
             />
 
-            <button
-              type="button"
-              className={`${STYLE.arrowButton} ${STYLE.arrowLeft}`}
-              aria-label="이전 썸네일"
-              onClick={() => moveSlide("prev")}
-            >
-              <ChevronLeft size={40} />
-            </button>
+            {thumbnails.length > 1 && (
+              <>
+                <button
+                  type="button"
+                  className={`${STYLE.arrowButton} ${STYLE.arrowLeft}`}
+                  aria-label="이전 썸네일"
+                  onClick={() => moveSlide("prev")}
+                >
+                  <ChevronLeft size={40} />
+                </button>
 
-            <button
-              type="button"
-              className={`${STYLE.arrowButton} ${STYLE.arrowRight}`}
-              aria-label="다음 썸네일"
-              onClick={() => moveSlide("next")}
-            >
-              <ChevronRight size={40} />
-            </button>
+                <button
+                  type="button"
+                  className={`${STYLE.arrowButton} ${STYLE.arrowRight}`}
+                  aria-label="다음 썸네일"
+                  onClick={() => moveSlide("next")}
+                >
+                  <ChevronRight size={40} />
+                </button>
+              </>)}
           </div>
 
           <div className={STYLE.dotRow}>
@@ -282,21 +282,25 @@ export default function ProductDetailTop({ product }: ProductDetailTopProps) {
           </div>
         </div>
 
-        <div className={STYLE.detailImages}>
-          {detailImages.map((src, index) => (
-            <div key={`${src}-${index}`} className={STYLE.detailImageWrap}>
-              <Image
-                src={src}
-                alt={`${product.mainTitle} 상세 이미지 ${index + 1}`}
-                width={1500}
-                height={1000}
-                className="w-full h-auto object-contain"
-                unoptimized={true}
-                draggable={false}
-              />
-            </div>
-          ))}
-        </div>
+        {detailImages.length > 0 && (
+          <div className={STYLE.detailImages}>
+            {detailImages.map((src, index) => (
+              <div key={`${src}-${index}`} className={STYLE.detailImageWrap}>
+                <Image
+                  src={String(src)}
+                  alt={`${product.mainTitle} 상세 이미지 ${index + 1}`}
+                  width={1500}
+                  height={1000}
+                  className="w-full h-auto object-contain"
+                  unoptimized={true}
+                  draggable={false}
+                />
+              </div>
+            ))}
+          </div>
+        )}
+
+
       </div>
 
       <div className={STYLE.rightCol}>
@@ -325,50 +329,54 @@ export default function ProductDetailTop({ product }: ProductDetailTopProps) {
 
         <p className={STYLE.desc}>{product.desc}</p>
 
-        <a
-          href={product.purchaseLink}
-          target="_blank"
-          rel="noopener noreferrer"
-          className={STYLE.buyButton}
-        >
-          <span className="flex items-center gap-[0.6rem]">
-            구매하러 가기
-            <ExternalLink size={20} strokeWidth={2} />
-          </span>
-        </a>
+        {/* 구매하러 가기 버튼은 구매 링크 존재할 때에만 노출 */}
+        {product.purchaseLink && (
+          <a
+            href={product.purchaseLink}
+            target="_blank"
+            rel="noopener noreferrer"
+            className={STYLE.buyButton}
+          >
+            <span className="flex items-center gap-[0.6rem]">
+              구매하러 가기
+              <ExternalLink size={20} strokeWidth={2} />
+            </span>
+          </a>
+        )}
+
       </div>
 
       {isMounted && isModalOpen
         ? createPortal(
+          <div
+            className={STYLE.modal}
+            onClick={() => setIsModalOpen(false)}
+            role="dialog"
+            aria-modal="true"
+          >
             <div
-              className={STYLE.modal}
-              onClick={() => setIsModalOpen(false)}
-              role="dialog"
-              aria-modal="true"
+              className={STYLE.modalInner}
+              onClick={(event) => event.stopPropagation()}
             >
-              <div
-                className={STYLE.modalInner}
-                onClick={(event) => event.stopPropagation()}
+              <Image
+                width={500}
+                height={500}
+                src={modalSrc}
+                alt={modalAlt}
+                className={STYLE.modalImage}
+              />
+              <button
+                type="button"
+                className={STYLE.modalClose}
+                onClick={() => setIsModalOpen(false)}
+                aria-label="상세 이미지 닫기"
               >
-                <Image
-                  width={500}
-                  height={500}
-                  src={modalSrc}
-                  alt={modalAlt}
-                  className={STYLE.modalImage}
-                />
-                <button
-                  type="button"
-                  className={STYLE.modalClose}
-                  onClick={() => setIsModalOpen(false)}
-                  aria-label="상세 이미지 닫기"
-                >
-                  ×
-                </button>
-              </div>
-            </div>,
-            document.body,
-          )
+                ×
+              </button>
+            </div>
+          </div>,
+          document.body,
+        )
         : null}
     </div>
   );

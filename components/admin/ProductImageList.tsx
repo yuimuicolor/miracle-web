@@ -24,7 +24,7 @@ export function ProductImageList({ type, images, onUpload, onRemove, onReorder }
   return (
     <div className="space-y-2">
       <div className="flex justify-between items-center">
-        <span className="text-admin-small font-bold">{type === "thumbnail" ? "썸네일" : "상세 이미지"}</span>
+        <span className="text-admin-small font-bold">{type === "thumbnail" ? <>썸네일 <span className="text-blue-600">*</span></> : "상세 이미지"}</span>
         <label className="cursor-pointer text-[14px] font-semibold bg-slate-100 px-2 py-1 rounded hover:bg-slate-200">
           추가
           <input 

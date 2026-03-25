@@ -115,7 +115,7 @@ export const useProductManager = () => {
 
     // 1. 유효하지 않은 아이템 찾기 (대표 이미지, 제목이 없는 경우)
     const invalidItem = activeItems.find(
-      (i) => (!i.image && !i.tempMainFile) || !i.mainTitle,
+      (i) => (!i.image && !i.tempMainFile) || !i.mainTitle || (!i.thumbnailImages || i.thumbnailImages.length === 0),
     );
 
     if (invalidItem) {
@@ -123,9 +123,13 @@ export const useProductManager = () => {
       if (!invalidItem.mainTitle) {
         alert("❌ 모든 상품은 메인 제목이 필요합니다.");
       }
-      // 3. 이미지 둘 다 없는 경우 체크
+      // 3. 대표 이미지 없는 경우 체크
       else if (!invalidItem.image && !invalidItem.tempMainFile) {
-        alert("❌ 모든 상품은 메인 이미지가 필요합니다.");
+        alert("❌ 모든 상품은 대표 이미지가 필요합니다.");
+      }
+      // 4. 썸네일 이미지 없는 경우 체크
+      else if (!invalidItem.thumbnailImages || invalidItem.thumbnailImages.length === 0) {
+        alert("❌ 모든 상품은 최소 1개 이상의 썸네일 이미지가 필요합니다.");
       }
 
       return; // 검사 걸리면 중단
