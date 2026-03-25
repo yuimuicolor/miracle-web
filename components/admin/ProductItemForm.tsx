@@ -48,7 +48,7 @@ export default function ProductItemForm({
   // 1. 메인 이미지 변경 (무조건 1개)
   const handleMainChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
-      updateItem(index, "tempMainFile", URL.createObjectURL(e.target.files[0]));
+      updateItem(index, "tempMainFile", e.target.files[0]);
     }
   };
 
@@ -69,14 +69,26 @@ export default function ProductItemForm({
 
 
 
-  // 4. 리스트 내 순서 변경 (DnD)
-  const handleReorder = (field: "thumbnailImages" | "detailImages", result: DropResult) => {
-    if (!result.destination) return;
-    const list = Array.from(item[field]);
-    const [moved] = list.splice(result.source.index, 1);
-    list.splice(result.destination.index, 0, moved);
-    updateItem(index, field, list);
-  };
+// 4. 리스트 내 순서 변경 (DnD)
+const handleReorder = (field: "thumbnailImages" | "detailImages", result: DropResult) => {
+  if (!result.destination) return;
+
+  // 1. 기존 리스트 복사
+  const list = Array.from(item[field]);
+  
+  // 2. 드래그 앤 드롭으로 위치 변경
+  const [moved] = list.splice(result.source.index, 1);
+  list.splice(result.destination.index, 0, moved);
+
+  // 3. 변경된 배열 순서에 맞춰 displayOrder를 1부터 다시 매김
+  const updatedList = list.map((slot, idx) => ({
+    ...slot,
+    displayOrder: idx + 1, // 1, 2, 3... 순서대로 부여
+  }));
+
+  // 4. 부모 컴포넌트의 상태 업데이트
+  updateItem(index, field, updatedList);
+};
 
 
 
@@ -95,6 +107,7 @@ export default function ProductItemForm({
                   className="w-full h-full object-cover"
                   fill
                   unoptimized={true}
+                  loading="eager"
                   alt="Main Product Image"
                 />
               ) : (

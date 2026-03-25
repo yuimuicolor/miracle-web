@@ -87,26 +87,76 @@ export const useProductManager = () => {
   // 5. 드래그 앤 드롭 순서 변경 (전체 상품 순서)
   const onReorder = (result: DropResult) => {
     if (!result.destination) return;
-    const newItems = Array.from(items);
-    const [moved] = newItems.splice(result.source.index, 1);
-    newItems.splice(result.destination.index, 0, moved);
-    setItems(newItems.map((item, idx) => ({ ...item, displayOrder: idx + 1 })));
+
+    // 1. '삭제 예정'인 아이템 제거
+    const deletedItems = items.filter((item) => item.isDeleted);
+    // 2. '삭제 예정'이 아닌 아이템만 필터링
+    const activeItems = items.filter((item) => !item.isDeleted);
+
+    // 3. 순서 변경
+    const reorderedActive = Array.from(activeItems);
+    const [moved] = reorderedActive.splice(result.source.index, 1);
+    reorderedActive.splice(result.destination.index, 0, moved);
+
+    // 4. 변경된 순서에 맞게 displayOrder 업데이트 (1부터 시작)
+    const updatedActive = reorderedActive.map((item, idx) => ({
+      ...item,
+      displayOrder: idx + 1,
+    }));
+
+    // 5. 삭제 예정 아이템은 기존 displayOrder 유지하면서 뒤에 붙이기
+    setItems([...updatedActive, ...deletedItems]);
   };
 
   // 6. 이미지 압축 및 업로드 핵심 로직
-  const uploadAndGetUrl = async (file: File, path: string) => {
-    // 타입 에러 방지를 위해 any 캐스팅 후 호출
-    const compressed = await (imageCompression as any).default(
-      file,
-      compressOptions,
-    );
-    const { error } = await supabase.storage
-      .from("products")
-      .upload(path, compressed, { upsert: true });
+const uploadAndGetUrl = async (file: File, path: string) => {
+    const compressed = await (imageCompression as any).default(file, compressOptions);
+    const { error } = await supabase.storage.from("products").upload(path, compressed, { upsert: true });
     if (error) throw error;
     const { data } = supabase.storage.from("products").getPublicUrl(path);
     return data.publicUrl;
   };
+
+  // 6-1. 리스트 이미지 처리 (청소 후 재업로드)
+const processList = async (list: ImageSlot[], type: string, folder: string) => {
+  const activeFileNames: string[] = [];
+
+  const uploadPromises = list.map(async (slot) => {
+    // 1. 이미 업로드된 기존 이미지인 경우
+    if (slot.url && !slot.file) {
+      const fileName = slot.url.split('/').pop()?.split('?')[0] || "";
+      activeFileNames.push(fileName); // 현재 사용 중인 파일 목록에 추가
+      return slot.url;
+    }
+
+    // 2. 새로 추가된 파일인 경우 (UUID로 이름 생성)
+    if (slot.file) {
+      const uniqueName = `${crypto.randomUUID()}.webp`; // 파일명이 같아도 여기서 갈라짐!
+      const targetPath = `${folder}/${type}/${uniqueName}`;
+      
+      const url = await uploadAndGetUrl(slot.file, targetPath);
+      activeFileNames.push(uniqueName);
+      return url;
+    }
+    return "";
+  });
+
+  const finalUrls = await Promise.all(uploadPromises);
+
+  // 3. [스토리지 절약] 실제 리스트(activeFileNames)에 없는 파일들만 골라 삭제
+  const { data: storageFiles } = await supabase.storage.from("products").list(`${folder}/${type}`);
+  if (storageFiles) {
+    const filesToDelete = storageFiles
+      .filter(f => !activeFileNames.includes(f.name)) // 현재 UI에 없는 파일들만 필터링
+      .map(f => `${folder}/${type}/${f.name}`);
+    
+    if (filesToDelete.length > 0) {
+      await supabase.storage.from("products").remove(filesToDelete); // 찌꺼기 파일 삭제
+    }
+  }
+
+  return finalUrls.filter(url => url !== "");
+};
 
   // 7. 최종 저장
   const handleSave = async () => {
@@ -115,7 +165,11 @@ export const useProductManager = () => {
 
     // 1. 유효하지 않은 아이템 찾기 (대표 이미지, 제목이 없는 경우)
     const invalidItem = activeItems.find(
-      (i) => (!i.image && !i.tempMainFile) || !i.mainTitle || (!i.thumbnailImages || i.thumbnailImages.length === 0),
+      (i) =>
+        (!i.image && !i.tempMainFile) ||
+        !i.mainTitle ||
+        !i.thumbnailImages ||
+        i.thumbnailImages.length === 0,
     );
 
     if (invalidItem) {
@@ -128,7 +182,10 @@ export const useProductManager = () => {
         alert("❌ 모든 상품은 대표 이미지가 필요합니다.");
       }
       // 4. 썸네일 이미지 없는 경우 체크
-      else if (!invalidItem.thumbnailImages || invalidItem.thumbnailImages.length === 0) {
+      else if (
+        !invalidItem.thumbnailImages ||
+        invalidItem.thumbnailImages.length === 0
+      ) {
         alert("❌ 모든 상품은 최소 1개 이상의 썸네일 이미지가 필요합니다.");
       }
 
@@ -136,101 +193,61 @@ export const useProductManager = () => {
     }
 
     setIsSaving(true);
+try {
+    // 1. 삭제 대상 제거
+    const idsToDelete = items.filter((i) => i.isDeleted && !i.isNew).map((i) => i.id);
+    if (idsToDelete.length > 0) await supabase.from("products").delete().in("id", idsToDelete);
 
-    try {
-      // 1. 삭제 처리 (isDeleted가 true인 것들 DB에서 즉시 삭제)
-      const idsToDelete = items
-        .filter((i) => i.isDeleted && !i.isNew)
-        .map((i) => i.id);
-      if (idsToDelete.length > 0) {
-        const { error: delError } = await supabase
-          .from("products")
-          .delete()
-          .in("id", idsToDelete);
-        if (delError) throw delError;
-      }
+    const activeItems = items.filter((i) => !i.isDeleted);
 
-      // 2. 저장할 아이템들 가공
-      const itemsToSave = items.filter((i) => !i.isDeleted);
-
-      const processedItems = await Promise.all(
-        itemsToSave.map(async (item, idx) => {
-          const folder = `product-${String(item.id).slice(-6)}`;
-
-          // 메인 이미지 업로드
-          let finalMain = item.image;
-          if (item.tempMainFile) {
-            finalMain = await uploadAndGetUrl(
-              item.tempMainFile,
-              `${folder}/main.webp`,
-            );
-          }
-
-          // 리스트 이미지 처리 함수
-          const processList = async (list: ImageSlot[], type: string) => {
-            return Promise.all(
-              list.map(async (slot, i) => {
-                if (slot.file) {
-                  return await uploadAndGetUrl(
-                    slot.file,
-                    `${folder}/${type}/${i + 1}.webp`,
-                  );
-                }
-                return slot.url || "";
-              }),
-            );
-          };
-
-          const finalThumbs = await processList(item.thumbnailImages, "thumb");
-          const finalDetails = await processList(item.detailImages, "detail");
-
-          // ✅ 1. 기본 저장 객체 (id 제외)
-          const saveObject: any = {
-            subTitle: item.subTitle,
-            mainTitle: item.mainTitle,
-            desc: item.desc,
-            category: item.category,
-            options: item.options,
-            image: finalMain,
-            thumbnailImages: finalThumbs,
-            detailImages: finalDetails,
-            purchaseLink: item.purchaseLink,
-            isVisible: item.isVisible,
-            displayOrder: item.displayOrder,
-          };
-
-          // ✅ 2. 기존 상품일 때만 id를 "추가"한다
-          // 새 상품(isNew: true)일 때는 saveObject에 'id'라는 키 자체가 생성되지 않음!
-          if (!item.isNew) {
-            saveObject.id = item.id;
-          }
-
-          return saveObject;
-        }),
-      );
-
-      // 3. DB Upsert
-      const itemsToInsert = processedItems.filter((item) => !item.id);
-      const itemsToUpdate = processedItems.filter((item) => item.id);
-
-      if (itemsToInsert.length > 0) {
-        const { error } = await supabase.from("products").insert(itemsToInsert);
+    // 2. 저장 및 이미지 처리
+    const finalItemsToUpdate = await Promise.all(activeItems.map(async (item) => {
+      let currentId = item.id;
+      
+      // [중요] 신규 아이템은 먼저 DB에 넣어 ID를 확정받음
+      if (item.isNew) {
+        const { data, error } = await supabase.from("products")
+          .insert({ mainTitle: item.mainTitle, displayOrder: item.displayOrder })
+          .select().single();
         if (error) throw error;
-      }
-      if (itemsToUpdate.length > 0) {
-        const { error } = await supabase.from("products").upsert(itemsToUpdate);
-        if (error) throw error;
+        currentId = data.id;
       }
 
-      alert("✅ 저장 완료!");
-      await fetchProducts(); // 최신 데이터로 리프레시
-    } catch (e: any) {
-      console.error("저장 중 상세 오류:", e);
-      alert(`❌ 오류: ${e.message || "저장에 실패했습니다."}`);
-    } finally {
-      setIsSaving(false);
-    }
-  };
+      const folder = `product-${String(currentId).padStart(2, "0")}`;
+
+      // 이미지 업로드 (업로드 시 UUID 사용으로 덮어쓰기 문제 해결)
+      let finalMain = item.image;
+      if (item.tempMainFile) {
+        finalMain = await uploadAndGetUrl(item.tempMainFile, `${folder}/main.webp`);
+      }
+
+      const finalThumbs = await processList(item.thumbnailImages, "thumb", folder);
+      const finalDetails = await processList(item.detailImages, "detail", folder);
+
+      return {
+        ...item,
+        id: currentId,
+        image: finalMain,
+        thumbnailImages: finalThumbs,
+        detailImages: finalDetails,
+        isNew: false
+      };
+    }));
+
+    // 3. 최종 전체 업데이트
+    const { error } = await supabase.from("products").upsert(
+      finalItemsToUpdate.map(({ tempMainFile, isNew, isDeleted, ...rest }) => rest)
+    );
+    
+    if (error) throw error;
+    alert("✅ 저장이 완료되었습니다!");
+    await fetchProducts();
+  } catch (e: any) {
+    alert(`❌ 오류: ${e.message}`);
+  } finally {
+    setIsSaving(false);
+  }
+};
 
   return {
     items,

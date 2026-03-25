@@ -317,7 +317,7 @@ useEffect(() => {
           >
             {[...products, ...products].map((item, index) => (
               <div
-                key={index}
+                key={`${item.id}-${index}`}
                 data-product-card="true"
                 className={STYLE.cardWrap}
               >

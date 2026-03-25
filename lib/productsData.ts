@@ -4,6 +4,7 @@ export interface ImageSlot {
   id: string; // 로컬 프리뷰 및 DnD를 위한 고유 키
   file?: File; // 새로 업로드할 파일
   url?: string; // 기존 DB에 저장된 URL
+  displayOrder?: number; // 이미지 순서 관리용 (옵션)
 }
 
 export interface ProductItem {
