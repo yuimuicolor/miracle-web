@@ -2,8 +2,8 @@ import { useState, useEffect } from "react";
 import { supabase } from "@/lib/supabase";
 import { ProductItem, ImageSlot } from "@/lib/productsData";
 import { DropResult } from "@hello-pangea/dnd";
-import { toggleDeleteState, uploadImage } from "@/lib/supabase-utils";
-import { ensureRecordId } from "@/lib/api/supabase-service";
+import { getFileNameFromUrl, toggleDeleteState, uploadImage } from "@/lib/supabase-utils";
+import { cleanupStorageFiles, ensureRecordId } from "@/lib/api/supabase-service";
 
 export const useProductManager = () => {
   const [items, setItems] = useState<ProductItem[]>([]);
@@ -103,45 +103,30 @@ export const useProductManager = () => {
     type: string,
     folder: string,
   ) => {
-    const activeFileNames: string[] = [];
-
     const uploadPromises = list.map(async (slot) => {
-      // 1. 이미 업로드된 기존 이미지인 경우
-      if (slot.url && !slot.file) {
-        const fileName = slot.url.split("/").pop()?.split("?")[0] || "";
-        activeFileNames.push(fileName); // 현재 사용 중인 파일 목록에 추가
-        return slot.url;
-      }
-
-      // 2. 새로 추가된 파일인 경우 (UUID로 이름 생성)
-      if (slot.file) {
-        const uniqueName = `${crypto.randomUUID()}.webp`; // 파일명이 같아도 여기서 갈라짐!
-        const targetPath = `${folder}/${type}/${uniqueName}`;
-
-        const url = await uploadImage(slot.file, "products", targetPath);
-        activeFileNames.push(uniqueName);
-        return url;
-      }
-      return "";
-    });
-
-    const finalUrls = await Promise.all(uploadPromises);
-
-    // 3. [스토리지 절약] 실제 리스트(activeFileNames)에 없는 파일들만 골라 삭제
-    const { data: storageFiles } = await supabase.storage
-      .from("products")
-      .list(`${folder}/${type}`);
-    if (storageFiles) {
-      const filesToDelete = storageFiles
-        .filter((f) => !activeFileNames.includes(f.name)) // 현재 UI에 없는 파일들만 필터링
-        .map((f) => `${folder}/${type}/${f.name}`);
-
-      if (filesToDelete.length > 0) {
-        await supabase.storage.from("products").remove(filesToDelete); // 찌꺼기 파일 삭제
-      }
+      // [Case A] 새로 추가된 파일이 있는 경우 -> 무조건 업로드
+    if (slot.file) {
+      const uniqueName = `${crypto.randomUUID()}_${Date.now()}.webp`;
+      const targetPath = `${folder}/${type}/${uniqueName}`;
+      return await uploadImage(slot.file, "products", targetPath);
+    }
+    
+    // [Case B] 파일은 없고 기존 URL만 있는 경우 -> 유지
+    if (slot.url) {
+      return slot.url;
     }
 
-    return finalUrls.filter((url) => url !== "");
+    return null;
+    });
+
+    const finalUrls = (await Promise.all(uploadPromises)).filter((url): url is string => !!url);
+
+    // 2. 청소 로직: 현재 DB에 저장될 finalUrls에 포함되지 않은 파일들은 스토리지에서 삭제
+  // 여기서 getFileNameFromUrl을 써서 실제 파일명만 추출해야 해요.
+  const activeFileNames = finalUrls.map(url => getFileNameFromUrl(url));
+  await cleanupStorageFiles("products", `${folder}/${type}`, activeFileNames);
+
+  return finalUrls; // 이 배열이 그대로 DB의 column으로 들어갑니다.
   };
 
   // 7. 최종 저장
@@ -204,11 +189,9 @@ export const useProductManager = () => {
           // 이미지 업로드 (업로드 시 UUID 사용으로 덮어쓰기 문제 해결)
           let finalMain = item.image;
           if (item.tempMainFile) {
-            finalMain = await uploadImage(
-              item.tempMainFile,
-              "products",
-              `${folder}/main.webp`,
-            );
+            const mainName = `main_${Date.now()}.webp`; // 유니크한 이름
+            await cleanupStorageFiles("products", folder, [mainName], "main_");
+            finalMain = await uploadImage(item.tempMainFile, "products", `${folder}/${mainName}`);
           }
 
           const finalThumbs = await processList(
@@ -233,16 +216,15 @@ export const useProductManager = () => {
         }),
       );
 
-      // 3. 최종 전체 업데이트
-      const { error } = await supabase
-        .from("products")
-        .upsert(
-          finalItemsToUpdate.map(
-            ({ tempMainFile, isNew, isDeleted, ...rest }) => rest,
-          ),
-        );
+      const dataToUpsert = finalItemsToUpdate.map(
+        ({ tempMainFile, isNew, isDeleted, ...rest }) => ({
+            ...rest,
+        })
+      );
 
+      const { error } = await supabase.from("products").upsert(dataToUpsert);
       if (error) throw error;
+
       alert("✅ 저장이 완료되었습니다!");
       await fetchProducts();
     } catch (e: any) {
