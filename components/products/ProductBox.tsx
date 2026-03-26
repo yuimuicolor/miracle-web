@@ -47,9 +47,9 @@ export default function ProductBox({ item, index }: ProductBoxProps) {
     <article className={STYLE.card}>
       {item.image ? (
         <Image
-          src={item.image}
+          src={String(item.image)}
           alt={item.mainTitle}
-          unoptimized={true}
+          unoptimized
           fill
           draggable={false}
           priority={isFirstImage}

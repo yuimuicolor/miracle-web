@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
+import { supabase } from "@/lib/supabase";
 
 export default function AdminLoginPage() {
   const [userId, setUserId] = useState("");
@@ -12,7 +13,7 @@ export default function AdminLoginPage() {
 
   const handleLogin = async (e: React.SyntheticEvent) => {
     e.preventDefault();
-    
+
     // NextAuth의 signIn 함수 호출
     const result = await signIn("credentials", {
       username: userId,
@@ -22,14 +23,28 @@ export default function AdminLoginPage() {
 
     if (result?.error) {
       setError("아이디/비밀번호 오류입니다. 다시 시도해주세요.");
+    } else if (result?.ok) {
+      // 💡 [핵심] 2. 브라우저의 Supabase 객체도 직접 로그인 시킵니다.
+      // 이렇게 해야 브라우저 쿠키/로컬스토리지에 Supabase 전용 '신분증'이 저장돼요!
+      const { error } = await supabase.auth.signInWithPassword({
+        email: process.env.NEXT_PUBLIC_SUPABASE_ADMIN_EMAIL!, // 공개 가능한 관리자 계정 이메일
+        password: process.env.NEXT_PUBLIC_SUPABASE_ADMIN_PASSWORD!,
+      });
+
+      if (error) {
+        alert("Supabase 인증 실패: " + error.message);
+        return;
+      }
+
+      // 둘 다 성공하면 대시보드로 이동
+      window.location.href = "/admin/dashboard";
     } else {
-        // 로그인 성공 시 관리자 대시보드로 이동
-      router.push("/admin");
-      router.refresh();
+      alert("로그인 정보가 일치하지 않습니다.");
     }
   };
 
-return (
+
+  return (
     <div className="flex h-full items-center justify-center bg-slate-100 text-black font-noto tracking-tight">
       <div className="w-full max-w-2xl p-8 bg-white rounded-2xl shadow-xl">
         <h1 className="text-admin-title font-bold text-center mb-8">ADMIN</h1>

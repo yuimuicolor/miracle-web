@@ -2,19 +2,7 @@ import { useState, useEffect, useRef } from "react";
 import { supabase } from "@/lib/supabase";
 import { uploadImage, getFileNameFromUrl } from "@/lib/supabase-utils";
 import { toggleDeleteState } from "@/lib/supabase-utils";
-
-export interface GalleryItem {
-  id: number;
-  imageUrl: string;
-  subtitle: string;
-  mainTitle: string;
-  isVisible: boolean;
-  displayOrder: number;
-  isDeleted?: boolean;
-  isNew?: boolean;
-  previewUrl?: string;
-  tempFile?: File;
-}
+import { GalleryItem, getAllGalleryForAdmin } from "@/lib/galleryService";
 
 export const useGalleryManager = () => {
   const [items, setItems] = useState<GalleryItem[]>([]);
@@ -25,13 +13,16 @@ export const useGalleryManager = () => {
   // 1. 데이터 불러오기
   const fetchGallery = async () => {
     setLoading(true);
-    const { data } = await supabase
-      .from("gallery")
-      .select("*")
-      .order("displayOrder", { ascending: true });
-
-    if (data) setItems(data);
-    setLoading(false);
+    try {
+      // 아까 합친 파일에서 가져온 함수!
+      const data = await getAllGalleryForAdmin();
+      setItems(data);
+    } catch (error) {
+      console.error("데이터 로딩 중 에러 발생:", error);
+      alert("데이터를 불러오지 못했습니다. 새로고침 해보세요!");
+    } finally {
+      setLoading(false);
+    }
   };
 
   useEffect(() => {

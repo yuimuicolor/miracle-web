@@ -5,10 +5,10 @@ import { useEffect, useState } from "react";
 import ZoomablePhotoCard from "@/components/gallery/ZoomablePhotoCard";
 import ScrollReveal from "@/components/ScrollReveal";
 import { HOME_REVEAL } from "@/components/sections/homeMotion";
-import { getGalleryImages, type GalleryImageItem } from "../../lib/galleryData";
 import MoreButton from "../MoreButton";
 import SectionTitle from "./common/SectionTitle";
 import { STATIC_ASSETS } from "@/lib/siteData";
+import { GalleryItem, getPublicGalleryImages } from "@/lib/galleryService";
 
 const STYLE = {
   section: `
@@ -33,11 +33,11 @@ const STYLE = {
 };
 
 export default function GallerySection() {
-  const [galleryImages, setGalleryImages] = useState<GalleryImageItem[]>([]);
+  const [galleryImages, setGalleryImages] = useState<GalleryItem[]>([]);
 
   useEffect(() => {
     const fetchGalleryImages = async () => {
-      const images = await getGalleryImages(6);
+      const images = await getPublicGalleryImages(6);
       setGalleryImages(images);
     };
 
@@ -52,7 +52,7 @@ export default function GallerySection() {
         </ScrollReveal>
 
         <div className={STYLE.grid}>
-          {galleryImages.map((image: GalleryImageItem, index) => (
+          {galleryImages.map((image: GalleryItem, index) => (
             <ScrollReveal
               key={image.id}
               className="w-full"
@@ -60,8 +60,8 @@ export default function GallerySection() {
               {...HOME_REVEAL.card}
             >
               <ZoomablePhotoCard
-              src={image.src}
-              alt={image.alt}
+              src={image.imageUrl}
+              alt={image.mainTitle}
                />
             </ScrollReveal>
           ))}

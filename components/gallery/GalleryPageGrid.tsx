@@ -7,8 +7,7 @@ import ZoomablePhotoCard from "@/components/gallery/ZoomablePhotoCard";
 import { HOME_REVEAL } from "@/components/sections/homeMotion";
 
 interface GalleryPageGridItem {
-  src: string;
-  alt: string;
+  imageUrl: string;
   subtitle: string;
   mainTitle: string;
 }
@@ -43,14 +42,14 @@ export default function GalleryPageGrid({ images }: GalleryPageGridProps) {
       <div className={STYLE.grid}>
         {visibleImages.map((image, index) => (
           <ScrollReveal
-            key={image.src}
+            key={image.imageUrl}
             className="w-full"
             delayMs={(index % PAGE_SIZE) * 60}
             {...HOME_REVEAL.card}
           >
             <ZoomablePhotoCard
-              src={image.src}
-              alt={image.alt}
+              src={image.imageUrl}
+              alt={image.mainTitle}
               mode="with-title"
               subtitle={image.subtitle}
               mainTitle={image.mainTitle}

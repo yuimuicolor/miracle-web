@@ -5,7 +5,7 @@ import GalleryPageGrid from "../../../components/gallery/GalleryPageGrid";
 import ScrollReveal from "@/components/ScrollReveal";
 import { HOME_REVEAL } from "@/components/sections/homeMotion";
 import SectionTitle from "@/components/sections/common/SectionTitle";
-import { type GalleryImageItem, getGalleryImages } from "../../../lib/galleryData";
+import { GalleryItem, getPublicGalleryImages } from "@/lib/galleryService";
 
 const STYLE = {
   section: `
@@ -21,13 +21,11 @@ const STYLE = {
 };
 
 export default function GalleryPage() {
-  const [galleryImages, setGalleryImages] = useState<GalleryImageItem[]>([]);
+  const [galleryImages, setGalleryImages] = useState<GalleryItem[]>([]);
 
-  // 2. 페이지 로드 시 데이터 가져오기
   useEffect(() => {
     const fetchAllImages = async () => {
-      // 인자 없이 호출하면 전체 데이터를 가져오도록 설계했었지? 😤
-      const data = await getGalleryImages(); 
+      const data = await getPublicGalleryImages(); 
       setGalleryImages(data);
     };
     fetchAllImages();
