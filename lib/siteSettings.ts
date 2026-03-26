@@ -32,7 +32,6 @@ export const getSiteSettings = async (): Promise<SiteSettings | null> => {
 
   if (error || !data) return null;
 
-  // 훨씬 가볍고 중복 없는 리턴!
   return {
     ...data,
     snsConfig: data.snsConfig || {

@@ -1,21 +1,13 @@
 import { useState, useEffect } from "react";
 import { supabase } from "@/lib/supabase";
-import * as imageCompression from "browser-image-compression";
 import { ProductItem, ImageSlot } from "@/lib/productsData";
 import { DropResult } from "@hello-pangea/dnd";
+import { uploadImage } from "@/lib/supabase-utils";
 
 export const useProductManager = () => {
   const [items, setItems] = useState<ProductItem[]>([]);
   const [loading, setLoading] = useState(true);
   const [isSaving, setIsSaving] = useState(false);
-
-  // WebP 변환 옵션 (유이 누나의 1920px 그리드 최적화)
-  const compressOptions = {
-    maxSizeMB: 1,
-    maxWidthOrHeight: 1920,
-    useWebWorker: true,
-    fileType: "image/webp" as const,
-  };
 
   // 1. 데이터 가져오기
   const fetchProducts = async () => {
@@ -108,15 +100,6 @@ export const useProductManager = () => {
     setItems([...updatedActive, ...deletedItems]);
   };
 
-  // 6. 이미지 압축 및 업로드 핵심 로직
-const uploadAndGetUrl = async (file: File, path: string) => {
-    const compressed = await (imageCompression as any).default(file, compressOptions);
-    const { error } = await supabase.storage.from("products").upload(path, compressed, { upsert: true });
-    if (error) throw error;
-    const { data } = supabase.storage.from("products").getPublicUrl(path);
-    return data.publicUrl;
-  };
-
   // 6-1. 리스트 이미지 처리 (청소 후 재업로드)
 const processList = async (list: ImageSlot[], type: string, folder: string) => {
   const activeFileNames: string[] = [];
@@ -134,7 +117,7 @@ const processList = async (list: ImageSlot[], type: string, folder: string) => {
       const uniqueName = `${crypto.randomUUID()}.webp`; // 파일명이 같아도 여기서 갈라짐!
       const targetPath = `${folder}/${type}/${uniqueName}`;
       
-      const url = await uploadAndGetUrl(slot.file, targetPath);
+      const url = await uploadImage(slot.file, "products", targetPath);
       activeFileNames.push(uniqueName);
       return url;
     }
@@ -218,7 +201,7 @@ try {
       // 이미지 업로드 (업로드 시 UUID 사용으로 덮어쓰기 문제 해결)
       let finalMain = item.image;
       if (item.tempMainFile) {
-        finalMain = await uploadAndGetUrl(item.tempMainFile, `${folder}/main.webp`);
+        finalMain = await uploadImage(item.tempMainFile, "products", `${folder}/main.webp`);
       }
 
       const finalThumbs = await processList(item.thumbnailImages, "thumb", folder);
