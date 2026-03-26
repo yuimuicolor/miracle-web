@@ -1,9 +1,9 @@
 import { useState, useEffect, useRef } from "react";
 import { supabase } from "@/lib/supabase";
-import { uploadImage, getFileNameFromUrl } from "@/lib/supabase-utils";
+import { uploadImage } from "@/lib/supabase-utils";
 import { toggleDeleteState } from "@/lib/supabase-utils";
 import { GalleryItem, getAllGalleryForAdmin } from "@/lib/galleryService";
-import { ensureRecordId } from "@/lib/api/supabase-service";
+import { cleanupStorageFiles, deleteMarkedItems, ensureRecordId } from "@/lib/api/supabase-service";
 
 export const useGalleryManager = () => {
   const [items, setItems] = useState<GalleryItem[]>([]);
@@ -99,92 +99,32 @@ export const useGalleryManager = () => {
 
     setIsSaving(true);
     try {
-      // [A] 삭제 처리
-      const itemsToDelete = items.filter(
-        (item) => item.isDeleted && !item.isNew,
-      );
-      if (itemsToDelete.length > 0) {
-        const deletePaths = itemsToDelete
-          .map((item) => getFileNameFromUrl(item.imageUrl))
-          .filter(Boolean) as string[];
-        const deleteIds = itemsToDelete.map((item) => item.id);
-
-        await Promise.all([
-          supabase.storage.from("gallery").remove(deletePaths),
-          supabase.from("gallery").delete().in("id", deleteIds),
-        ]);
-      }
+      // [A] 공통 함수로 삭제 처리
+      await deleteMarkedItems("gallery", items);
 
       // [B] 신규/수정 처리
-      const itemsToSave = items.filter((item) => !item.isDeleted);
+      const activeItems = items.filter((item) => !item.isDeleted);
       const finalItems = await Promise.all(
-        itemsToSave.map(async (item, index) => {
+        activeItems.map(async (item, index) => {
           let finalImageUrl = item.imageUrl;
-
-          const currentId = item.isNew
-            ? await ensureRecordId("gallery", {
-                subtitle: item.subtitle,
-                mainTitle: item.mainTitle,
-                displayOrder: index + 1,
-                isVisible: item.isVisible,
-              })
+          const currentId = item.isNew 
+            ? await ensureRecordId("gallery", { subtitle: item.subtitle, mainTitle: item.mainTitle, displayOrder: index + 1 }) 
             : item.id;
 
           if (item.tempFile) {
-            // 1. 기존 파일 및 찌꺼기 파일들 싹 청소하기
-            if (item.imageUrl || !item.isNew) {
-              const formattedId = String(currentId).padStart(2, "0");
-              const prefix = `gallery-${formattedId}_`; // 예: "gallery-01_"
-
-              // A. 스토리지에서 해당 ID로 시작하는 모든 파일 목록 가져오기
-              const { data: allFiles } = await supabase.storage
-                .from("gallery")
-                .list();
-
-              if (allFiles) {
-                // B. 파일명 중에 해당 ID를 포함한 것들만 필터링 (예: gallery-01_123, gallery-01_456...)
-                const filesToDelete = allFiles
-                  .filter((f) => f.name.startsWith(prefix))
-                  .map((f) => f.name);
-
-                if (filesToDelete.length > 0) {
-                  // C. 찾은 찌꺼기들 한 번에 다 지우기
-                  const { error: deleteError } = await supabase.storage
-                    .from("gallery")
-                    .remove(filesToDelete);
-
-                  if (deleteError)
-                    console.error("찌꺼기 파일 삭제 실패:", deleteError);
-                  else console.log("청소 완료된 파일들:", filesToDelete);
-                }
-              }
-            }
-
-            // 2. 새 파일 업로드 (기존 로직 동일)
-            const newPath = `gallery-${String(currentId).padStart(2, "0")}_${Date.now()}.webp`;
-            finalImageUrl = await uploadImage(
-              item.tempFile,
-              "gallery",
-              newPath,
-            );
+            const prefix = `gallery-${String(currentId).padStart(2, "0")}`;
+            const newName = `${prefix}_${Date.now()}.webp`;
+            // 1. 기존 파일 청소 (함수 사용)
+            await cleanupStorageFiles("gallery", "", [newName], prefix); 
+            // 2. 업로드
+            finalImageUrl = await uploadImage(item.tempFile, "gallery", newName);
           }
 
-          return {
-            id: currentId,
-            imageUrl: finalImageUrl,
-            subtitle: item.subtitle,
-            mainTitle: item.mainTitle,
-            isVisible: item.isVisible,
-            displayOrder: index + 1,
-          };
-        }),
+          return { id: currentId, imageUrl: finalImageUrl, subtitle: item.subtitle, mainTitle: item.mainTitle, isVisible: item.isVisible, displayOrder: index + 1 };
+        })
       );
 
-      const { error: upsertError } = await supabase
-        .from("gallery")
-        .upsert(finalItems);
-      if (upsertError) throw upsertError;
-
+      await supabase.from("gallery").upsert(finalItems);
       alert("✅ 갤러리 저장이 완료되었습니다.");
       await fetchGallery();
     } catch (error: any) {
