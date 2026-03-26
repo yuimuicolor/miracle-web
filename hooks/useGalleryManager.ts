@@ -3,6 +3,7 @@ import { supabase } from "@/lib/supabase";
 import { uploadImage, getFileNameFromUrl } from "@/lib/supabase-utils";
 import { toggleDeleteState } from "@/lib/supabase-utils";
 import { GalleryItem, getAllGalleryForAdmin } from "@/lib/galleryService";
+import { ensureRecordId } from "@/lib/api/supabase-service";
 
 export const useGalleryManager = () => {
   const [items, setItems] = useState<GalleryItem[]>([]);
@@ -118,23 +119,16 @@ export const useGalleryManager = () => {
       const itemsToSave = items.filter((item) => !item.isDeleted);
       const finalItems = await Promise.all(
         itemsToSave.map(async (item, index) => {
-          let currentId = item.id;
           let finalImageUrl = item.imageUrl;
 
-          if (item.isNew) {
-            const { data, error } = await supabase
-              .from("gallery")
-              .insert({
+          const currentId = item.isNew
+            ? await ensureRecordId("gallery", {
                 subtitle: item.subtitle,
                 mainTitle: item.mainTitle,
                 displayOrder: index + 1,
                 isVisible: item.isVisible,
               })
-              .select()
-              .single();
-            if (error) throw error;
-            currentId = data.id;
-          }
+            : item.id;
 
           if (item.tempFile) {
             // 1. 기존 파일 및 찌꺼기 파일들 싹 청소하기

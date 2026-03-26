@@ -1,5 +1,5 @@
 import { supabase } from "@/lib/supabase";
-import { getFileNameFromUrl, uploadImage } from "@/lib/supabase-utils";
+import { getFileNameFromUrl } from "@/lib/supabase-utils";
 
 /**
  * 1. 삭제 통합 관리 (DB 레코드 + 스토리지 파일)
