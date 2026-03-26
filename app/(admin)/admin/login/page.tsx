@@ -37,7 +37,7 @@ export default function AdminLoginPage() {
       }
 
       // 둘 다 성공하면 대시보드로 이동
-      window.location.href = "/admin/dashboard";
+      window.location.href = "/admin";
     } else {
       alert("로그인 정보가 일치하지 않습니다.");
     }
