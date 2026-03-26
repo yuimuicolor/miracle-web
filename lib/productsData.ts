@@ -15,7 +15,6 @@ export interface ProductItem {
   category: string;
   options: string[];
   image: string; // 메인 이미지 슬롯 (최대 1개) - 기존 URL 또는 새 파일 둘 다 허용
-  tempMainFile?: File; // 메인 이미지로 새로 업로드할 파일
 
   thumbnailImages: ImageSlot[];
   detailImages: ImageSlot[];
@@ -24,6 +23,8 @@ export interface ProductItem {
   isVisible: boolean;
   displayOrder: number;
   
+  // 관리자 전용 데이터
+  tempMainFile?: File; // 메인 이미지로 새로 업로드할 파일
   isDeleted?: boolean;
   isNew?: boolean;
 }
