@@ -5,6 +5,7 @@ import {
   getProductById,
   getAllProducts,
 } from "@/lib/api/products";
+import { supabaseServer } from "@/lib/supabase/server";
 
 const STYLE = {
   section: `
@@ -20,8 +21,8 @@ interface ProductDetailPageProps {
 }
 
 export async function generateStaticParams() {
-  const products = await getAllProducts();
-  return products.map((product) => ({
+  const products = await getAllProducts(supabaseServer);
+  return products.map((product: any) => ({
     productId: product.id.toString(), // URL용 문자열로 변환
   }));
 }
@@ -34,7 +35,7 @@ export default async function ProductDetailPage({ params }: ProductDetailPagePro
     notFound();
   }
 
-  const product = await getProductById(numericId);
+  const product = await getProductById(supabaseServer, numericId);
 
   if (!product) {
     notFound();

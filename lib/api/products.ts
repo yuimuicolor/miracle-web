@@ -1,29 +1,20 @@
-import { ProductItem } from "../types/products";
-import { getBaseUrl } from "../utils/common";
 import { getFileNameFromUrl, uploadImage } from "@/lib/utils/storage";
 import { cleanupStorageFiles, ensureRecordId } from "@/lib/api/common";
 
 
-export const getAllProducts = async (): Promise<ProductItem[]> => {
-  const baseUrl = getBaseUrl();
-  const res = await fetch(`${baseUrl}/api/products`, { cache: "no-store" });
-
-  if (!res.ok) return [];
-  return res.json();
+export const getAllProducts = async (supabase: any) => {
+  const { data } = await supabase.from("products").select("*");
+  return data;
 };
 
-export const getProductById = async (
-  id: number,
-): Promise<ProductItem | null> => {
-  const baseUrl = getBaseUrl();
-  const res = await fetch(`${baseUrl}/api/products/${id}`, {
-    cache: "no-store",
-  });
+export const getProductById = async (supabase: any, id: string | number) => {
+  const { data, error } = await supabase
+    .from("products")
+    .select("*")
+    .eq("id", id)
+    .single();
 
-  if (!res.ok) return null;
-
-  const data = await res.json();
-
+  if (error) return null;
   return {
     ...data,
     image: data.image || null,

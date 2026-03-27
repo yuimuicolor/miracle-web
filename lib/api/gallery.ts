@@ -1,17 +1,14 @@
-import { getBaseUrl } from "@/lib/utils/common";
 import { GalleryItem } from "../types/gallery";
-
-const baseUrl = getBaseUrl();
 
 // 1. GET (그냥 호출)
 export const getPublicGalleryImages = async (limit?: number): Promise<GalleryItem[]> => {
-  const res = await fetch(`${baseUrl}/api/gallery${limit ? `?limit=${limit}` : ""}`, { cache: "no-store" });
+  const res = await fetch(`/api/gallery${limit ? `?limit=${limit}` : ""}`, { cache: "no-store" });
   return res.json();
 };
 
 // 2. GET (관리자용, ?admin=true 를 붙여서 호출)
 export const getAllGalleryForAdmin = async (): Promise<GalleryItem[]> => {
-  const res = await fetch(`${baseUrl}/api/gallery?admin=true`, { 
+  const res = await fetch(`/api/gallery?admin=true`, { 
     cache: "no-store" 
   });
 
@@ -34,7 +31,7 @@ export const saveGalleryAll = async (items: GalleryItem[]) => {
       displayOrder: item.displayOrder,
     }));
 
-  const res = await fetch(`${baseUrl}/api/gallery`, {
+  const res = await fetch(`/api/gallery`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ finalItems, deletedIds }),
