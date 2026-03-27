@@ -10,6 +10,11 @@ import {
 import { cleanupStorageFiles, ensureRecordId } from "@/lib/api/common";
 import { reorderItems } from "@/lib/utils/reorder";
 import { ImageSlot, ProductItem } from "@/lib/types/products";
+import {
+  getAllProducts,
+  prepareProductData,
+  saveProductsAll,
+} from "@/lib/api/products";
 
 export const useProductManager = () => {
   const [items, setItems] = useState<ProductItem[]>([]);
@@ -19,10 +24,7 @@ export const useProductManager = () => {
   // 1. 데이터 가져오기
   const fetchProducts = async () => {
     setLoading(true);
-    const { data } = await supabase
-      .from("products")
-      .select("*")
-      .order("displayOrder", { ascending: true });
+    const data = await getAllProducts();
 
     if (data) {
       const formatted = data.map((item: any) => ({
@@ -164,7 +166,7 @@ export const useProductManager = () => {
       if (slot.file) {
         const uniqueName = `${crypto.randomUUID()}_${Date.now()}.webp`;
         const targetPath = `${folder}/${type}/${uniqueName}`;
-        return await uploadImage(slot.file, "products", targetPath);
+        return await uploadImage(supabase, slot.file, "products", targetPath);
       }
 
       // [Case B] 파일은 없고 기존 URL만 있는 경우 -> 유지
@@ -181,14 +183,18 @@ export const useProductManager = () => {
 
     // 2. 청소 로직: 현재 DB에 저장될 finalUrls에 포함되지 않은 파일들은 스토리지에서 삭제
     const activeFileNames = finalUrls.map((url) => getFileNameFromUrl(url));
-    await cleanupStorageFiles("products", `${folder}/${type}`, activeFileNames);
+    await cleanupStorageFiles(
+      supabase,
+      "products",
+      `${folder}/${type}`,
+      activeFileNames,
+    );
 
     return finalUrls; // 이 배열이 그대로 DB의 column으로 들어갑니다.
   };
 
   // 11. 최종 저장
   const handleSave = async () => {
-    // 삭제되지 않은 아이템들만 제목 체크 (삭제 처리할 건 제목 없어도 통과!)
     const activeItems = items.filter((i) => !i.isDeleted);
 
     // 1. 유효하지 않은 아이템 찾기 (대표 이미지, 제목이 없는 경우)
@@ -221,70 +227,15 @@ export const useProductManager = () => {
     }
 
     setIsSaving(true);
-    try {
-      // 1. 삭제 대상 제거
-      const idsToDelete = items
+
+    try {const deletedIds = items
         .filter((i) => i.isDeleted && !i.isNew)
         .map((i) => i.id);
-      if (idsToDelete.length > 0)
-        await supabase.from("products").delete().in("id", idsToDelete);
 
-      const activeItems = items.filter((i) => !i.isDeleted);
-
-      // 2. 저장 및 이미지 처리
-      const finalItemsToUpdate = await Promise.all(
-        activeItems.map(async (item) => {
-          const currentId = item.isNew
-            ? await ensureRecordId("products", {
-                mainTitle: item.mainTitle,
-                displayOrder: item.displayOrder,
-              })
-            : item.id;
-
-          const folder = `product-${String(currentId).padStart(2, "0")}`;
-
-          // 이미지 업로드 (업로드 시 UUID 사용으로 덮어쓰기 문제 해결)
-          let finalMain = item.image;
-          if (item.tempMainFile) {
-            const mainName = `main_${Date.now()}.webp`; // 유니크한 이름
-            await cleanupStorageFiles("products", folder, [mainName], "main_");
-            finalMain = await uploadImage(
-              item.tempMainFile,
-              "products",
-              `${folder}/${mainName}`,
-            );
-          }
-
-          const finalThumbs = await processList(
-            item.thumbnailImages,
-            "thumb",
-            folder,
-          );
-          const finalDetails = await processList(
-            item.detailImages,
-            "detail",
-            folder,
-          );
-
-          return {
-            ...item,
-            id: currentId,
-            image: finalMain,
-            thumbnailImages: finalThumbs,
-            detailImages: finalDetails,
-            isNew: false,
-          };
-        }),
-      );
-
-      const dataToUpsert = finalItemsToUpdate.map(
-        ({ tempMainFile, isNew, isDeleted, ...rest }) => ({
-          ...rest,
-        }),
-      );
-
-      const { error } = await supabase.from("products").upsert(dataToUpsert);
-      if (error) throw error;
+      // 2. 이미지 처리 및 데이터 가공
+      const finalItems = await prepareProductData(supabase, activeItems);
+      
+      await saveProductsAll(finalItems, deletedIds);
 
       alert("✅ 저장이 완료되었습니다!");
       await fetchProducts();

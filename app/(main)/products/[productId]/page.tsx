@@ -16,7 +16,7 @@ const STYLE = {
 };
 
 interface ProductDetailPageProps {
-  params: { productId: string };
+  params: Promise<{ productId: string }>;
 }
 
 export async function generateStaticParams() {

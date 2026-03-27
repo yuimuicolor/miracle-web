@@ -1,6 +1,5 @@
 // lib/storageUtils.ts
 import * as imageCompression from "browser-image-compression";
-import { supabase } from "@/lib/supabase/client";
 import { CompressionOptions } from "../types/common";
 
 
@@ -15,6 +14,7 @@ const DEFAULT_OPTIONS: CompressionOptions = {
  * 이미지를 압축하고 Supabase Storage에 업로드한 뒤 Public URL을 반환
  */
 export const uploadImage = async (
+  supabaseClient: any,
   file: File,
   bucket: string,
   path: string,
@@ -31,14 +31,14 @@ export const uploadImage = async (
     const compressed = await (imageCompression as any).default(file, compressOptions);
 
     // 2. 스토리지 업로드 (upsert: true로 덮어쓰기 허용)
-    const { error: uploadError } = await supabase.storage
+    const { error: uploadError } = await supabaseClient.storage
       .from(bucket)
       .upload(path, compressed, { upsert: true });
 
     if (uploadError) throw uploadError;
 
     // 3. Public URL 추출
-    const { data } = supabase.storage.from(bucket).getPublicUrl(path);
+    const { data } = supabaseClient.storage.from(bucket).getPublicUrl(path);
     return data.publicUrl;
   } catch (error) {
     console.error("Upload failed:", error);
