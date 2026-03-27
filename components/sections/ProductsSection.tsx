@@ -12,7 +12,6 @@ import { ProductItem } from "@/lib/types/products";
 import { useSettings } from "@/context/SiteSettingsContext";
 import { useProductsSlider } from "@/hooks/useProductsSlider";
 
-
 const STYLE = {
   section: `
     w-full bg-bg-light

@@ -1,6 +1,6 @@
 "use server";
 
-import { ContactData } from "@/lib/contactsData";
+import { ContactItem } from "@/lib/types/contact";
 import { createClient } from "@supabase/supabase-js";
 import { Resend } from "resend";
 
@@ -11,7 +11,7 @@ const supabase = createClient(
 );
 
 // 1. 입력받을 데이터 타입 정의 (Pick 사용)
-type ContactInput = Pick<ContactData, "name" | "phone" | "email" | "company" | "message">;
+type ContactInput = Pick<ContactItem, "name" | "phone" | "email" | "company" | "message">;
 
 export async function sendContactEmail(submitData: ContactInput) { 
   try {
