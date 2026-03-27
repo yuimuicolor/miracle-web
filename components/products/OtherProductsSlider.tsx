@@ -3,14 +3,10 @@
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 import MoreButton from "@/components/MoreButton";
-import { getAllProducts } from "@/lib/api/products";
 import ProductBox from "./ProductBox";
 import { ProductItem } from "@/lib/types/products";
-
- interface OtherProductsSliderProps {
-  currentProductId: number;
-}
-
+import { getAllProducts } from "@/lib/api/products";
+import { useProductsSlider } from "@/hooks/useProductsSlider";
 
 const STYLE = {
   section: `
@@ -47,6 +43,10 @@ const STYLE = {
   buttonWrap: "flex justify-center pt-[1rem]",
 };
 
+interface OtherProductsSliderProps {
+  currentProductId: number;
+}
+
 export default function OtherProductsSlider({
   currentProductId,
 }: OtherProductsSliderProps) {
@@ -54,6 +54,17 @@ export default function OtherProductsSlider({
 
   const [products, setProducts] = useState<ProductItem[]>([]);
   const [loading, setLoading] = useState(true);
+  const halfRef = useRef(0);
+
+  const {
+    trackRef,
+    grabbing,
+    handleMouseDown,
+    handleMouseMove,
+    stopDrag,
+    handleCardClick,
+    scrollByCard,
+  } = useProductsSlider();
 
   useEffect(() => {
     const fetchOtherProducts = async () => {
@@ -71,25 +82,7 @@ export default function OtherProductsSlider({
     fetchOtherProducts();
   }, [currentProductId]);
 
-  const trackRef = useRef<HTMLDivElement | null>(null);
-  const [grabbing, setGrabbing] = useState(false);
-  const halfRef = useRef(0);
-  const isDragging = useRef(false);
-  const dragStartX = useRef(0);
-  const dragScrollLeft = useRef(0);
-  const dragMovedRef = useRef(false);
-  const arrowAnimRef = useRef<number>(0);
-
-  const normalizeScroll = (value: number, half: number) => {
-    if (half <= 0) return value;
-    return ((value % half) + half) % half;
-  };
-
-  const calcHalf = (container: HTMLDivElement) => {
-    if (products.length === 0) return;
-    halfRef.current = container.scrollWidth / 2;
-  };
-
+  
   useEffect(() => {
     const container = trackRef.current;
     if (!container || products.length === 0) return;
@@ -99,102 +92,19 @@ export default function OtherProductsSlider({
     requestAnimationFrame(() => calcHalf(container));
 
     return () => {
-      if (arrowAnimRef.current) cancelAnimationFrame(arrowAnimRef.current);
-      ro.disconnect();
+    ro.disconnect();
     };
   }, [products]);
 
-  const stopArrowAnimation = () => {
-    if (!arrowAnimRef.current) return;
-    cancelAnimationFrame(arrowAnimRef.current);
-    arrowAnimRef.current = 0;
-  };
-
-  const animateScrollBy = (delta: number) => {
-    const container = trackRef.current;
-    if (!container) return;
-
-    const half = halfRef.current;
-    const startLeft = container.scrollLeft;
-    const startTime = performance.now();
-
-    stopArrowAnimation();
-
-    const tick = (now: number) => {
-      const progress = Math.min((now - startTime) / ARROW_SCROLL_DURATION, 1);
-      const eased = 1 - (1 - progress) ** 3;
-      container.scrollLeft = normalizeScroll(startLeft + delta * eased, half);
-
-      if (progress < 1) {
-        arrowAnimRef.current = requestAnimationFrame(tick);
-      } else {
-        arrowAnimRef.current = 0;
-      }
-    };
-
-    arrowAnimRef.current = requestAnimationFrame(tick);
-  };
-
-  const scrollByCard = (direction: "prev" | "next") => {
-    const container = trackRef.current;
-    if (!container) return;
-
-    const firstCard = container.querySelector<HTMLElement>(
-      "[data-product-card='true']",
-    );
-    if (!firstCard) return;
-
-    const gap =
-      Number.parseFloat(getComputedStyle(container).columnGap || "0") || 0;
-    const step = firstCard.offsetWidth + gap;
-    animateScrollBy(direction === "next" ? step : -step);
-  };
-
-  const handleMouseDown = (e: React.MouseEvent<HTMLDivElement>) => {
-    const container = trackRef.current;
-    if (!container) return;
-    stopArrowAnimation();
-    isDragging.current = true;
-    dragMovedRef.current = false;
-    setGrabbing(true);
-    dragStartX.current = e.pageX - container.getBoundingClientRect().left;
-    dragScrollLeft.current = container.scrollLeft;
-  };
-
-  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
-    if (!isDragging.current) return;
-    const container = trackRef.current;
-    if (!container) return;
-    const half = halfRef.current;
-    const x = e.pageX - container.getBoundingClientRect().left;
-
-    if (Math.abs(x - dragStartX.current) > 6) {
-      dragMovedRef.current = true;
-    }
-
-    const newLeft = dragScrollLeft.current - (x - dragStartX.current) * 1.8;
-    container.scrollLeft = normalizeScroll(newLeft, half);
-  };
-
-  const handleCardClick = (event: React.MouseEvent<HTMLAnchorElement>) => {
-    if (!dragMovedRef.current) return;
-    event.preventDefault();
-    dragMovedRef.current = false;
+  const calcHalf = (container: HTMLDivElement) => {
+    if (products.length === 0) return;
+    halfRef.current = container.scrollWidth / 2;
   };
 
   const handleNativeDragStart = (event: React.DragEvent<HTMLElement>) => {
-    event.preventDefault();
-  };
+  event.preventDefault();
+};
 
-  const stopDrag = () => {
-    if (!isDragging.current) return;
-    isDragging.current = false;
-    setGrabbing(false);
-  };
-
-  const handleTrackMouseLeave = () => {
-    stopDrag();
-  };
 
   if (!loading && products.length === 0) return null;
 
@@ -225,7 +135,7 @@ export default function OtherProductsSlider({
             onMouseDown={handleMouseDown}
             onMouseMove={handleMouseMove}
             onMouseUp={stopDrag}
-            onMouseLeave={handleTrackMouseLeave}
+            onMouseLeave={stopDrag}
           >
             {products.length > 0 && [...products, ...products].map((item, index) => (
               <div
