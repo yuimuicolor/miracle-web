@@ -1,20 +1,5 @@
 import { supabase } from "@/lib/supabase";
-
-// 1. 공통 인터페이스 정의 (관리자/일반 공용)
-export interface GalleryItem {
-  id: number;
-  createdAt?: string;
-  subtitle: string;
-  mainTitle: string;
-  imageUrl: string; // DB에 저장된 실제 경로 또는 URL
-  isVisible: boolean;
-  displayOrder: number;
-  // 관리자 UI 전용 상태 (Optional)
-  isDeleted?: boolean;
-  isNew?: boolean;
-  previewUrl?: string;
-  tempFile?: File;
-}
+import { GalleryItem } from "../types/gallery";
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL?.replace(/\/$/, "");
 

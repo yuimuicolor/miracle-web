@@ -7,8 +7,8 @@ import ScrollReveal from "@/components/ScrollReveal";
 import { HOME_REVEAL } from "@/components/sections/homeMotion";
 import MoreButton from "../MoreButton";
 import SectionTitle from "./common/SectionTitle";
-import { getAllProducts } from "@/lib/productsData";
-import { ProductItem } from "@/lib/productsData";
+import { getAllProducts } from "@/lib/api/products";
+import { ProductItem } from "@/lib/types/products";
 import { useSettings } from "@/context/SiteSettingsContext";
 
 const AUTO_SPEED = 1;

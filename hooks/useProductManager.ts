@@ -1,9 +1,18 @@
 import { useState, useEffect } from "react";
-import { supabase } from "@/lib/supabase";
-import { ProductItem, ImageSlot } from "@/lib/productsData";
+import { supabase } from "@/lib/supabase"; 
 import { DropResult } from "@hello-pangea/dnd";
-import { getFileNameFromUrl, toggleDeleteState, uploadImage } from "@/lib/supabase-utils";
-import { cleanupStorageFiles, ensureRecordId } from "@/lib/api/supabase-service";
+
+import {
+  getFileNameFromUrl,
+  toggleDeleteState,
+  uploadImage,
+} from "@/lib/utils/storage";
+import {
+  cleanupStorageFiles,
+  ensureRecordId,
+} from "@/lib/api/common";
+import { reorderItems } from "@/lib/utils/reorder";
+import { ImageSlot, ProductItem } from "@/lib/types/products";
 
 export const useProductManager = () => {
   const [items, setItems] = useState<ProductItem[]>([]);
@@ -77,24 +86,10 @@ export const useProductManager = () => {
   const onReorder = (result: DropResult) => {
     if (!result.destination) return;
 
-    // 1. '삭제 예정'인 아이템 제거
-    const deletedItems = items.filter((item) => item.isDeleted);
-    // 2. '삭제 예정'이 아닌 아이템만 필터링
-    const activeItems = items.filter((item) => !item.isDeleted);
+    const sourceIndex = result.source.index;
+    const destinationIndex = result.destination.index;
 
-    // 3. 순서 변경
-    const reorderedActive = Array.from(activeItems);
-    const [moved] = reorderedActive.splice(result.source.index, 1);
-    reorderedActive.splice(result.destination.index, 0, moved);
-
-    // 4. 변경된 순서에 맞게 displayOrder 업데이트 (1부터 시작)
-    const updatedActive = reorderedActive.map((item, idx) => ({
-      ...item,
-      displayOrder: idx + 1,
-    }));
-
-    // 5. 삭제 예정 아이템은 기존 displayOrder 유지하면서 뒤에 붙이기
-    setItems([...updatedActive, ...deletedItems]);
+    setItems((prev) => reorderItems(prev, sourceIndex, destinationIndex));
   };
 
   // 6-1. 리스트 이미지 처리 (청소 후 재업로드)
@@ -105,28 +100,30 @@ export const useProductManager = () => {
   ) => {
     const uploadPromises = list.map(async (slot) => {
       // [Case A] 새로 추가된 파일이 있는 경우 -> 무조건 업로드
-    if (slot.file) {
-      const uniqueName = `${crypto.randomUUID()}_${Date.now()}.webp`;
-      const targetPath = `${folder}/${type}/${uniqueName}`;
-      return await uploadImage(slot.file, "products", targetPath);
-    }
-    
-    // [Case B] 파일은 없고 기존 URL만 있는 경우 -> 유지
-    if (slot.url) {
-      return slot.url;
-    }
+      if (slot.file) {
+        const uniqueName = `${crypto.randomUUID()}_${Date.now()}.webp`;
+        const targetPath = `${folder}/${type}/${uniqueName}`;
+        return await uploadImage(slot.file, "products", targetPath);
+      }
 
-    return null;
+      // [Case B] 파일은 없고 기존 URL만 있는 경우 -> 유지
+      if (slot.url) {
+        return slot.url;
+      }
+
+      return null;
     });
 
-    const finalUrls = (await Promise.all(uploadPromises)).filter((url): url is string => !!url);
+    const finalUrls = (await Promise.all(uploadPromises)).filter(
+      (url): url is string => !!url,
+    );
 
     // 2. 청소 로직: 현재 DB에 저장될 finalUrls에 포함되지 않은 파일들은 스토리지에서 삭제
-  // 여기서 getFileNameFromUrl을 써서 실제 파일명만 추출해야 해요.
-  const activeFileNames = finalUrls.map(url => getFileNameFromUrl(url));
-  await cleanupStorageFiles("products", `${folder}/${type}`, activeFileNames);
+    // 여기서 getFileNameFromUrl을 써서 실제 파일명만 추출해야 해요.
+    const activeFileNames = finalUrls.map((url) => getFileNameFromUrl(url));
+    await cleanupStorageFiles("products", `${folder}/${type}`, activeFileNames);
 
-  return finalUrls; // 이 배열이 그대로 DB의 column으로 들어갑니다.
+    return finalUrls; // 이 배열이 그대로 DB의 column으로 들어갑니다.
   };
 
   // 7. 최종 저장
@@ -191,7 +188,11 @@ export const useProductManager = () => {
           if (item.tempMainFile) {
             const mainName = `main_${Date.now()}.webp`; // 유니크한 이름
             await cleanupStorageFiles("products", folder, [mainName], "main_");
-            finalMain = await uploadImage(item.tempMainFile, "products", `${folder}/${mainName}`);
+            finalMain = await uploadImage(
+              item.tempMainFile,
+              "products",
+              `${folder}/${mainName}`,
+            );
           }
 
           const finalThumbs = await processList(
@@ -218,8 +219,8 @@ export const useProductManager = () => {
 
       const dataToUpsert = finalItemsToUpdate.map(
         ({ tempMainFile, isNew, isDeleted, ...rest }) => ({
-            ...rest,
-        })
+          ...rest,
+        }),
       );
 
       const { error } = await supabase.from("products").upsert(dataToUpsert);

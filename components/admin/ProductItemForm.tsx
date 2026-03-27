@@ -1,4 +1,4 @@
-import { ProductItem, ImageSlot } from "@/lib/productsData";
+import { ProductItem, ImageSlot } from "@/lib/types/products";
 import { AdminToggle } from "./AdminToggle";
 import { AdminInput } from "./AdminInput";
 import { ProductImageList } from "./ProductImageList";

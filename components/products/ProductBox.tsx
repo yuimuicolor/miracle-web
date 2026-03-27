@@ -1,6 +1,6 @@
 import Image from "next/image";
 import { Plus } from "lucide-react";
-import { ProductItem } from "@/lib/productsData";
+import { ProductItem } from "@/lib/types/products";
 
 interface ProductBoxProps {
   item: ProductItem;

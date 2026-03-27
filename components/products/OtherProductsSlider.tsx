@@ -3,11 +3,9 @@
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 import MoreButton from "@/components/MoreButton";
-import {
-  getAllProducts,
-  ProductItem,
-} from "@/lib/productsData";
+import { getAllProducts } from "@/lib/api/products";
 import ProductBox from "./ProductBox";
+import { ProductItem } from "@/lib/types/products";
 
 const STYLE = {
   section: `
@@ -86,10 +84,10 @@ export default function OtherProductsSlider({
     return ((value % half) + half) % half;
   };
 
-const calcHalf = (container: HTMLDivElement) => {
-  if (products.length === 0) return;
-  halfRef.current = container.scrollWidth / 2;
-};
+  const calcHalf = (container: HTMLDivElement) => {
+    if (products.length === 0) return;
+    halfRef.current = container.scrollWidth / 2;
+  };
 
   useEffect(() => {
     const container = trackRef.current;

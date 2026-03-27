@@ -6,7 +6,7 @@ import { HOME_REVEAL } from "@/components/sections/homeMotion";
 import { sendContactEmail } from "@/app/actions";
 import TextModal from "../TextModal";
 import { useSettings } from "@/context/SiteSettingsContext";
-import { ContactData } from "@/lib/contactsData";
+import { ContactItem } from "@/lib/types/contact";
 
 const STYLE = {
   section: `
@@ -88,7 +88,7 @@ const FIELDS: Array<{
 
 
 type ContactInput = Pick<
-  ContactData,
+  ContactItem,
   "name" | "phone" | "email" | "company" | "message"
 >;
 

@@ -2,8 +2,8 @@ import ProductsPageGrid from "@/components/products/ProductsPageGrid";
 import ScrollReveal from "@/components/ScrollReveal";
 import { HOME_REVEAL } from "@/components/sections/homeMotion";
 import SectionTitle from "@/components/sections/common/SectionTitle";
-import { getAllProducts } from "@/lib/productsData";
-import { getSiteSettings } from "@/lib/siteSettings";
+import { getAllProducts } from "@/lib/api/products";
+import { getSiteSettings } from "@/lib/api/siteSettings";
 
 const STYLE = {
 	section: `

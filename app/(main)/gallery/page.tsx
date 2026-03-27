@@ -5,7 +5,8 @@ import GalleryPageGrid from "../../../components/gallery/GalleryPageGrid";
 import ScrollReveal from "@/components/ScrollReveal";
 import { HOME_REVEAL } from "@/components/sections/homeMotion";
 import SectionTitle from "@/components/sections/common/SectionTitle";
-import { GalleryItem, getPublicGalleryImages } from "@/lib/galleryService";
+import { getPublicGalleryImages } from "@/lib/api/gallery";
+import { GalleryItem } from "@/lib/types/gallery";
 
 const STYLE = {
   section: `

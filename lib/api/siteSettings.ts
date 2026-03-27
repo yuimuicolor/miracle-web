@@ -1,29 +1,8 @@
 import { supabase } from "@/lib/supabase";
+import { SiteSettingsItem } from "../types/siteSettings";
 
-export interface SiteSettings {
-  id: number;
-  brandName: string;
-  brandUppercaseName: string;
-  brandLogoSrc: string;
-  brandLogoAlt: string;
-  businessName: string;
-  address: string;
-  phone: string;
-  email: string;
-  businessHours: string;
-  mapQuery: string;
-  mapLink: string;
-  ownerName: string;
-  businessRegistrationNumber: string;
-  privacyPolicyText: string;
-  snsConfig: {
-    [key: string]: {
-      href: string;
-      label: string;
-    };
-  };
-}
-export const getSiteSettings = async (): Promise<SiteSettings | null> => {
+
+export const getSiteSettings = async (): Promise<SiteSettingsItem | null> => {
   const { data, error } = await supabase
     .from("siteSettings")
     .select("*")
@@ -43,7 +22,7 @@ export const getSiteSettings = async (): Promise<SiteSettings | null> => {
 };
 
 // 관리자 페이지에서 업데이트할 때 쓸 함수
-export const updateSiteSettings = async (newData: Partial<SiteSettings>) => {
+export const updateSiteSettings = async (newData: Partial<SiteSettingsItem>) => {
   const { data, error } = await supabase
     .from("siteSettings")
     .update(newData)

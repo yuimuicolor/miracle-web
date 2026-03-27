@@ -1,7 +1,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import { Plus } from "lucide-react";
-import { type ProductItem } from "@/lib/productsData";
+import { ProductItem } from "@/lib/types/products";
 
 interface ProductsPageBoxProps {
   item: ProductItem;

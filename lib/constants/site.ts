@@ -1,13 +1,4 @@
-export interface NavigationSubmenuItem {
-  label: string;
-  href: string;
-}
-
-export interface NavigationMenuItem {
-  title: string;
-  href: string;
-  submenus: NavigationSubmenuItem[];
-}
+import { NavigationMenuItem } from "../types/header";
 
 export const SITE_METADATA = {
   title: "Miracle",

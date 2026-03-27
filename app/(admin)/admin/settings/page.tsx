@@ -2,15 +2,16 @@
 
 import { useState, useEffect, useRef } from "react";
 import { supabase } from "@/lib/supabase";
-import { SiteSettings, updateSiteSettings } from "@/lib/siteSettings";
+import { updateSiteSettings } from "@/lib/api/siteSettings";
 import { AdminHeader } from "@/components/admin/AdminHeader";
 import AdminSaveButton from "@/components/admin/AdminSaveButton";
 import { AdminInput } from "@/components/admin/AdminInput";
 import Image from "next/image";
-import { uploadImage } from "@/lib/supabase-utils";
+import { uploadImage } from "@/lib/utils/storage";
+import { SiteSettingsItem } from "@/lib/types/siteSettings";
 
 export default function AdminSiteSettingsPage() {
-  const [settings, setSettings] = useState<SiteSettings | null>(null);
+  const [settings, setSettings] = useState<SiteSettingsItem | null>(null);
   const [loading, setLoading] = useState(true);
   const [isSaving, setIsSaving] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -24,7 +25,7 @@ export default function AdminSiteSettingsPage() {
     fetchSettings();
   }, []);
 
-  const handleChange = (field: keyof SiteSettings, value: any) => {
+  const handleChange = (field: keyof SiteSettingsItem, value: any) => {
     if (!settings) return;
     setSettings({ ...settings, [field]: value });
   };

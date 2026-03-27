@@ -8,7 +8,7 @@ export const CONTACT_STATUS_OPTIONS = [
 
 export type ContactStatus = (typeof CONTACT_STATUS_OPTIONS)[number];
 
-export interface ContactData {
+export interface ContactItem {
   idx: number;          // 고유 인덱스
   id: number;           // ID
   created_at: string;   // 생성일 (ISO string)
@@ -22,8 +22,4 @@ export interface ContactData {
   admin_memo: string;   // 관리자 메모
 }
 
-/**
- * 데이터 업데이트 시 사용할 수 있는 Partial 타입
- * (업데이트 시 특정 필드만 넘길 때 유용함)
- */
-export type ContactUpdatePayload = Partial<Pick<ContactData, 'status' | 'admin_memo'>>;
+export type ContactUpdatePayload = Partial<Pick<ContactItem, 'status' | 'admin_memo'>>;

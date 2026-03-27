@@ -4,7 +4,7 @@ import OtherProductsSlider from "@/components/products/OtherProductsSlider";
 import {
   getProductById,
   getAllProducts,
-} from "@/lib/productsData";
+} from "@/lib/api/products";
 
 const STYLE = {
   section: `

@@ -5,7 +5,7 @@ import {
   SECTION_REVEAL,
   SECTION_REVEAL_EFFECT,
 } from "@/components/aboutus/aboutPageShared";
-import { ABOUT_PAGE_CONTENT } from "@/lib/aboutPageData";
+import { ABOUT_PAGE_CONTENT } from "@/lib/aboutUsData";
 
 export default function AboutMarqueeSection() {
   return (

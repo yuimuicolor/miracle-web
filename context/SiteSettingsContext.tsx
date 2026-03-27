@@ -1,10 +1,10 @@
 "use client";
 
+import { SiteSettingsItem } from "@/lib/types/siteSettings";
 import { createContext, useContext, ReactNode } from "react";
-import { SiteSettings } from "@/lib/siteSettings";
 
 // 1. Context 생성
-const SiteSettingsContext = createContext<SiteSettings | null>(null);
+const SiteSettingsContext = createContext<SiteSettingsItem | null>(null);
 
 // 2. 공급자(Provider)
 export function SiteSettingsProvider({ 
@@ -12,7 +12,7 @@ export function SiteSettingsProvider({
   settings 
 }: { 
   children: ReactNode; 
-  settings: SiteSettings | null; 
+  settings: SiteSettingsItem | null; 
 }) {
   return (
     <SiteSettingsContext.Provider value={settings}>

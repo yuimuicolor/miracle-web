@@ -2,12 +2,11 @@
 
 export const dynamic = "force-dynamic";
 
-
-import { CONTACT_STATUS_OPTIONS, ContactStatus } from "@/lib/contactsData";
 import { supabase } from "@/lib/supabase";
 import { useState, useEffect } from "react";
 import { useSearchParams } from "next/navigation";
 import { AdminHeader } from "@/components/admin/AdminHeader";
+import { CONTACT_STATUS_OPTIONS, ContactStatus } from "@/lib/types/contact";
 
 const FILTER_OPTIONS = ["전체", ...CONTACT_STATUS_OPTIONS];
 type FilterStatus = "전체" | ContactStatus;

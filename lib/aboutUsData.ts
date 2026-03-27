@@ -1,18 +1,5 @@
-import { STATIC_ASSETS } from "./siteData";
-
-export interface AboutHistoryItem {
-  year: string;
-  date: string;
-  title: string;
-  imageSrc: string;
-  imageAlt: string;
-}
-
-export interface CertificateItem {
-  id: number;
-  title: string;
-  desc: string;
-}
+import { STATIC_ASSETS } from "./constants/site";
+import { AboutHistoryItem, CertificateItem } from "./types/aboutUs";
 
 export const ABOUT_PAGE_CONTENT = {
   pageTitle: "ABOUT US",

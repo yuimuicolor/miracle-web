@@ -7,8 +7,9 @@ import ScrollReveal from "@/components/ScrollReveal";
 import { HOME_REVEAL } from "@/components/sections/homeMotion";
 import MoreButton from "../MoreButton";
 import SectionTitle from "./common/SectionTitle";
-import { STATIC_ASSETS } from "@/lib/siteData";
-import { GalleryItem, getPublicGalleryImages } from "@/lib/galleryService";
+import { STATIC_ASSETS } from "@/lib/constants/site";
+import { getPublicGalleryImages } from "@/lib/api/gallery";
+import { GalleryItem } from "@/lib/types/gallery";
 
 const STYLE = {
   section: `

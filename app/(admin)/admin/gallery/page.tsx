@@ -1,7 +1,6 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
-import { supabase } from "@/lib/supabase";
+import { useRef } from "react";
 import { DragDropContext, Droppable, Draggable } from "@hello-pangea/dnd";
 import Image from "next/image";
 import { AdminHeader } from "@/components/admin/AdminHeader";
@@ -10,7 +9,6 @@ import AdminAddButton from "@/components/admin/AdminAddButton";
 import { AdminInput } from "@/components/admin/AdminInput";
 import { AdminToggle } from "@/components/admin/AdminToggle";
 import { AdminDeleteButton } from "@/components/admin/AdminDeleteButton";
-import { uploadImage } from "@/lib/supabase-utils";
 import { useGalleryManager } from "@/hooks/useGalleryManager";
 
 
@@ -24,9 +22,9 @@ export default function AdminGalleryPage() {
     addItem,
     toggleDelete,
     handleReplaceImage,
-    handleDragEnd,
     handleChange,
     handleAllSave,
+    onReorder,
   } = useGalleryManager();
 
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -64,7 +62,7 @@ export default function AdminGalleryPage() {
           <div className="col-span-2 text-center">삭제</div>
         </div>
 
-        <DragDropContext onDragEnd={handleDragEnd}>
+        <DragDropContext onDragEnd={onReorder}>
           <Droppable droppableId="gallery-list">
             {(provided) => (
               <div {...provided.droppableProps} ref={provided.innerRef}>

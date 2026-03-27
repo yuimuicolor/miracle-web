@@ -2,9 +2,9 @@
 
 import { useState } from "react";
 import { useSettings } from "@/context/SiteSettingsContext";
-import { getDesktopRows, getFooterData } from "@/lib/footerData";
 import TextModal from "./TextModal";
 import Logo from "./sections/common/Logo";
+import { getDesktopRows, getFooterItems } from "@/lib/config/footerConfig";
 
 const STYLE = {
   root: `
@@ -36,8 +36,8 @@ export default function Footer() {
   const settings = useSettings();
   if (!settings) return null;
 
-  const footerData = getFooterData(settings);
-  const desktopRows = getDesktopRows(footerData.items);
+  const footerItems = getFooterItems(settings);
+  const desktopRows = getDesktopRows(footerItems);
 
   const renderInfoItem = (label: string, value: string, mobile = false) => (
     <div key={label} className={mobile ? STYLE.mobileItem : STYLE.desktopItem}>
@@ -63,7 +63,7 @@ export default function Footer() {
             ))}
           </div>
           <div className={STYLE.mobileInfoWrap}>
-            {footerData.items.map((item) =>
+            {footerItems.map((item) =>
               renderInfoItem(item.label, item.value, true),
             )}
           </div>

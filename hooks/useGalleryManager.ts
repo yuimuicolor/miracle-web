@@ -1,9 +1,11 @@
 import { useState, useEffect, useRef } from "react";
 import { supabase } from "@/lib/supabase";
-import { uploadImage } from "@/lib/supabase-utils";
-import { toggleDeleteState } from "@/lib/supabase-utils";
-import { GalleryItem, getAllGalleryForAdmin } from "@/lib/galleryService";
-import { cleanupStorageFiles, deleteMarkedItems, ensureRecordId } from "@/lib/api/supabase-service";
+import { uploadImage } from "@/lib/utils/storage";
+import { toggleDeleteState } from "@/lib/utils/storage";
+import { getAllGalleryForAdmin } from "@/lib/api/gallery";
+import { reorderItems } from "@/lib/utils/reorder";
+import { GalleryItem } from "@/lib/types/gallery";
+import { cleanupStorageFiles, deleteMarkedItems, ensureRecordId } from "@/lib/api/common";
 
 export const useGalleryManager = () => {
   const [items, setItems] = useState<GalleryItem[]>([]);
@@ -15,7 +17,6 @@ export const useGalleryManager = () => {
   const fetchGallery = async () => {
     setLoading(true);
     try {
-      // 아까 합친 파일에서 가져온 함수!
       const data = await getAllGalleryForAdmin();
       setItems(data);
     } catch (error) {
@@ -74,16 +75,13 @@ export const useGalleryManager = () => {
   };
 
   // 6. 드래그 앤 드롭 순서 변경
-  const handleDragEnd = (result: any) => {
-    if (!result.destination) return;
-    const newItems = Array.from(items);
-    const [reorderedItem] = newItems.splice(result.source.index, 1);
-    newItems.splice(result.destination.index, 0, reorderedItem);
-
-    setItems(
-      newItems.map((item, index) => ({ ...item, displayOrder: index + 1 })),
-    );
-  };
+const onReorder = (result: any) => {
+  if (!result.destination) return;
+  
+  setItems((prev) => 
+    reorderItems(prev, result.source.index, result.destination.index)
+  );
+};
 
   // 7. 전체 저장 (핵심 로직)
   const handleAllSave = async () => {
@@ -143,8 +141,8 @@ export const useGalleryManager = () => {
     addItem,
     toggleDelete,
     handleReplaceImage,
-    handleDragEnd,
     handleChange,
     handleAllSave,
+    onReorder,
   };
 };

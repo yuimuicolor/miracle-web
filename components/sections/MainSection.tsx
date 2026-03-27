@@ -3,7 +3,7 @@
 import { ChevronDown } from 'lucide-react';
 import ScrollReveal from '@/components/ScrollReveal';
 import { HOME_REVEAL } from '@/components/sections/homeMotion';
-import { STATIC_ASSETS } from '@/lib/siteData';
+import { STATIC_ASSETS } from '@/lib/constants/site';
 import { useSettings } from '@/context/SiteSettingsContext';
 
 const STYLE = {

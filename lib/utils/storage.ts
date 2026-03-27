@@ -1,12 +1,7 @@
 // lib/storageUtils.ts
 import * as imageCompression from "browser-image-compression";
 import { supabase } from "@/lib/supabase";
-
-export interface CompressionOptions {
-  maxSizeMB?: number;
-  maxWidthOrHeight?: number;
-  fileType?: string;
-}
+import { CompressionOptions } from "../types/common";
 
 
 // 압축 옵션의 기본값 설정 (필요에 따라 조정 가능)
@@ -50,8 +45,6 @@ export const uploadImage = async (
     throw error;
   }
 };
-
-// lib/storageUtils.ts 에 추가
 
 /**
  * URL에서 파일명만 추출 (쿼리 스트링 제거)

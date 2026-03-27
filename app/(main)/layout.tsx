@@ -1,9 +1,8 @@
 import type { Metadata } from "next";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
-import TopButton from "@/components/TopButton";
-import { HEADER_HEIGHTS_CSS } from "@/lib/headerConfig";
-import { SITE_METADATA } from "@/lib/siteData";
+import { HEADER_HEIGHTS_CSS } from "@/lib/config/headerConfig";
+import { SITE_METADATA } from "@/lib/constants/site";
 
 export const metadata: Metadata = {
   title: SITE_METADATA.title,
