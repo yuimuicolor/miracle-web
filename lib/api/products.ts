@@ -22,6 +22,20 @@ export const getProductById = async (id: number | string): Promise<ProductItem |
   };
 };
 
+export const getProductByIdServer = async (id: number | string, supabaseClient: any): Promise<ProductItem | null> => {
+  const { data, error } = await supabaseClient
+    .from("products")
+    .select("*")
+    .eq("id", id)
+    .single();
+
+  if (error || !data) return null;
+  return {
+    ...data,
+    image: data.image || null,
+  };
+}
+
 export const saveProductsAll = async (finalItems: any[], deletedIds: number[]) => {
   // 2. DB용 아이템 정리 (삭제 제외 + 필요한 필드만)
   const res = await fetch("/api/products", {

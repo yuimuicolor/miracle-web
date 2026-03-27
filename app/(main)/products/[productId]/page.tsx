@@ -1,12 +1,12 @@
-'use client';
-
+import { notFound } from "next/navigation";
 import ProductDetailTop from "@/components/products/ProductDetailTop";
 import OtherProductsSlider from "@/components/products/OtherProductsSlider";
 import {
   getProductById,
+  getAllProducts,
+  getProductByIdServer,
 } from "@/lib/api/products";
-import React, { useEffect, useState } from "react";
-import { ProductItem } from "@/lib/types/products";
+import { supabaseServer } from "@/lib/supabase/server";
 
 const STYLE = {
   section: `
@@ -22,39 +22,19 @@ interface ProductDetailPageProps {
 }
 
 export default async function ProductDetailPage({ params }: ProductDetailPageProps) {
-  const [product, setProduct] = useState<ProductItem | null>(null);
-  const [loading, setLoading] = useState(true);
-
-  const { productId } = React.use(params);
+  const { productId } = await params;
   const numericId = Number(productId);
+  
+  if (isNaN(numericId)) {
+    notFound();
+  }
 
-  useEffect(() => {
-    if (isNaN(numericId)) {
-      setLoading(false);
-      return;
-    }
-
-    const fetchProduct = async () => {
-      try {
-        // 누나가 쓰던 그 getProductById (/api/... fetch 방식) 그대로!
-        const data = await getProductById(numericId);
-        setProduct(data);
-      } catch (error) {
-        console.error("데이터 가져오기 실패:", error);
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchProduct();
-  }, [numericId]);
+  const product = await getProductByIdServer(numericId, supabaseServer);
 
   if (!product) {
-    return <div>상품이 없습니다.</div>;
+    notFound();
   }
 
-  if (loading) {
-    return <div className="py-[10rem] text-center">상품 정보를 불러오는 중입니다...</div>;
-  }
 
   return (
     <section className={STYLE.section}>

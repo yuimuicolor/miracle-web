@@ -1,8 +1,13 @@
+"use client";
+
 import ProductsPageGrid from "@/components/products/ProductsPageGrid";
 import ScrollReveal from "@/components/ScrollReveal";
 import { HOME_REVEAL } from "@/components/sections/homeMotion";
 import SectionTitle from "@/components/sections/common/SectionTitle";
 import { getAllProducts } from "@/lib/api/products";
+import { useEffect, useState } from "react";
+import { ProductItem } from "@/lib/types/products";
+import { SiteSettingsItem } from "@/lib/types/siteSettings";
 import { getSiteSettings } from "@/lib/api/siteSettings";
 
 const STYLE = {
@@ -29,9 +34,23 @@ const STYLE = {
 	`,
 };
 
-export default async function ProductsPage() {;
-	const settings = await getSiteSettings();
-    const products = await getAllProducts();
+export default function ProductsPage() {
+
+	const [products, setProducts] = useState<ProductItem[]>([]);
+	const [settings, setSettings] = useState<SiteSettingsItem | null>(null);
+
+	  useEffect(() => {
+		const fetchAllImages = async () => {
+		  const data = await getAllProducts(); 
+		  setProducts(data);
+		};
+		const fetchSettings = async () => {
+			const data = await getSiteSettings();
+			setSettings(data);
+		};
+		fetchAllImages();
+		fetchSettings();
+	  }, []);
 
 	return (
 		<section className={STYLE.section}>
