@@ -1,20 +1,21 @@
 import { getFileNameFromUrl, uploadImage } from "@/lib/utils/storage";
 import { cleanupStorageFiles, ensureRecordId } from "@/lib/api/common";
+import { ProductItem } from "../types/products";
 
 
-export const getAllProducts = async (supabase: any) => {
-  const { data } = await supabase.from("products").select("*");
-  return data;
+export const getAllProducts = async () : Promise<ProductItem[]> => {
+ const res = await fetch("/api/products", { cache: "no-store" });
+
+ if (!res.ok) throw new Error("상품 데이터를 불러오는데 실패했습니다.");
+ return res.json();
 };
 
-export const getProductById = async (supabase: any, id: string | number) => {
-  const { data, error } = await supabase
-    .from("products")
-    .select("*")
-    .eq("id", id)
-    .single();
+export const getProductById = async (id: number | string): Promise<ProductItem | null> => {
+  const res = await fetch(`/api/products/${id}`, { cache: "no-store" });
 
-  if (error) return null;
+  if (!res.ok) return null;
+  const data = await res.json();
+
   return {
     ...data,
     image: data.image || null,

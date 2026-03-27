@@ -17,6 +17,7 @@ export async function GET() {
 
   return NextResponse.json(safeData);
 }
+
 export async function POST(request: Request) {
   try {
     const { finalItems, deletedIds } = await request.json();

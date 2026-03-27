@@ -12,7 +12,6 @@ import {
   prepareProductData,
   saveProductsAll,
 } from "@/lib/api/products";
-import { supabaseServer } from "@/lib/supabase/server";
 
 export const useProductManager = () => {
   const [items, setItems] = useState<ProductItem[]>([]);
@@ -22,7 +21,7 @@ export const useProductManager = () => {
   // 1. 데이터 가져오기
   const fetchProducts = async () => {
     setLoading(true);
-    const data = await getAllProducts(supabaseServer);
+    const data = await getAllProducts();
 
     if (data) {
       const formatted = data.map((item: any) => ({

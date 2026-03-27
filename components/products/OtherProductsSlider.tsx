@@ -68,7 +68,7 @@ export default function OtherProductsSlider({
   useEffect(() => {
     const fetchOtherProducts = async () => {
       try {
-        const allData = await getAllProducts(supabaseServer);
+        const allData = await getAllProducts();
         const filtered = allData.filter((item:any) => item.id !== currentProductId);
         setProducts(filtered);
       } catch (error) {

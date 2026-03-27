@@ -4,7 +4,6 @@ import { HOME_REVEAL } from "@/components/sections/homeMotion";
 import SectionTitle from "@/components/sections/common/SectionTitle";
 import { getAllProducts } from "@/lib/api/products";
 import { getSiteSettings } from "@/lib/api/siteSettings";
-import { supabaseServer } from "@/lib/supabase/server";
 
 const STYLE = {
 	section: `
@@ -32,7 +31,7 @@ const STYLE = {
 
 export default async function ProductsPage() {;
 	const settings = await getSiteSettings();
-    const products = await getAllProducts(supabaseServer);
+    const products = await getAllProducts();
 
 	return (
 		<section className={STYLE.section}>
