@@ -3,11 +3,8 @@ import { supabase } from "@/lib/supabase/client";
 import { DropResult } from "@hello-pangea/dnd";
 
 import {
-  getFileNameFromUrl,
   toggleDeleteState,
-  uploadImage,
 } from "@/lib/utils/storage";
-import { cleanupStorageFiles, ensureRecordId } from "@/lib/api/common";
 import { reorderItems } from "@/lib/utils/reorder";
 import { ImageSlot, ProductItem } from "@/lib/types/products";
 import {
@@ -15,6 +12,7 @@ import {
   prepareProductData,
   saveProductsAll,
 } from "@/lib/api/products";
+import { supabaseServer } from "@/lib/supabase/server";
 
 export const useProductManager = () => {
   const [items, setItems] = useState<ProductItem[]>([]);
@@ -24,7 +22,7 @@ export const useProductManager = () => {
   // 1. 데이터 가져오기
   const fetchProducts = async () => {
     setLoading(true);
-    const data = await getAllProducts();
+    const data = await getAllProducts(supabaseServer);
 
     if (data) {
       const formatted = data.map((item: any) => ({

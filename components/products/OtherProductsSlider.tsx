@@ -7,6 +7,7 @@ import ProductBox from "./ProductBox";
 import { ProductItem } from "@/lib/types/products";
 import { getAllProducts } from "@/lib/api/products";
 import { useProductsSlider } from "@/hooks/useProductsSlider";
+import { supabaseServer } from "@/lib/supabase/server";
 
 const STYLE = {
   section: `
@@ -67,8 +68,8 @@ export default function OtherProductsSlider({
   useEffect(() => {
     const fetchOtherProducts = async () => {
       try {
-        const allData = await getAllProducts();
-        const filtered = allData.filter((item) => item.id !== currentProductId);
+        const allData = await getAllProducts(supabaseServer);
+        const filtered = allData.filter((item:any) => item.id !== currentProductId);
         setProducts(filtered);
       } catch (error) {
         console.error("다른 상품 로드 실패:", error);

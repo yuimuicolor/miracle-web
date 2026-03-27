@@ -11,6 +11,7 @@ import { getAllProducts } from "@/lib/api/products";
 import { ProductItem } from "@/lib/types/products";
 import { useSettings } from "@/context/SiteSettingsContext";
 import { useProductsSlider } from "@/hooks/useProductsSlider";
+import { supabaseServer } from "@/lib/supabase/server";
 
 const STYLE = {
   section: `
@@ -45,7 +46,7 @@ const {
   } = useProductsSlider(products.length, { isInfinite: true, autoScroll: true });
 
   useEffect(() => {
-    getAllProducts().then(setProducts).catch(err => console.error("데이터 로딩 실패:", err));
+    getAllProducts(supabaseServer).then(setProducts).catch(err => console.error("데이터 로딩 실패:", err));
   }, []);
 
   if (!settings) {
