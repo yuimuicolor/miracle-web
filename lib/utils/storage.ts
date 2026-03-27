@@ -1,4 +1,3 @@
-// lib/storageUtils.ts
 import * as imageCompression from "browser-image-compression";
 import { CompressionOptions } from "../types/common";
 

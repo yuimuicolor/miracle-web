@@ -1,11 +1,11 @@
 import { useState, useEffect, useRef } from "react";
-import { supabase } from "@/lib/supabase/client";
 import { uploadImage } from "@/lib/utils/storage";
 import { toggleDeleteState } from "@/lib/utils/storage";
 import { getAllGalleryForAdmin, saveGalleryAll } from "@/lib/api/gallery";
 import { reorderItems } from "@/lib/utils/reorder";
 import { GalleryItem } from "@/lib/types/gallery";
 import { cleanupStorageFiles, ensureRecordId } from "@/lib/api/common";
+import { supabase } from "@/lib/supabase/client";
 
 export const useGalleryManager = () => {
   const [items, setItems] = useState<GalleryItem[]>([]);
@@ -123,6 +123,7 @@ export const useGalleryManager = () => {
               item.tempFile,
               "gallery",
               newName,
+              { maxWidthOrHeight: 2000, maxSizeMB: 3 },
             );
           }
 

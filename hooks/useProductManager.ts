@@ -155,44 +155,6 @@ export const useProductManager = () => {
     updateItem(productIndex, "options", newOptions);
   };
 
-  // 10. 리스트 이미지 처리 (청소 후 재업로드)
-  const processList = async (
-    list: ImageSlot[],
-    type: string,
-    folder: string,
-  ) => {
-    const uploadPromises = list.map(async (slot) => {
-      // [Case A] 새로 추가된 파일이 있는 경우 -> 무조건 업로드
-      if (slot.file) {
-        const uniqueName = `${crypto.randomUUID()}_${Date.now()}.webp`;
-        const targetPath = `${folder}/${type}/${uniqueName}`;
-        return await uploadImage(supabase, slot.file, "products", targetPath);
-      }
-
-      // [Case B] 파일은 없고 기존 URL만 있는 경우 -> 유지
-      if (slot.url) {
-        return slot.url;
-      }
-
-      return null;
-    });
-
-    const finalUrls = (await Promise.all(uploadPromises)).filter(
-      (url): url is string => !!url,
-    );
-
-    // 2. 청소 로직: 현재 DB에 저장될 finalUrls에 포함되지 않은 파일들은 스토리지에서 삭제
-    const activeFileNames = finalUrls.map((url) => getFileNameFromUrl(url));
-    await cleanupStorageFiles(
-      supabase,
-      "products",
-      `${folder}/${type}`,
-      activeFileNames,
-    );
-
-    return finalUrls; // 이 배열이 그대로 DB의 column으로 들어갑니다.
-  };
-
   // 11. 최종 저장
   const handleSave = async () => {
     const activeItems = items.filter((i) => !i.isDeleted);

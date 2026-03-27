@@ -1,6 +1,6 @@
 import { ProductItem } from "../types/products";
 import { getBaseUrl } from "../utils/common";
-import { uploadImage, getFileNameFromUrl } from "@/lib/utils/storage";
+import { getFileNameFromUrl, uploadImage } from "@/lib/utils/storage";
 import { cleanupStorageFiles, ensureRecordId } from "@/lib/api/common";
 
 
