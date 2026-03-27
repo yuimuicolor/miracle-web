@@ -19,18 +19,3 @@ export interface GalleryPageGridItem {
   subtitle: string;
   mainTitle: string;
 }
-
-export interface GalleryPageGridProps {
-  images: GalleryPageGridItem[];
-}
-
-
-export interface ZoomablePhotoCardProps {
-  src: string;
-  alt: string;
-  sizes?: string;
-  className?: string;
-  mode?: "default" | "with-title";
-  subtitle?: string;
-  mainTitle?: string;
-}

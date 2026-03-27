@@ -6,7 +6,7 @@ import {
   SECTION_REVEAL,
   SECTION_REVEAL_EFFECT } from "@/lib/constants/aboutPage";
 import { ABOUT_PAGE_CONTENT } from "@/lib/aboutUsData";
-import { SectionHeading } from "./AboutPageShared";
+import { SectionHeading } from "./SharedAboutPage";
 
 export default function AboutCertificatesSection() {
   const { certificates } = ABOUT_PAGE_CONTENT;

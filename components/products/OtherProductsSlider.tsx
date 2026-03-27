@@ -5,7 +5,12 @@ import { useEffect, useRef, useState } from "react";
 import MoreButton from "@/components/MoreButton";
 import { getAllProducts } from "@/lib/api/products";
 import ProductBox from "./ProductBox";
-import { OtherProductsSliderProps, ProductItem } from "@/lib/types/products";
+import { ProductItem } from "@/lib/types/products";
+
+ interface OtherProductsSliderProps {
+  currentProductId: number;
+}
+
 
 const STYLE = {
   section: `

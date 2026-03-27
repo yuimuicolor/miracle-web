@@ -1,7 +1,11 @@
 import Image from "next/image";
 import { Plus } from "lucide-react";
-import { ProductBoxProps } from "@/lib/types/products";
+import { ProductItem } from "@/lib/types/products";
 
+interface ProductBoxProps {
+  item: ProductItem;
+  index?: number;
+}
 const STYLE = {
   card: `
     group relative h-[30rem] w-full overflow-hidden

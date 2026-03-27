@@ -4,7 +4,11 @@ import Image from "next/image";
 import { ChevronLeft, ChevronRight, ExternalLink } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
-import { ProductDetailTopProps } from "@/lib/types/products";
+import { ProductItem } from "@/lib/types/products";
+
+interface ProductDetailTopProps {
+  product: ProductItem;
+}
 
 const DRAG_THRESHOLD = 28;
 

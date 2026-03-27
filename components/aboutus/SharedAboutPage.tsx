@@ -1,6 +1,13 @@
 import { ABOUT_PAGE_STYLE } from "@/lib/constants/aboutPage";
-import { SectionHeadingProps } from "@/lib/types/aboutUs";
 import { ReactNode } from "react";
+
+
+export interface SectionHeadingProps {
+  headingEn: string;
+  headingKo: string;
+  description: string;
+};
+
 
 export function SectionHeading({
   headingEn,

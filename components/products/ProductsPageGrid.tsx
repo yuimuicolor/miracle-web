@@ -5,7 +5,11 @@ import MoreButton from "@/components/MoreButton";
 import ProductsPageBox from "@/components/products/ProductsPageBox";
 import ScrollReveal from "@/components/ScrollReveal";
 import { HOME_REVEAL } from "@/components/sections/homeMotion";
-import { ProductsPageGridProps } from "@/lib/types/products";
+import { ProductItem } from "@/lib/types/products";
+
+interface ProductsPageGridProps {
+  products: ProductItem[];
+}
 
 const PAGE_SIZE = 6;
 

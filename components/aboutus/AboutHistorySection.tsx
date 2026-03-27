@@ -1,6 +1,6 @@
 import Image from "next/image";
 import ScrollReveal from "@/components/ScrollReveal";
-import { SectionHeading } from "@/components/aboutus/AboutPageShared";
+import { SectionHeading } from "@/components/aboutus/SharedAboutPage";
 import {
   ABOUT_PAGE_STYLE,
   ANCHOR_PADDING_TOP,
