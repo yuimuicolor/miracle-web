@@ -64,7 +64,7 @@ export default function OtherProductsSlider({
     stopDrag,
     handleCardClick,
     scrollByCard,
-  } = useProductsSlider();
+  } = useProductsSlider(products.length);
 
   useEffect(() => {
     const fetchOtherProducts = async () => {
