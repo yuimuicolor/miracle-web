@@ -1,10 +1,12 @@
-import { notFound } from "next/navigation";
+'use client';
+
 import ProductDetailTop from "@/components/products/ProductDetailTop";
 import OtherProductsSlider from "@/components/products/OtherProductsSlider";
 import {
   getProductById,
-  getAllProducts,
 } from "@/lib/api/products";
+import React, { useEffect, useState } from "react";
+import { ProductItem } from "@/lib/types/products";
 
 const STYLE = {
   section: `
@@ -19,27 +21,40 @@ interface ProductDetailPageProps {
   params: Promise<{ productId: string }>;
 }
 
-export async function generateStaticParams() {
-  const products = await getAllProducts();
-  return products.map((product: any) => ({
-    productId: product.id.toString(), // URL용 문자열로 변환
-  }));
-}
-
 export default async function ProductDetailPage({ params }: ProductDetailPageProps) {
-  const { productId } = await params;
-  const numericId = Number(productId);
-  
-  if (isNaN(numericId)) {
-    notFound();
-  }
+  const [product, setProduct] = useState<ProductItem | null>(null);
+  const [loading, setLoading] = useState(true);
 
-  const product = await getProductById(numericId);
+  const { productId } = React.use(params);
+  const numericId = Number(productId);
+
+  useEffect(() => {
+    if (isNaN(numericId)) {
+      setLoading(false);
+      return;
+    }
+
+    const fetchProduct = async () => {
+      try {
+        // 누나가 쓰던 그 getProductById (/api/... fetch 방식) 그대로!
+        const data = await getProductById(numericId);
+        setProduct(data);
+      } catch (error) {
+        console.error("데이터 가져오기 실패:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchProduct();
+  }, [numericId]);
 
   if (!product) {
-    notFound();
+    return <div>상품이 없습니다.</div>;
   }
 
+  if (loading) {
+    return <div className="py-[10rem] text-center">상품 정보를 불러오는 중입니다...</div>;
+  }
 
   return (
     <section className={STYLE.section}>
