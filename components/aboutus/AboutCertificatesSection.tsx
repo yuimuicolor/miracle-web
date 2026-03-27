@@ -1,13 +1,12 @@
 import Image from "next/image";
 import ScrollReveal from "@/components/ScrollReveal";
-import {
+import { 
   ABOUT_PAGE_STYLE,
   ANCHOR_PADDING_TOP,
   SECTION_REVEAL,
-  SECTION_REVEAL_EFFECT,
-  SectionHeading,
-} from "@/components/aboutus/aboutPageShared";
+  SECTION_REVEAL_EFFECT } from "@/lib/constants/aboutPage";
 import { ABOUT_PAGE_CONTENT } from "@/lib/aboutUsData";
+import { SectionHeading } from "./AboutPageShared";
 
 export default function AboutCertificatesSection() {
   const { certificates } = ABOUT_PAGE_CONTENT;

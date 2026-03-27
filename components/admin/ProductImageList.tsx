@@ -1,5 +1,5 @@
 import { DragDropContext, Droppable, Draggable, DropResult } from "@hello-pangea/dnd";
-import { ImageSlot } from "@/lib/productsData";
+import { ImageSlot } from "@/lib/types/products";
 import Image from "next/image";
 
 interface Props {

@@ -3,7 +3,7 @@ import AboutCertificatesSection from "@/components/aboutus/AboutCertificatesSect
 import AboutHistorySection from "@/components/aboutus/AboutHistorySection";
 import AboutIntroSection from "@/components/aboutus/AboutIntroSection";
 import AboutMarqueeSection from "@/components/aboutus/AboutMarqueeSection";
-import { ABOUT_PAGE_STYLE } from "@/components/aboutus/aboutPageShared";
+import { ABOUT_PAGE_STYLE } from "@/lib/constants/aboutPage";
 
 export default function AboutUsPage() {
   return (

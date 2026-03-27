@@ -1,18 +1,9 @@
 "use client";
 
+import { ZoomablePhotoCardProps } from "@/lib/types/gallery";
 import Image from "next/image";
 import { useEffect, useState } from "react";
 import { createPortal } from "react-dom";
-
-interface ZoomablePhotoCardProps {
-  src: string;
-  alt: string;
-  sizes?: string;
-  className?: string;
-  mode?: "default" | "with-title";
-  subtitle?: string;
-  mainTitle?: string;
-}
 
 const TWO_LINE_CLAMP_STYLE = {
   display: "-webkit-box",

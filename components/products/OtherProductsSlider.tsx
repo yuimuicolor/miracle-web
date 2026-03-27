@@ -5,7 +5,7 @@ import { useEffect, useRef, useState } from "react";
 import MoreButton from "@/components/MoreButton";
 import { getAllProducts } from "@/lib/api/products";
 import ProductBox from "./ProductBox";
-import { ProductItem } from "@/lib/types/products";
+import { OtherProductsSliderProps, ProductItem } from "@/lib/types/products";
 
 const STYLE = {
   section: `
@@ -41,10 +41,6 @@ const STYLE = {
     "shrink-0 text-[5rem] leading-none text-black/20 transition-colors hover:text-black/45 md:text-[6rem]",
   buttonWrap: "flex justify-center pt-[1rem]",
 };
-
-interface OtherProductsSliderProps {
-  currentProductId: number;
-}
 
 export default function OtherProductsSlider({
   currentProductId,

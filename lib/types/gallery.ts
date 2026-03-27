@@ -12,3 +12,25 @@ export interface GalleryItem {
   previewUrl?: string;
   tempFile?: File;
 }
+
+
+export interface GalleryPageGridItem {
+  imageUrl: string;
+  subtitle: string;
+  mainTitle: string;
+}
+
+export interface GalleryPageGridProps {
+  images: GalleryPageGridItem[];
+}
+
+
+export interface ZoomablePhotoCardProps {
+  src: string;
+  alt: string;
+  sizes?: string;
+  className?: string;
+  mode?: "default" | "with-title";
+  subtitle?: string;
+  mainTitle?: string;
+}

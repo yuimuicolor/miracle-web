@@ -1,11 +1,8 @@
 import Link from "next/link";
 import Image from "next/image";
 import { Plus } from "lucide-react";
-import { ProductItem } from "@/lib/types/products";
+import { ProductsPageBoxProps } from "@/lib/types/products";
 
-interface ProductsPageBoxProps {
-  item: ProductItem;
-}
 
 const TWO_LINE_CLAMP_STYLE = {
   display: "-webkit-box",

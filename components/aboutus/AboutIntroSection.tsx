@@ -5,7 +5,7 @@ import {
   ABOUT_PAGE_STYLE,
   ANCHOR_PADDING_TOP,
   INTRO_REVEAL,
-} from "@/components/aboutus/aboutPageShared";
+} from "@/lib/constants/aboutPage";
 
 const INTRO_ROWS = [
   {

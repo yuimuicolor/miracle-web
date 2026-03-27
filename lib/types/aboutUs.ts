@@ -11,3 +11,9 @@ export interface CertificateItem {
   title: string;
   desc: string;
 }
+
+export interface SectionHeadingProps {
+  headingEn: string;
+  headingKo: string;
+  description: string;
+};

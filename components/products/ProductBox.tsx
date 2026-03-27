@@ -1,11 +1,6 @@
 import Image from "next/image";
 import { Plus } from "lucide-react";
-import { ProductItem } from "@/lib/types/products";
-
-interface ProductBoxProps {
-  item: ProductItem;
-  index?: number;
-}
+import { ProductBoxProps } from "@/lib/types/products";
 
 const STYLE = {
   card: `

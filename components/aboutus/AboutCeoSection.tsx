@@ -5,7 +5,7 @@ import {
   ANCHOR_PADDING_TOP,
   SECTION_REVEAL,
   SECTION_REVEAL_EFFECT,
-} from "@/components/aboutus/aboutPageShared";
+} from "@/lib/constants/aboutPage";
 import { ABOUT_PAGE_CONTENT } from "@/lib/aboutUsData";
 
 

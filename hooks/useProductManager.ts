@@ -119,7 +119,6 @@ export const useProductManager = () => {
     );
 
     // 2. 청소 로직: 현재 DB에 저장될 finalUrls에 포함되지 않은 파일들은 스토리지에서 삭제
-    // 여기서 getFileNameFromUrl을 써서 실제 파일명만 추출해야 해요.
     const activeFileNames = finalUrls.map((url) => getFileNameFromUrl(url));
     await cleanupStorageFiles("products", `${folder}/${type}`, activeFileNames);
 

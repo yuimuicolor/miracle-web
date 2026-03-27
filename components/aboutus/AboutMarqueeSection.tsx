@@ -4,7 +4,7 @@ import {
   MARQUEE_REPEAT_COUNT,
   SECTION_REVEAL,
   SECTION_REVEAL_EFFECT,
-} from "@/components/aboutus/aboutPageShared";
+} from "@/lib/constants/aboutPage";
 import { ABOUT_PAGE_CONTENT } from "@/lib/aboutUsData";
 
 export default function AboutMarqueeSection() {

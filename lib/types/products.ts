@@ -27,3 +27,29 @@ export interface ProductItem {
   isDeleted?: boolean;
   isNew?: boolean;
 }
+
+// OtherProductsSlider.tsx
+export interface OtherProductsSliderProps {
+  currentProductId: number;
+}
+
+// ProductBox.tsx
+export interface ProductBoxProps {
+  item: ProductItem;
+  index?: number;
+}
+
+// ProductDetailTop.tsx
+export interface ProductDetailTopProps {
+  product: ProductItem;
+}
+
+// ProductsPageBox.tsx
+export interface ProductsPageBoxProps {
+  item: ProductItem;
+}
+
+// ProductsPageGrid.tsx
+export interface ProductsPageGridProps {
+  products: ProductItem[];
+}

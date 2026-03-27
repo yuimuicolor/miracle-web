@@ -5,16 +5,7 @@ import MoreButton from "@/components/MoreButton";
 import ScrollReveal from "@/components/ScrollReveal";
 import ZoomablePhotoCard from "@/components/gallery/ZoomablePhotoCard";
 import { HOME_REVEAL } from "@/components/sections/homeMotion";
-
-interface GalleryPageGridItem {
-  imageUrl: string;
-  subtitle: string;
-  mainTitle: string;
-}
-
-interface GalleryPageGridProps {
-  images: GalleryPageGridItem[];
-}
+import { GalleryPageGridProps } from "@/lib/types/gallery";
 
 const PAGE_SIZE = 6;
 

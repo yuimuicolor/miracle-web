@@ -1,13 +1,12 @@
 import Image from "next/image";
 import ScrollReveal from "@/components/ScrollReveal";
+import { SectionHeading } from "@/components/aboutus/AboutPageShared";
 import {
   ABOUT_PAGE_STYLE,
   ANCHOR_PADDING_TOP,
   HISTORY_STAGGER_MS,
   SECTION_REVEAL,
-  SECTION_REVEAL_EFFECT,
-  SectionHeading,
-} from "@/components/aboutus/aboutPageShared";
+  SECTION_REVEAL_EFFECT} from "@/lib/constants/aboutPage";
 import { ABOUT_PAGE_CONTENT } from "@/lib/aboutUsData";
 
 export default function AboutHistorySection() {
