@@ -42,7 +42,7 @@ export default function ProductsSection() {
 const {
     trackRef, grabbing, handleMouseDown, handleMouseMove, stopDrag,
     scrollByCard, isHoverPauseRef, dragMovedRef
-  } = useProductsSlider(products.length);
+  } = useProductsSlider(products.length, { isInfinite: true, autoScroll: true });
 
   useEffect(() => {
     getAllProducts().then(setProducts).catch(err => console.error("데이터 로딩 실패:", err));

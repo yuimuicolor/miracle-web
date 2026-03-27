@@ -4,7 +4,17 @@ const AUTO_SPEED = 1;
 const MOBILE_AUTO_SPEED = 0.5;
 const ARROW_SCROLL_DURATION = 420;
 
-export function useProductsSlider(productsLength: number) {
+interface SliderOptions {
+  isInfinite?: boolean;
+  autoScroll?: boolean;
+}
+
+export function useProductsSlider(
+  productsLength: number,
+  options?: SliderOptions,
+) {
+  const { isInfinite = true, autoScroll = true } = options || {};
+
   const trackRef = useRef<HTMLDivElement | null>(null);
   const [grabbing, setGrabbing] = useState(false);
 
@@ -54,7 +64,7 @@ export function useProductsSlider(productsLength: number) {
   // 메인 애니메이션 루프
   useEffect(() => {
     const container = trackRef.current;
-    if (!container || productsLength === 0) return;
+    if (!container || productsLength === 0 || !autoScroll) return; // ❌ autoScroll이 false면 종료
 
     const loop = () => {
       if (!isDragging.current && !isHoverPauseRef.current) {
@@ -89,7 +99,7 @@ export function useProductsSlider(productsLength: number) {
 
     rafRef.current = requestAnimationFrame(loop);
     return () => cancelAnimationFrame(rafRef.current);
-  }, [productsLength]);
+  }, [productsLength, autoScroll]);
 
   // 애니메이션 제어 함수
   const stopArrowAnimation = () => {
@@ -111,12 +121,13 @@ export function useProductsSlider(productsLength: number) {
       const progress = Math.min((now - startTime) / ARROW_SCROLL_DURATION, 1);
       const eased = 1 - (1 - progress) ** 3;
 
-      container.scrollLeft = startLeft + delta * eased;
+      const targetLeft = startLeft + delta * eased;
+      container.scrollLeft = isInfinite
+        ? normalizeScroll(targetLeft)
+        : targetLeft;
 
       if (progress < 1) {
         arrowAnimRef.current = requestAnimationFrame(tick);
-      } else {
-        arrowAnimRef.current = 0;
       }
     };
 

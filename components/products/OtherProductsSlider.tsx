@@ -50,11 +50,9 @@ interface OtherProductsSliderProps {
 export default function OtherProductsSlider({
   currentProductId,
 }: OtherProductsSliderProps) {
-  const ARROW_SCROLL_DURATION = 420;
 
   const [products, setProducts] = useState<ProductItem[]>([]);
   const [loading, setLoading] = useState(true);
-  const halfRef = useRef(0);
 
   const {
     trackRef,
@@ -64,7 +62,7 @@ export default function OtherProductsSlider({
     stopDrag,
     handleCardClick,
     scrollByCard,
-  } = useProductsSlider(products.length);
+  } = useProductsSlider(products.length, { isInfinite: false, autoScroll: false });
 
   useEffect(() => {
     const fetchOtherProducts = async () => {
@@ -83,24 +81,6 @@ export default function OtherProductsSlider({
   }, [currentProductId]);
 
   
-  useEffect(() => {
-    const container = trackRef.current;
-    if (!container || products.length === 0) return;
-
-    const ro = new ResizeObserver(() => calcHalf(container));
-    ro.observe(container);
-    requestAnimationFrame(() => calcHalf(container));
-
-    return () => {
-    ro.disconnect();
-    };
-  }, [products]);
-
-  const calcHalf = (container: HTMLDivElement) => {
-    if (products.length === 0) return;
-    halfRef.current = container.scrollWidth / 2;
-  };
-
   const handleNativeDragStart = (event: React.DragEvent<HTMLElement>) => {
   event.preventDefault();
 };
@@ -137,7 +117,7 @@ export default function OtherProductsSlider({
             onMouseUp={stopDrag}
             onMouseLeave={stopDrag}
           >
-            {products.length > 0 && [...products, ...products].map((item, index) => (
+            {products.map((item, index) => (
               <div
                 key={`${item.id}-${index}`}
                 data-product-card="true"
