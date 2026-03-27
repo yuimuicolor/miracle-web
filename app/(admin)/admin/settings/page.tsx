@@ -46,7 +46,7 @@ export default function AdminSiteSettingsPage() {
     if (!file || !settings) return;
 
     try {
-      const publicUrl = await uploadImage(file, "site", `logo-${crypto.randomUUID()}.webp`, {
+      const publicUrl = await uploadImage(supabase, file, "site", `logo-${crypto.randomUUID()}.webp`, {
         maxWidthOrHeight: 1000,
         maxSizeMB: 1
       });
