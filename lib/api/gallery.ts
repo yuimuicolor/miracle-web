@@ -4,8 +4,8 @@ import { GalleryItem } from "../types/gallery";
 const baseUrl = getBaseUrl();
 
 // 1. GET (그냥 호출)
-export const getPublicGalleryImages = async (): Promise<GalleryItem[]> => {
-  const res = await fetch(`${baseUrl}/api/gallery`, { cache: "no-store" });
+export const getPublicGalleryImages = async (limit?: number): Promise<GalleryItem[]> => {
+  const res = await fetch(`${baseUrl}/api/gallery${limit ? `?limit=${limit}` : ""}`, { cache: "no-store" });
   return res.json();
 };
 
