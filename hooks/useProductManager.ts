@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { supabase } from "@/lib/supabase"; 
+import { supabase } from "@/lib/supabase";
 import { DropResult } from "@hello-pangea/dnd";
 
 import {
@@ -7,10 +7,7 @@ import {
   toggleDeleteState,
   uploadImage,
 } from "@/lib/utils/storage";
-import {
-  cleanupStorageFiles,
-  ensureRecordId,
-} from "@/lib/api/common";
+import { cleanupStorageFiles, ensureRecordId } from "@/lib/api/common";
 import { reorderItems } from "@/lib/utils/reorder";
 import { ImageSlot, ProductItem } from "@/lib/types/products";
 
@@ -92,7 +89,71 @@ export const useProductManager = () => {
     setItems((prev) => reorderItems(prev, sourceIndex, destinationIndex));
   };
 
-  // 6-1. 리스트 이미지 처리 (청소 후 재업로드)
+  // 6. 리스트 이미지 순서 변경 (썸네일/상세 각각)
+  const reorderImageList = (
+    productIndex: number,
+    field: "thumbnailImages" | "detailImages",
+    result: DropResult,
+  ) => {
+    // 1. 드롭 대상이 없으면 종료
+    if (!result.destination) return;
+
+    // 2. 해당 상품의 기존 이미지 리스트 복사
+    const list = Array.from(items[productIndex][field] || []);
+
+    // 3. 배열 내 위치 이동
+    const [moved] = list.splice(result.source.index, 1);
+    list.splice(result.destination.index, 0, moved);
+
+    // 4. 새로운 순서에 맞춰 displayOrder 부여 (1부터 시작)
+    const updatedList = list.map((slot, idx) => ({
+      ...slot,
+      displayOrder: idx + 1,
+    }));
+
+    // 5. 전체 상품 상태 업데이트 (이미 만들어둔 updateItem 활용)
+    updateItem(productIndex, field, updatedList);
+  };
+
+  // 6. 리스트 이미지 추가 (ID 생성 포함)
+  const handleListUpload = (
+    index: number,
+    field: "thumbnailImages" | "detailImages",
+    files: File[],
+  ) => {
+    const newSlots: ImageSlot[] = files.map((file) => ({
+      id: crypto.randomUUID(),
+      file,
+    }));
+    updateItem(index, field, [...(items[index][field] || []), ...newSlots]);
+  };
+
+  // 7. 리스트 이미지 삭제
+  const handleRemoveImage = (
+    index: number,
+    field: "thumbnailImages" | "detailImages",
+    id: string,
+  ) => {
+    const filtered = items[index][field].filter((img) => img.id !== id);
+    updateItem(index, field, filtered);
+  };
+
+  // 8. 옵션 추가
+  const handleAddOption = (index: number, newOption: string) => {
+    if (!newOption.trim()) return;
+    const nextOptions = [...(items[index].options || []), newOption.trim()];
+    updateItem(index, "options", nextOptions);
+  };
+
+  // 9. 옵션 삭제
+  const handleRemoveOption = (productIndex: number, optIdx: number) => {
+    const newOptions = items[productIndex].options.filter(
+      (_, i) => i !== optIdx,
+    );
+    updateItem(productIndex, "options", newOptions);
+  };
+
+  // 10. 리스트 이미지 처리 (청소 후 재업로드)
   const processList = async (
     list: ImageSlot[],
     type: string,
@@ -125,7 +186,7 @@ export const useProductManager = () => {
     return finalUrls; // 이 배열이 그대로 DB의 column으로 들어갑니다.
   };
 
-  // 7. 최종 저장
+  // 11. 최종 저장
   const handleSave = async () => {
     // 삭제되지 않은 아이템들만 제목 체크 (삭제 처리할 건 제목 없어도 통과!)
     const activeItems = items.filter((i) => !i.isDeleted);
@@ -240,7 +301,12 @@ export const useProductManager = () => {
     isSaving,
     handleAddProduct,
     handleSave,
+    handleAddOption,
+    handleRemoveOption,
+    handleListUpload,
+    handleRemoveImage,
     onReorder,
+    reorderImageList,
     updateItem,
     toggleDelete,
   };

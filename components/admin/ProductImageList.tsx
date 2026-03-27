@@ -1,6 +1,7 @@
 import { DragDropContext, Droppable, Draggable, DropResult } from "@hello-pangea/dnd";
 import { ImageSlot } from "@/lib/types/products";
 import Image from "next/image";
+import { getFileNameFromUrl } from "@/lib/utils/storage";
 
 interface Props {
   type: "thumbnail" | "detail";
@@ -9,28 +10,19 @@ interface Props {
   onRemove: (id: string) => void;
   onReorder: (result: DropResult) => void;
 }
-
 export function ProductImageList({ type, images, onUpload, onRemove, onReorder }: Props) {
-
-  const getFileName = (url: string) => {
-    try {
-      const decodeUrl = decodeURIComponent(url); // 한글 파일명 대응
-      const parts = decodeUrl.split("/");
-      return parts[parts.length - 1].split("?")[0]; // 쿼리 스트링 제거 후 파일명만 반환
-    } catch (e) {
-      return "기존 이미지";
-    }
-  };
-
   return (
     <div className="space-y-2">
       <div className="flex justify-between items-center">
-        <span className="text-admin-small font-bold">{type === "thumbnail" ? <>썸네일 <span className="text-blue-600">*</span></> : "상세 이미지"}</span>
-        <label className="cursor-pointer text-[14px] font-semibold bg-slate-100 px-2 py-1 rounded hover:bg-slate-200">
-          추가
+        <span className="text-admin-small font-bold">
+          {type === "thumbnail" ? <>썸네일 <span className="text-blue-600">*</span></> : "상세 이미지"}
+        </span>
+        <label className="cursor-pointer text-[12px] font-semibold bg-blue-50 text-blue-600 px-2 py-1 rounded hover:bg-blue-100 transition-colors">
+          파일 추가
           <input
             type="file"
             multiple
+            accept="image/*"
             className="hidden"
             onChange={(e) => e.target.files && onUpload(Array.from(e.target.files))}
           />
@@ -40,31 +32,38 @@ export function ProductImageList({ type, images, onUpload, onRemove, onReorder }
       <DragDropContext onDragEnd={onReorder}>
         <Droppable droppableId={`list-${type}`}>
           {(provided) => (
-            <div {...provided.droppableProps} ref={provided.innerRef} className="space-y-1">
+            <div 
+              {...provided.droppableProps} 
+              ref={provided.innerRef} 
+              className="space-y-1 min-h-[40px] bg-slate-50/50 rounded-lg p-1"
+            >
               {images.map((img, i) => (
                 <Draggable key={img.id} draggableId={img.id} index={i}>
-                  {(prov) => (
+                  {(prov, snapshot) => (
                     <div
                       ref={prov.innerRef}
                       {...prov.draggableProps}
                       {...prov.dragHandleProps}
-                      className="group flex items-center gap-2 bg-slate-50 p-1.5 rounded-md border border-transparent hover:border-slate-200"
+                      className={`group flex items-center gap-2 p-1.5 rounded-md border transition-all ${
+                        snapshot.isDragging ? "bg-white shadow-lg border-blue-400 z-50" : "bg-white border-slate-200 hover:border-slate-300"
+                      }`}
                     >
-                      <Image
-                        src={img?.file ? URL.createObjectURL(img.file) : (img.url || "/fallback-image.png")}
-                        width={32}  // Image 태그는 width, height가 필수예요! (w-8 = 32px)
-                        height={32}
-                        className="w-8 h-8 object-cover rounded shadow-sm"
-                        alt="preview"
-                        // 2. 임시 URL(blob)일 때는 최적화를 꺼서 에러를 방지해요
-                        unoptimized={true}
-                      />
-                      <span className="flex-1 text-[1.4rem] truncate text-slate-600">
-                        {img?.file ? img.file.name : getFileName(img.url || "")}
+                      <div className="relative w-8 h-8 flex-shrink-0">
+                        <Image
+                          src={img?.file ? URL.createObjectURL(img.file) : (img.url || "/fallback-image.png")}
+                          fill
+                          className="object-cover rounded shadow-sm"
+                          alt="preview"
+                          unoptimized
+                        />
+                      </div>
+                      <span className="flex-1 text-[1.2rem] truncate text-slate-600 font-medium">
+                        {img?.file ? img.file.name : getFileNameFromUrl(img.url || "")}
                       </span>
                       <button
+                        type="button" // ⭐ 기본 submit 방지
                         onClick={() => onRemove(img.id)}
-                        className="text-red-400 opacity-0 group-hover:opacity-100 transition-opacity px-1"
+                        className="text-slate-400 hover:text-red-500 transition-colors px-1"
                       >
                         ✕
                       </button>
@@ -73,6 +72,13 @@ export function ProductImageList({ type, images, onUpload, onRemove, onReorder }
                 </Draggable>
               ))}
               {provided.placeholder}
+              
+              {/* ⭐ 이미지가 없을 때 보여줄 문구 */}
+              {images.length === 0 && (
+                <div className="text-center py-4 text-[12px] text-slate-400 border border-dashed border-slate-200 rounded-lg">
+                  이미지를 추가해주세요.
+                </div>
+              )}
             </div>
           )}
         </Droppable>

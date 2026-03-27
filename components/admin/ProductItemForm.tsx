@@ -12,6 +12,11 @@ type ProductItemFormProps = {
   index: number;
   updateItem: (index: number, field: keyof ProductItem, value: any) => void;
   toggleDelete: (id: number) => void;
+  handleListUpload: (index: number, field: "thumbnailImages" | "detailImages", files: File[]) => void;
+  handleRemoveImage: (index: number, field: "thumbnailImages" | "detailImages", id: string) => void;
+  reorderImageList: (index: number, field: "thumbnailImages" | "detailImages", res: DropResult) => void;
+  handleAddOption: (index: number, opt: string) => void;
+  handleRemoveOption: (index: number, optIdx: number) => void;
 };
 
 export default function ProductItemForm({
@@ -19,78 +24,15 @@ export default function ProductItemForm({
   index,
   updateItem,
   toggleDelete,
+  handleListUpload,
+  handleRemoveImage,
+  reorderImageList,
+  handleAddOption,
+  handleRemoveOption
 }: ProductItemFormProps) {
 
   const [tempOptionInput, setTempOptionInput] = useState("");
   const inputRef = useRef<HTMLInputElement>(null);
-
-  // 1. 옵션 추가 함수
-  const handleAddOption = (newOption: string) => {
-    // 공백만 입력하거나 빈 값인 경우 방지
-    if (!newOption || newOption.trim() === "") return;
-
-    const trimmedOption = newOption.trim();
-    const currentOptions = Array.isArray(item.options) ? item.options : [];
-    const nextOptions = [...currentOptions, trimmedOption];
-
-    // 기존 옵션 배열에 새 값 추가
-    updateItem(index, "options", nextOptions);
-    setTempOptionInput("");
-    inputRef.current?.focus();
-  };
-
-  // 2. 옵션 삭제 함수
-  const handleRemoveOption = (optIdx: number) => {
-    const newOptions = item.options.filter((_, i) => i !== optIdx);
-    updateItem(index, "options", newOptions);
-  };
-
-  // 1. 메인 이미지 변경 (무조건 1개)
-  const handleMainChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files && e.target.files[0]) {
-      updateItem(index, "tempMainFile", e.target.files[0]);
-    }
-  };
-
-  // 2. 리스트(썸네일/상세) 이미지 추가
-  const handleListUpload = (field: "thumbnailImages" | "detailImages", files: File[]) => {
-    const newSlots: ImageSlot[] = files.map(file => ({
-      id: crypto.randomUUID(),
-      file
-    }));
-    updateItem(index, field, [...(item[field] || []), ...newSlots]);
-  };
-
-  // 3. 이미지 삭제
-  const handleRemoveImage = (field: "thumbnailImages" | "detailImages", id: string) => {
-    const filtered = item[field].filter(img => img.id !== id);
-    updateItem(index, field, filtered);
-  };
-
-
-
-// 4. 리스트 내 순서 변경 (DnD)
-const handleReorder = (field: "thumbnailImages" | "detailImages", result: DropResult) => {
-  if (!result.destination) return;
-
-  // 1. 기존 리스트 복사
-  const list = Array.from(item[field]);
-  
-  // 2. 드래그 앤 드롭으로 위치 변경
-  const [moved] = list.splice(result.source.index, 1);
-  list.splice(result.destination.index, 0, moved);
-
-  // 3. 변경된 배열 순서에 맞춰 displayOrder를 1부터 다시 매김
-  const updatedList = list.map((slot, idx) => ({
-    ...slot,
-    displayOrder: idx + 1, // 1, 2, 3... 순서대로 부여
-  }));
-
-  // 4. 부모 컴포넌트의 상태 업데이트
-  updateItem(index, field, updatedList);
-};
-
-
 
   return (
     <>
@@ -113,7 +55,7 @@ const handleReorder = (field: "thumbnailImages" | "detailImages", result: DropRe
               ) : (
                 <span className="text-slate-400 text-admin-small">이미지 업로드</span>
               )}
-              <input type="file" className="hidden" onChange={handleMainChange} />
+              <input type="file" className="hidden" onChange={(e) => updateItem(index, "tempMainFile", e.target.files?.[0])} />
             </label>
           </div>
         </div>
@@ -122,18 +64,18 @@ const handleReorder = (field: "thumbnailImages" | "detailImages", result: DropRe
         <ProductImageList
           type="thumbnail"
           images={item.thumbnailImages}
-          onUpload={(files) => handleListUpload("thumbnailImages", files)}
-          onRemove={(id) => handleRemoveImage("thumbnailImages", id)}
-          onReorder={(res) => handleReorder("thumbnailImages", res)}
+          onUpload={(files) => handleListUpload(index, "thumbnailImages", files)}
+          onRemove={(id) => handleRemoveImage(index, "thumbnailImages", id)}
+          onReorder={(res) => reorderImageList(index, "thumbnailImages", res)}
         />
 
         {/* 상세 이미지 리스트 (여러개) */}
         <ProductImageList
           type="detail"
           images={item.detailImages}
-          onUpload={(files) => handleListUpload("detailImages", files)}
-          onRemove={(id) => handleRemoveImage("detailImages", id)}
-          onReorder={(res) => handleReorder("detailImages", res)}
+          onUpload={(files) => handleListUpload(index, "detailImages", files)}
+          onRemove={(id) => handleRemoveImage(index, "detailImages", id)}
+          onReorder={(res) => reorderImageList(index, "detailImages", res)}
         />
       </div>
 
@@ -187,7 +129,9 @@ const handleReorder = (field: "thumbnailImages" | "detailImages", result: DropRe
                   type="button"
                   onClick={() => {
                     if (tempOptionInput) {
-                      handleAddOption(tempOptionInput);
+                      handleAddOption(index, tempOptionInput);
+                      setTempOptionInput("");
+                      inputRef.current?.focus();
                     }
                   }}
                   className="px-4 py-3 bg-blue-500 text-white rounded-lg text-admin-small font-bold hover:bg-blue-600 transition-colors"
@@ -212,7 +156,7 @@ const handleReorder = (field: "thumbnailImages" | "detailImages", result: DropRe
                   {/* 삭제 X 버튼 */}
                   <button
                     type="button"
-                    onClick={() => handleRemoveOption(optIdx)}
+                    onClick={() => handleRemoveOption(index, optIdx)}
                     className="w-8 h-8 flex items-center justify-center rounded-full bg-slate-400 text-white group-hover:bg-red-400 transition-colors"
                   >
                     <span className="text-[12px] leading-none">✕</span>

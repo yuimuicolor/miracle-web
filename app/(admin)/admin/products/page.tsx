@@ -16,9 +16,14 @@ export default function AdminProductsPage() {
     isSaving,
     handleAddProduct,
     handleSave,
+    handleAddOption,
+    handleRemoveOption,
+    handleListUpload,
+    handleRemoveImage,
     onReorder,
+    reorderImageList,
     updateItem,
-    toggleDelete
+    toggleDelete,
   } = useProductManager();
 
   const scrollRef = useRef<HTMLDivElement>(null);
@@ -89,7 +94,13 @@ export default function AdminProductsPage() {
                           item={item}
                           index={index}
                           updateItem={updateItem}
-                          toggleDelete={() => toggleDelete(item.id)}
+                          toggleDelete={toggleDelete}
+                          handleListUpload={handleListUpload}
+                          handleRemoveImage={handleRemoveImage}
+                          reorderImageList={reorderImageList}
+                          handleAddOption={handleAddOption}
+                          handleRemoveOption={handleRemoveOption}
+
                         />
                       </div>
                     )}
