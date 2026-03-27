@@ -1,7 +1,6 @@
 import * as imageCompression from "browser-image-compression";
 import { CompressionOptions } from "../types/common";
 
-
 // 압축 옵션의 기본값 설정 (필요에 따라 조정 가능)
 const DEFAULT_OPTIONS: CompressionOptions = {
   maxSizeMB: 3,
