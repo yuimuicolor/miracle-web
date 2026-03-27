@@ -1,6 +1,6 @@
 // lib/storageUtils.ts
 import * as imageCompression from "browser-image-compression";
-import { supabase } from "@/lib/supabase";
+import { supabase } from "@/lib/supabase/client";
 import { CompressionOptions } from "../types/common";
 
 

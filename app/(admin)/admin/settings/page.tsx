@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect, useRef } from "react";
-import { supabase } from "@/lib/supabase";
+import { supabase } from "@/lib/supabase/client";
 import { updateSiteSettings } from "@/lib/api/siteSettings";
 import { AdminHeader } from "@/components/admin/AdminHeader";
 import AdminSaveButton from "@/components/admin/AdminSaveButton";

@@ -2,7 +2,7 @@
 
 export const dynamic = "force-dynamic";
 
-import { supabase } from "@/lib/supabase";
+import { supabase } from "@/lib/supabase/client";
 import { useState, useEffect } from "react";
 import { useSearchParams } from "next/navigation";
 import { AdminHeader } from "@/components/admin/AdminHeader";

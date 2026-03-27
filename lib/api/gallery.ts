@@ -1,45 +1,45 @@
-import { supabase } from "@/lib/supabase";
+import { getBaseUrl } from "@/lib/utils/common";
 import { GalleryItem } from "../types/gallery";
 
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL?.replace(/\/$/, "");
+const baseUrl = getBaseUrl();
 
-/**
- * [일반 사용자용] 노출 가능한 이미지 리스트 가져오기
- */
-export const getPublicGalleryImages = async (limit?: number): Promise<GalleryItem[]> => {
-  let query = supabase
-    .from("gallery")
-    .select("*")
-    .eq("isVisible", true)
-    .order("displayOrder", { ascending: true });
-
-  if (limit) query = query.limit(limit);
-
-  const { data, error } = await query;
-  if (error || !data) {
-    console.error("갤러리 로딩 실패:", error);
-    return [];
-  }
-
-  // 헬퍼 함수: DB의 imageUrl을 전체 URL로 변환
-  return data.map(item => ({
-    ...item,
-    // 만약 DB에 파일명만 저장된다면 아래처럼 풀 경로를 만들어줍니다.
-    imageUrl: item.imageUrl?.startsWith('http') 
-      ? item.imageUrl 
-      : `${supabaseUrl}/storage/v1/object/public/gallery/${item.imageUrl}`
-  }));
+// 1. GET (그냥 호출)
+export const getPublicGalleryImages = async (): Promise<GalleryItem[]> => {
+  const res = await fetch(`${baseUrl}/api/gallery`, { cache: "no-store" });
+  return res.json();
 };
 
-/**
- * [관리자용] 모든 데이터 가져오기 (비공개 포함)
- */
+// 2. GET (관리자용, ?admin=true 를 붙여서 호출)
 export const getAllGalleryForAdmin = async (): Promise<GalleryItem[]> => {
-  const { data, error } = await supabase
-    .from("gallery")
-    .select("*")
-    .order("displayOrder", { ascending: true });
+  const res = await fetch(`${baseUrl}/api/gallery?admin=true`, { 
+    cache: "no-store" 
+  });
 
-  if (error) throw error;
-  return data || [];
+  if (!res.ok) throw new Error("데이터 로딩 실패!");
+  return res.json();
+};
+
+// 3. POST (업데이트/생성/삭제 한번에 처리)
+export const saveGalleryAll = async (items: GalleryItem[]) => {
+  // 삭제할 Item ID 필터링
+  const deletedIds = items.filter(item => item.isDeleted && !item.isNew).map(item => item.id);
+  const finalItems = items
+    .filter(item => !item.isDeleted)
+    .map((item) => ({
+      id: item.id,
+      subtitle: item.subtitle,
+      mainTitle: item.mainTitle,
+      imageUrl: item.imageUrl,
+      isVisible: item.isVisible,
+      displayOrder: item.displayOrder,
+    }));
+
+  const res = await fetch(`${baseUrl}/api/gallery`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ finalItems, deletedIds }),
+  });
+
+  if (!res.ok) throw new Error("서버 저장에 실패했습니다.");
+  return res.json();
 };
