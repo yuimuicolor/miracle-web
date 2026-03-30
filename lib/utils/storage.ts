@@ -44,6 +44,29 @@ export const uploadImage = async (
   }
 };
 
+export const formatPhoneNumber = (value: string) => {
+    if (!value) return value;
+
+    // 숫자만 남기기
+    const phone = value.replace(/[^\d]/g, "");
+    const len = phone.length;
+
+    // 1. 서울 지역번호 (02) 대응
+    if (phone.startsWith("02")) {
+      if (len < 3) return phone;
+      if (len < 6) return `${phone.slice(0, 2)}-${phone.slice(2)}`;
+      if (len < 10) return `${phone.slice(0, 2)}-${phone.slice(2, 5)}-${phone.slice(5)}`;
+      return `${phone.slice(0, 2)}-${phone.slice(2, 6)}-${phone.slice(6, 10)}`;
+    }
+
+    // 2. 일반 지역번호, 휴대폰, 인터넷 전화 (010, 031, 070 등)
+    if (len < 4) return phone;
+    if (len < 7) return `${phone.slice(0, 3)}-${phone.slice(3)}`;
+    if (len < 11) return `${phone.slice(0, 3)}-${phone.slice(3, 6)}-${phone.slice(6)}`;
+    // 11자리 (010-1234-5678)
+    return `${phone.slice(0, 3)}-${phone.slice(3, 7)}-${phone.slice(7, 11)}`;
+  };
+
 /**
  * URL에서 파일명만 추출 (쿼리 스트링 제거)
  */

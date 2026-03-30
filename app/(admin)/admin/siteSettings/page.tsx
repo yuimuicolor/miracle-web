@@ -55,30 +55,62 @@ export default function AdminSiteSettingsPage() {
         {/* 기본 정보 섹션 */}
         <section className="grid grid-cols-2 gap-6">
           <div>
-            <label className="block text-admin- font-semibold text-slate-600 mb-2">브랜드명</label>
+            <label className="block text-admin- font-semibold mb-2">브랜드명</label>
             <AdminInput value={items?.brandName || ""} onChange={(v) => handleChange("brandName", v)} />
           </div>
           <div>
-            <label className="block text-admin- font-semibold text-slate-600 mb-2">브랜드명 (영문 대문자)</label>
+            <label className="block text-admin- font-semibold mb-2">브랜드명 (영문 대문자)</label>
             <AdminInput value={items?.brandUppercaseName || ""} onChange={(v) => handleChange("brandUppercaseName", v)} />
           </div>
           <div>
-            <label className="block text-admin- font-semibold text-slate-600 mb-2">사업자명</label>
-            <AdminInput value={items?.businessName || ""} onChange={(v) => handleChange("businessName", v)} />
-          </div>
-          <div>
-            <label className="block text-admin- font-semibold text-slate-600 mb-2">대표자명</label>
+            <label className="block text-admin- font-semibold mb-2">대표자명</label>
             <AdminInput value={items?.ownerName || ""} onChange={(v) => handleChange("ownerName", v)} />
           </div>
+          <div>
+            <label className="block text-admin- font-semibold mb-2">사업자명</label>
+            <AdminInput value={items?.businessName || ""} onChange={(v) => handleChange("businessName", v)} placeholder="Map 에서 보여질 사업자명을 등록해 주세요." />
+          </div>
+          <hr className="col-span-2 border-slate-300 mt-6 mb-2" />
+          <div className="col-span-2">
+            <label className="block text-admin- font-semibold mb-2">주소</label>
+            <AdminInput value={items?.address || ""} onChange={(v) => handleChange("address", v)} placeholder="도로명 주소를 입력해 주세요." />
+          </div>
+          <div>
+            <label className="block text-admin- font-semibold mb-2">Google Map 제목</label>
+            <AdminInput value={items?.mapTitle || ""} onChange={(v) => handleChange("mapTitle", v)} placeholder="Google 지도에 표시될 이름을 입력해 주세요." />
+          </div>
+          <div>
+            <label className="block text-admin- font-semibold mb-2">Google Map 링크</label>
+            <AdminInput value={items?.mapLink || ""} onChange={(v) => handleChange("mapLink", v)} placeholder="https://www.google.com/maps/place/로 시작하는 정확한 주소를 입력해 주세요."/>
+          </div>
+          <hr className="col-span-2 border-slate-300 mt-6 mb-2" />
+          <div>
+            <label className="block text-admin- font-semibold mb-2">연락처</label>
+            <AdminInput value={items?.phone || ""} onChange={(v) => handleChange("phone", v)} />
+          </div>
+          <div>
+            <label className="block text-admin- font-semibold mb-2">이메일</label>
+            <AdminInput value={items?.email || ""} onChange={(v) => handleChange("email", v)} />
+          </div>
+          <div>
+            <label className="block text-admin- font-semibold mb-2">사업자 등록번호</label>
+            <AdminInput value={items?.businessRegistrationNumber || ""} onChange={(v) => handleChange("businessRegistrationNumber", v)} />
+          </div>
+          <div>
+            <label className="block text-admin- font-semibold mb-2">영업시간</label>
+            <AdminInput value={items?.businessHours || ""} onChange={(v) => handleChange("businessHours", v)} placeholder="Information 란에 노출될 영업시간을 입력해 주세요."/>
+          </div>
+
         </section>
 
+        <hr className="col-span-2 border-slate-300 mt-6" />
         {/* SNS 설정 섹션 */}
         <section>
           <h3 className="text-admin-body font-bold mb-4 text-slate-700">SNS 연결</h3>
           <div className="grid gap-4">
             {Object.entries(items?.snsConfig || {}).map(([platform, config]) => (
               <div key={platform} className="flex gap-4 items-center p-4 bg-slate-50 rounded-2xl">
-                <span className="w-50 font-bold text-slate-600 uppercase">{platform}</span>
+                <span className="w-50 font-bold uppercase">{platform}</span>
                 <AdminInput value={config.href} placeholder="URL을 입력하세요 (https://...)" onChange={(v) => handleSNSChange(platform, "href", v)} />
               </div>
             ))}
@@ -86,7 +118,7 @@ export default function AdminSiteSettingsPage() {
         </section>
 
         <section>
-          <label className="block text-admin- font-semibold text-slate-600 mb-2">개인정보처리방침</label>
+          <label className="block text-admin- font-semibold mb-2">개인정보처리방침</label>
           <textarea
             className="w-full h-100 p-4 border border-slate-200 rounded-2xl focus:outline-none focus:ring-2 focus:ring-slate-200"
             value={items?.privacyPolicyText || ""}

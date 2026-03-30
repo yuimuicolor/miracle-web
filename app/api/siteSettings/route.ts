@@ -48,7 +48,6 @@ export async function PATCH(request: Request) {
     return NextResponse.json(data);
   } catch (error: any) {
     // 500 에러가 나면 브라우저 Console -> Network 탭에서 
-    // 응답 내용(Response)에 찍히는 구체적인 에러 메시지를 꼭 확인해보세요!
     return NextResponse.json(
       { error: error.message || "Failed to update settings" },
       { status: 500 }

@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { SiteSettingsItem } from "@/lib/types/siteSettings";
 import { getSiteSettings, updateSiteSettings } from "@/lib/api/siteSettings";
 import { cleanupStorageFiles } from "@/lib/api/common";
-import { uploadImage } from "@/lib/utils/storage";
+import { formatPhoneNumber, uploadImage } from "@/lib/utils/storage";
 import { supabase } from "@/lib/supabase/client";
 
 export const useSiteSettingsManager = () => {
@@ -27,12 +27,19 @@ export const useSiteSettingsManager = () => {
     fetchSettings();
   }, []);
 
-  // 일반 필드 변경
+// 일반 필드 변경 핸들러
   const handleChange = (field: keyof SiteSettingsItem, value: any) => {
     if (!items) return;
-    setItems({ ...items, [field]: value });
-  };
 
+    let finalValue = value;
+
+    // field가 'phone'일 때만 포맷팅 적용
+    if (field === "phone") {
+      finalValue = formatPhoneNumber(value);
+    }
+
+    setItems({ ...items, [field]: finalValue });
+  };
   // SNS 설정 변경
   const handleSNSChange = (
     platform: string,

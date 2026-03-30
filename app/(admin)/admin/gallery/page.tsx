@@ -105,7 +105,7 @@ export default function AdminGalleryPage() {
                             src={item.previewUrl || item.imageUrl}
                             alt="p"
                             fill
-                            className="object-cover"
+                            className="object-contain"
                             loading="eager"
                             unoptimized
                           />

@@ -9,7 +9,7 @@ export interface SiteSettingsItem {
   phone: string;
   email: string;
   businessHours: string;
-  mapQuery: string;
+  mapTitle: string;
   mapLink: string;
   ownerName: string;
   businessRegistrationNumber: string;

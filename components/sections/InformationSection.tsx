@@ -83,8 +83,8 @@ export default function InformationSection() {
   if (!settings) return null;
 
 
-  const encodedMapQuery = encodeURIComponent(settings?.mapQuery || "");
-  const mapEmbedUrl = `https://maps.google.com/maps?q=${encodedMapQuery}&t=m&z=18&ie=UTF8&iwloc=B&output=embed`;
+  const encodedmapTitle = encodeURIComponent(settings?.mapTitle || "");
+  const mapEmbedUrl = `https://maps.google.com/maps?q=${encodedmapTitle}&t=m&z=18&ie=UTF8&iwloc=B&output=embed`;
 
   const openDirections = () => {
     if (settings?.mapLink) {
