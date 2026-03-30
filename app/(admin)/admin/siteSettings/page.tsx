@@ -51,7 +51,7 @@ export default function AdminSiteSettingsPage() {
         </section>
 
         {/* 기본 정보 섹션 */}
-        <section className="grid grid-cols-2 gap-6">
+        <section className="flex flex-col lg:grid lg:grid-cols-2 gap-6">
           <div>
             <label className="block text-admin- font-semibold mb-2">브랜드명</label>
             <AdminInput value={items?.brandName || ""} onChange={(v) => handleChange("brandName", v)} />
