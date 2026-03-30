@@ -41,7 +41,7 @@ export default function AdminCertificatesPage() {
         subtitle="인증서를 관리하는 페이지입니다."
         tip="* 변경사항이 있을 경우 [저장] 버튼을 눌러주세요."
       />
-      <div className="flex gap-3 mb-10 justify-end">
+      <div className="flex gap-3 mt-6 lg:mt-0 mb-10 justify-end">
         <input type="file" ref={fileInputRef} className="hidden" accept="image/*" onChange={(e) => {
           const file = e.target.files?.[0];
           if (file) addItem(file); // 훅에 있는 addItem 호출!
