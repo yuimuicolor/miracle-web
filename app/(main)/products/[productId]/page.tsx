@@ -2,8 +2,6 @@ import { notFound } from "next/navigation";
 import ProductDetailTop from "@/components/products/ProductDetailTop";
 import OtherProductsSlider from "@/components/products/OtherProductsSlider";
 import {
-  getProductById,
-  getAllProducts,
   getProductByIdServer,
 } from "@/lib/api/products";
 import { supabaseServer } from "@/lib/supabase/server";

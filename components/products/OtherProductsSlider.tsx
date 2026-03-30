@@ -1,13 +1,12 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import MoreButton from "@/components/MoreButton";
 import ProductBox from "./ProductBox";
 import { ProductItem } from "@/lib/types/products";
 import { getAllProducts } from "@/lib/api/products";
 import { useProductsSlider } from "@/hooks/useProductsSlider";
-import { supabaseServer } from "@/lib/supabase/server";
 
 const STYLE = {
   section: `

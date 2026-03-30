@@ -40,7 +40,7 @@ export default function ProductsPage() {
 	const [settings, setSettings] = useState<SiteSettingsItem | null>(null);
 
 	  useEffect(() => {
-		const fetchAllImages = async () => {
+		const fetchProducts = async () => {
 		  const data = await getAllProducts(); 
 		  setProducts(data);
 		};
@@ -48,7 +48,7 @@ export default function ProductsPage() {
 			const data = await getSiteSettings();
 			setSettings(data);
 		};
-		fetchAllImages();
+		fetchProducts();
 		fetchSettings();
 	  }, []);
 

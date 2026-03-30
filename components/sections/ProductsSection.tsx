@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import ProductBox from "@/components/products/ProductBox";
 import ScrollReveal from "@/components/ScrollReveal";
 import { HOME_REVEAL } from "@/components/sections/homeMotion";
@@ -11,7 +11,6 @@ import { getAllProducts } from "@/lib/api/products";
 import { ProductItem } from "@/lib/types/products";
 import { useSettings } from "@/context/SiteSettingsContext";
 import { useProductsSlider } from "@/hooks/useProductsSlider";
-import { supabaseServer } from "@/lib/supabase/server";
 
 const STYLE = {
   section: `
