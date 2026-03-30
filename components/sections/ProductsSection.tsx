@@ -58,7 +58,7 @@ const {
         <ScrollReveal className={STYLE.titleWrap} {...HOME_REVEAL.sectionTitle}>
           <SectionTitle title="Products" color="black" />
           <p className={STYLE.subText}>
-            <strong className="font-bold">{settings?.brandUppercaseName}</strong>
+            <strong className="font-bold">{settings?.brandName}</strong>
             의 제품들을 소개합니다.
           </p>
         </ScrollReveal>

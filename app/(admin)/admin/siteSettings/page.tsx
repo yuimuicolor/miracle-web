@@ -59,16 +59,8 @@ export default function AdminSiteSettingsPage() {
             <AdminInput value={items?.brandName || ""} onChange={(v) => handleChange("brandName", v)} />
           </div>
           <div>
-            <label className="block text-admin- font-semibold mb-2">브랜드명 (영문 대문자)</label>
-            <AdminInput value={items?.brandUppercaseName || ""} onChange={(v) => handleChange("brandUppercaseName", v)} />
-          </div>
-          <div>
             <label className="block text-admin- font-semibold mb-2">대표자명</label>
             <AdminInput value={items?.ownerName || ""} onChange={(v) => handleChange("ownerName", v)} />
-          </div>
-          <div>
-            <label className="block text-admin- font-semibold mb-2">사업자명</label>
-            <AdminInput value={items?.businessName || ""} onChange={(v) => handleChange("businessName", v)} placeholder="Map 에서 보여질 사업자명을 등록해 주세요." />
           </div>
           <hr className="col-span-2 border-slate-300 mt-6 mb-2" />
           <div className="col-span-2">
