@@ -3,10 +3,10 @@
 import { useState, ChangeEvent, SyntheticEvent } from "react";
 import ScrollReveal from "@/components/ScrollReveal";
 import { HOME_REVEAL } from "@/components/sections/homeMotion";
-import { sendContactEmail } from "@/app/actions";
 import TextModal from "../TextModal";
 import { useSettings } from "@/context/SiteSettingsContext";
-import { ContactItem } from "@/lib/types/contact";
+import { ContactInput } from "@/lib/types/contact";
+import { useContactsManager } from "@/hooks/useContactManager";
 
 const STYLE = {
   section: `
@@ -72,30 +72,26 @@ const STYLE = {
     "self-center h-[8rem] w-full max-w-[28rem] rounded-full bg-white text-[3.2rem] font-bold text-point font-pretendard transition-colors hover:bg-white",
 };
 const FIELDS: Array<{
-  id: string; 
+  id: string;
   name: keyof ContactInput;
   label: string;
   required?: boolean;
   type?: string;
   isTextarea?: boolean;
 }> = [
-  { id: "contact_u_name", name: "name", label: "이름", required: true },
-  { id: "contact_u_phone", name: "phone", label: "전화번호", type: "tell", required: true },
-  { id: "contact_u_email", name: "email", label: "이메일", type: "email", required: true },
-  { id: "contact_u_company", name: "company", label: "회사명" },
-  { id: "contact_u_msg", name: "message", label: "문의내용", required: true, isTextarea: true },
-];
+    { id: "contact_u_name", name: "name", label: "이름", required: true },
+    { id: "contact_u_phone", name: "phone", label: "전화번호", type: "tell", required: true },
+    { id: "contact_u_email", name: "email", label: "이메일", type: "email", required: true },
+    { id: "contact_u_company", name: "company", label: "회사명" },
+    { id: "contact_u_msg", name: "message", label: "문의내용", required: true, isTextarea: true },
+  ];
 
-
-type ContactInput = Pick<
-  ContactItem,
-  "name" | "phone" | "email" | "company" | "message"
->;
 
 
 export default function ContactUsSection() {
+  // 전문보기 모달 상태
   const [isTextModalOpen, setIsTextModalOpen] = useState(false);
-  // 2. 초기값에는 사용자 입력 항목만 넣기
+
   const [formData, setFormData] = useState<ContactInput>({
     name: "",
     phone: "",
@@ -105,40 +101,42 @@ export default function ContactUsSection() {
   });
   const settings = useSettings();
 
-const handleChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-  const { name, value } = e.target;
+  const { sendContactEmail } = useContactsManager("미확인");
 
-  if (name === "phone") {
-    // 13자(010-1234-5678)까지만 입력되도록 제한하면서 포맷팅
-    const formattedValue = formatPhoneNumber(value.slice(0, 13));
-    setFormData((prev) => ({ ...prev, [name]: formattedValue }));
-  } else {
-    setFormData((prev) => ({ ...prev, [name as keyof ContactInput]: value }));
-  }
-};
+  const handleChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    const { name, value } = e.target;
 
-const formatPhoneNumber = (value: string) => {
-  if (!value) return value;
+    if (name === "phone") {
+      // 13자(010-1234-5678)까지만 입력되도록 제한하면서 포맷팅
+      const formattedValue = formatPhoneNumber(value.slice(0, 13));
+      setFormData((prev) => ({ ...prev, [name]: formattedValue }));
+    } else {
+      setFormData((prev) => ({ ...prev, [name as keyof ContactInput]: value }));
+    }
+  };
 
-  // 숫자만 남기기
-  const phone = value.replace(/[^\d]/g, "");
-  const len = phone.length;
+  const formatPhoneNumber = (value: string) => {
+    if (!value) return value;
 
-  // 1. 서울 지역번호 (02) 대응
-  if (phone.startsWith("02")) {
-    if (len < 3) return phone;
-    if (len < 6) return `${phone.slice(0, 2)}-${phone.slice(2)}`;
-    if (len < 10) return `${phone.slice(0, 2)}-${phone.slice(2, 5)}-${phone.slice(5)}`;
-    return `${phone.slice(0, 2)}-${phone.slice(2, 6)}-${phone.slice(6, 10)}`;
-  } 
-  
-  // 2. 일반 지역번호, 휴대폰, 인터넷 전화 (010, 031, 070 등)
-  if (len < 4) return phone;
-  if (len < 7) return `${phone.slice(0, 3)}-${phone.slice(3)}`;
-  if (len < 11) return `${phone.slice(0, 3)}-${phone.slice(3, 6)}-${phone.slice(6)}`;
-  // 11자리 (010-1234-5678)
-  return `${phone.slice(0, 3)}-${phone.slice(3, 7)}-${phone.slice(7, 11)}`;
-};
+    // 숫자만 남기기
+    const phone = value.replace(/[^\d]/g, "");
+    const len = phone.length;
+
+    // 1. 서울 지역번호 (02) 대응
+    if (phone.startsWith("02")) {
+      if (len < 3) return phone;
+      if (len < 6) return `${phone.slice(0, 2)}-${phone.slice(2)}`;
+      if (len < 10) return `${phone.slice(0, 2)}-${phone.slice(2, 5)}-${phone.slice(5)}`;
+      return `${phone.slice(0, 2)}-${phone.slice(2, 6)}-${phone.slice(6, 10)}`;
+    }
+
+    // 2. 일반 지역번호, 휴대폰, 인터넷 전화 (010, 031, 070 등)
+    if (len < 4) return phone;
+    if (len < 7) return `${phone.slice(0, 3)}-${phone.slice(3)}`;
+    if (len < 11) return `${phone.slice(0, 3)}-${phone.slice(3, 6)}-${phone.slice(6)}`;
+    // 11자리 (010-1234-5678)
+    return `${phone.slice(0, 3)}-${phone.slice(3, 7)}-${phone.slice(7, 11)}`;
+  };
 
   const handleSubmit = async (e: SyntheticEvent<HTMLFormElement>) => {
     e.preventDefault();

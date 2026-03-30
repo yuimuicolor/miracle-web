@@ -5,8 +5,10 @@ export const CONTACT_STATUS_OPTIONS = [
   '진행완료',
   '보류',
 ] as const;
-
 export type ContactStatus = (typeof CONTACT_STATUS_OPTIONS)[number];
+
+export const FILTER_OPTIONS = ["전체", ...CONTACT_STATUS_OPTIONS];
+export type FilterStatus = "전체" | ContactStatus;
 
 export interface ContactItem {
   idx: number;          // 고유 인덱스
@@ -23,3 +25,8 @@ export interface ContactItem {
 }
 
 export type ContactUpdatePayload = Partial<Pick<ContactItem, 'status' | 'admin_memo'>>;
+
+export type ContactInput = Pick<
+  ContactItem,
+  "name" | "phone" | "email" | "company" | "message"
+>;
