@@ -2,8 +2,9 @@
 import TopButton from "@/components/TopButton";
 import "./globals.css";
 import { SiteSettingsProvider } from "@/context/SiteSettingsContext";
-import { getSiteSettingsByServer } from "@/lib/api/siteSettings";
 import { supabaseServer } from "@/lib/supabase/server";
+import { getSiteSettingsByServer } from "@/lib/api/siteSettings";
+
 
 export default async function RootLayout({ children }: { children: React.ReactNode }) {
   const settings = await getSiteSettingsByServer(supabaseServer);

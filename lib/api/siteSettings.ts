@@ -1,42 +1,26 @@
+// lib/api/siteSettings.ts
+import { SiteSettingsItem } from "@/lib/types/siteSettings";
 
-import { SiteSettingsItem } from "../types/siteSettings";
-
-
-export const getSiteSettings = async (): Promise<SiteSettingsItem | null> => {
+// 1. GET: 사이트 설정 불러오기 (ID: 1번 고정)
+export const getSiteSettings = async (): Promise<SiteSettingsItem> => {
   const res = await fetch("/api/siteSettings", { cache: "no-store" });
-
-  if (!res.ok) return null;
+  if (!res.ok) throw new Error("사이트 설정을 불러오지 못했습니다.");
   return res.json();
 };
 
-export const getSiteSettingsByServer = async (supabaseClient: any): Promise<SiteSettingsItem | null> => {
-  const { data, error } = await supabaseClient
-    .from("siteSettings")
-    .select("*")
-    .eq("id", 1)
-    .single();
-
-  if (error || !data) return null;
-  return {
-    ...data,
-    image: data.image || null,
-  };
+export const getSiteSettingsByServer  = async (supabaseClient: any): Promise<SiteSettingsItem> => {
+  const {data, error} = await supabaseClient.from("siteSettings").select("*").eq("id", 1).single();
+  if (error || !data) throw new Error("사이트 설정을 불러오지 못했습니다.");
+  return data;
 }
 
-
-// 관리자 페이지에서 업데이트할 때 쓸 함수
-export const updateSiteSettings = async (newData: Partial<SiteSettingsItem>) => {
+// 2. PATCH: 사이트 설정 업데이트
+export const updateSiteSettings = async (settings: SiteSettingsItem) => {
   const res = await fetch("/api/siteSettings", {
-    method: "PATCH",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(newData),
+    method: "PATCH", 
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(settings),
   });
-
-  if (!res.ok) {
-    const errorData = await res.json();
-    throw new Error(errorData.error || "사이트 설정 수정에 실패했습니다.");
-  }
+  if (!res.ok) throw new Error("설정 저장에 실패했습니다.");
   return res.json();
 };
