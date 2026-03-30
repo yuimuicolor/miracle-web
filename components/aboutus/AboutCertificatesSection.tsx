@@ -44,7 +44,7 @@ export default async function AboutCertificatesSection() {
           >
             <div className={ABOUT_PAGE_STYLE.certificateImageRatio}>
               <Image
-                src="/images/main-bg.png"
+                src={item.imageUrl}
                 alt={item.title}
                 fill
                 sizes="(max-width: 767px) 50vw, (max-width: 1023px) 33vw, 20vw"
