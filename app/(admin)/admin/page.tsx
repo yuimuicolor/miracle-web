@@ -72,7 +72,7 @@ export default function AdminDashboard() {
       label: "사이트관리",
       value: "설정⚙",
       color: "text-gray-600",
-      href: "/admin/settings",
+      href: "/admin/siteSettings",
     },
   ];
 

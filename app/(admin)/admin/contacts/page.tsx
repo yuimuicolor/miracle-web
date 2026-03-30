@@ -32,11 +32,11 @@ function AdminContactsPage() {
     selectedIds, setSelectedIds,
     expandedIds, setExpandedIds, editingMemoId, setEditingMemoId, tempMemo, setTempMemo,
     updateStatus, saveMemo, handleBulkUpdate,
-  } = useContactsManager(initialStatus);
+  } = useContactsManager(initialStatus as FilterStatus);
 
-  // URL 변경 로직만 컴포넌트에 유지
+  
   const handleFilterChange = (newStatus: string) => {
-    setFilter(newStatus);
+    setFilter(newStatus as FilterStatus);
 
     const params = new URLSearchParams(searchParams.toString());
 

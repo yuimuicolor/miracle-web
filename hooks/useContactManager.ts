@@ -1,7 +1,12 @@
 import { useState, useEffect } from "react";
-import { ContactInput, ContactStatus } from "@/lib/types/contact";
+import { ContactInput, ContactStatus, FilterStatus } from "@/lib/types/contact";
+import {
+  getContacts,
+  updateContactsApi,
+  createContact,
+} from "@/lib/api/contacts";
 
-export const useContactsManager = (initialFilter: string) => {
+export const useContactsManager = (initialFilter: FilterStatus) => {
   const [contacts, setContacts] = useState<any[]>([]);
   const [filter, setFilter] = useState(initialFilter);
   const [loading, setLoading] = useState(true);
@@ -18,14 +23,12 @@ export const useContactsManager = (initialFilter: string) => {
   const fetchContacts = async () => {
     setLoading(true);
     try {
-      const params = new URLSearchParams({
+      const result = await getContacts({
         status: filter,
-        page: String(currentPage),
-        limit: String(itemsPerPage),
+        page: currentPage,
+        limit: itemsPerPage,
         sortOrder,
       });
-      const res = await fetch(`/api/contacts?${params}`);
-      const result = await res.json();
       setContacts(result.data || []);
       setTotalCount(result.count || 0);
     } catch (error) {
@@ -39,69 +42,46 @@ export const useContactsManager = (initialFilter: string) => {
     fetchContacts();
   }, [currentPage, filter, sortOrder, itemsPerPage]);
 
-  const updateContact = async (id: number, updates: any) => {
-    const res = await fetch("/api/contacts", {
-      method: "PATCH",
-      body: JSON.stringify({ id, updates }),
-    });
-    if (res.ok) fetchContacts();
-  };
+  const handleUpdateStatus = async (
+    idOrIds: number | number[],
+    newStatus: ContactStatus,
+  ) => {
+    try {
+      const payload = Array.isArray(idOrIds)
+        ? { ids: idOrIds, updates: { status: newStatus } }
+        : { id: idOrIds, updates: { status: newStatus } };
 
-  const bulkUpdateStatus = async (ids: number[], newStatus: ContactStatus) => {
-    const res = await fetch("/api/contacts", {
-      method: "PATCH",
-      body: JSON.stringify({ ids, updates: { status: newStatus } }),
-    });
-    if (res.ok) {
-      setSelectedIds([]);
+      await updateContactsApi(payload);
+      if (Array.isArray(idOrIds)) setSelectedIds([]);
       fetchContacts();
+    } catch (error) {
+      alert("상태 변경 실패!");
     }
   };
-
-  const updateStatus = async (id: number, newStatus: ContactStatus) => {
-    const res = await fetch("/api/contacts", {
-      method: "PATCH",
-      body: JSON.stringify({ id, updates: { status: newStatus } }),
-    });
-    if (res.ok) fetchContacts();
-  };
+  
+const handleBulkUpdate = async (newStatus: ContactStatus) => {
+  if (selectedIds.length === 0) return alert("선택된 항목이 없습니다.");
+  if (!confirm(`${selectedIds.length}개를 '${newStatus}'로 변경할까요?`)) return;
+  await handleUpdateStatus(selectedIds, newStatus);
+};
 
   const saveMemo = async (id: number) => {
-    const res = await fetch("/api/contacts", {
-      method: "PATCH",
-      body: JSON.stringify({ id, updates: { admin_memo: tempMemo } }),
-    });
-    if (res.ok) {
+    try {
+      await updateContactsApi({
+        id,
+        updates: { admin_memo: tempMemo },
+      });
+
       setEditingMemoId(null);
-      fetchContacts();
-    }
-  };
-
-  const handleBulkUpdate = async (newStatus: ContactStatus) => {
-    if (selectedIds.length === 0) return alert("선택된 항목이 없습니다.");
-    if (!confirm(`${selectedIds.length}개를 '${newStatus}'로 변경할까요?`))
-      return;
-
-    const res = await fetch("/api/contacts", {
-      method: "PATCH",
-      body: JSON.stringify({
-        ids: selectedIds,
-        updates: { status: newStatus },
-      }),
-    });
-    if (res.ok) {
-      setSelectedIds([]);
-      fetchContacts();
+      await fetchContacts(); // 메모 저장 후 리스트 새로고침
+    } catch (error) {
+      alert("메모 저장 실패!");
     }
   };
 
   const sendContactEmail = async (submitData: ContactInput) => {
     try {
-      const res = await fetch("/api/contacts", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ ...submitData, status: "미확인" }),
-      });
+      const res = await createContact(submitData);
 
       if (!res.ok) {
         const errorData = await res.json();
@@ -132,18 +112,17 @@ export const useContactsManager = (initialFilter: string) => {
     setSortOrder,
     selectedIds,
     setSelectedIds,
-    updateContact,
-    bulkUpdateStatus,
-    fetchContacts,
     expandedIds,
     setExpandedIds,
     editingMemoId,
     setEditingMemoId,
     tempMemo,
     setTempMemo,
-    updateStatus,
+    updateStatus: (id: number, status: ContactStatus) =>
+      handleUpdateStatus(id, status),
     saveMemo,
     handleBulkUpdate,
     sendContactEmail,
+    fetchContacts,
   };
 };
