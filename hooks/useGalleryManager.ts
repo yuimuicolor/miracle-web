@@ -119,7 +119,7 @@ export const useGalleryManager = () => {
 
             await cleanupStorageFiles(supabase, "gallery", "", [newName], prefix); // 기존 파일 청소
             finalImageUrl = await uploadImage(
-              supabase,
+              supabase, 
               item.tempFile,
               "gallery",
               newName,

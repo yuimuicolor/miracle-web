@@ -8,18 +8,18 @@ import { useSiteSettingsManager } from "@/hooks/useSiteSettingsManager";
 import { useRef } from "react";
 
 export default function AdminSiteSettingsPage() {
-  const { 
-    settings, loading, isSaving, 
-    handleChange, handleSNSChange, handleLogoUpload, handleSave 
+  const {
+    items, loading, isSaving,
+    handleChange, handleSNSChange, handleReplaceImage, handleSave
   } = useSiteSettingsManager();
 
-const fileInputRef = useRef<HTMLInputElement>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   if (loading) return <div className="p-10 text-center">불러오는 중...</div>;
 
   return (
     <div className="mx-auto">
-      <AdminHeader title="사이트 기본 설정" subtitle="브랜드 정보 및 하단 푸터 정보를 관리합니다." />
+      <AdminHeader title="사이트 기본 설정" subtitle="브랜드 정보 및 하단 푸터 정보를 관리합니다." tip="* 변경사항이 있을 경우 [저장] 버튼을 눌러주세요." />
 
       <div className="flex justify-end mb-6">
         <AdminSaveButton onClick={handleSave} isSaving={isSaving} />
@@ -30,16 +30,23 @@ const fileInputRef = useRef<HTMLInputElement>(null);
         <section>
           <h3 className="text-admin-body font-bold mb-4">브랜드 로고</h3>
           <div className="flex items-center gap-6">
-            <div className="relative w-40 h-20 bg-slate-100 rounded-xl overflow-hidden border border-slate-200">
-              <Image src={settings?.brandLogoSrc || ""} alt="Logo" fill className="object-contain p-2" unoptimized />
+            <div className="relative w-40 h-20 bg-slate-300 rounded-xl overflow-hidden border border-slate-200">
+              <Image
+                src={items?.previewUrl || items?.brandLogoSrc || ""}
+                alt="p"
+                fill
+                className="object-cover"
+                loading="eager"
+                unoptimized
+              />
             </div>
             <button onClick={() => fileInputRef.current?.click()} className="px-4 py-2 bg-slate-800 text-white rounded-lg text-admin- hover:bg-slate-700 transition-colors">
               로고 교체
             </button>
             <input type="file" ref={fileInputRef} className="hidden" accept="image/*" onChange={(e) => {
-                const file = e.target.files?.[0];
-                if (file) handleLogoUpload(file);
-              }} />
+              const file = e.target.files?.[0];
+              if (file) handleReplaceImage(file);
+            }} />
           </div>
         </section>
 
@@ -48,20 +55,20 @@ const fileInputRef = useRef<HTMLInputElement>(null);
         {/* 기본 정보 섹션 */}
         <section className="grid grid-cols-2 gap-6">
           <div>
-            <label className="block text-admin- font-semibold text-slate-600 mb-2">브랜드명 (국문)</label>
-            <AdminInput value={settings?.brandName || ""} onChange={(v) => handleChange("brandName", v)} />
+            <label className="block text-admin- font-semibold text-slate-600 mb-2">브랜드명</label>
+            <AdminInput value={items?.brandName || ""} onChange={(v) => handleChange("brandName", v)} />
           </div>
           <div>
             <label className="block text-admin- font-semibold text-slate-600 mb-2">브랜드명 (영문 대문자)</label>
-            <AdminInput value={settings?.brandUppercaseName || ""} onChange={(v) => handleChange("brandUppercaseName", v)} />
+            <AdminInput value={items?.brandUppercaseName || ""} onChange={(v) => handleChange("brandUppercaseName", v)} />
           </div>
           <div>
             <label className="block text-admin- font-semibold text-slate-600 mb-2">사업자명</label>
-            <AdminInput value={settings?.businessName || ""} onChange={(v) => handleChange("businessName", v)} />
+            <AdminInput value={items?.businessName || ""} onChange={(v) => handleChange("businessName", v)} />
           </div>
           <div>
             <label className="block text-admin- font-semibold text-slate-600 mb-2">대표자명</label>
-            <AdminInput value={settings?.ownerName || ""} onChange={(v) => handleChange("ownerName", v)} />
+            <AdminInput value={items?.ownerName || ""} onChange={(v) => handleChange("ownerName", v)} />
           </div>
         </section>
 
@@ -69,7 +76,7 @@ const fileInputRef = useRef<HTMLInputElement>(null);
         <section>
           <h3 className="text-admin-body font-bold mb-4 text-slate-700">SNS 연결</h3>
           <div className="grid gap-4">
-            {Object.entries(settings?.snsConfig || {}).map(([platform, config]) => (
+            {Object.entries(items?.snsConfig || {}).map(([platform, config]) => (
               <div key={platform} className="flex gap-4 items-center p-4 bg-slate-50 rounded-2xl">
                 <span className="w-50 font-bold text-slate-600 uppercase">{platform}</span>
                 <AdminInput value={config.href} placeholder="URL을 입력하세요 (https://...)" onChange={(v) => handleSNSChange(platform, "href", v)} />
@@ -82,7 +89,7 @@ const fileInputRef = useRef<HTMLInputElement>(null);
           <label className="block text-admin- font-semibold text-slate-600 mb-2">개인정보처리방침</label>
           <textarea
             className="w-full h-100 p-4 border border-slate-200 rounded-2xl focus:outline-none focus:ring-2 focus:ring-slate-200"
-            value={settings?.privacyPolicyText || ""}
+            value={items?.privacyPolicyText || ""}
             onChange={(e) => handleChange("privacyPolicyText", e.target.value)}
           />
         </section>

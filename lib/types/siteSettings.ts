@@ -20,4 +20,8 @@ export interface SiteSettingsItem {
       label: string;
     };
   };
+
+  
+  tempFile?: File; // 미리보기용 임시 필드  
+  previewUrl?: string; // 미리보기용 임시 필드
 }

@@ -1,11 +1,12 @@
 import { useState, useEffect } from "react";
 import { SiteSettingsItem } from "@/lib/types/siteSettings";
 import { getSiteSettings, updateSiteSettings } from "@/lib/api/siteSettings";
+import { cleanupStorageFiles } from "@/lib/api/common";
 import { uploadImage } from "@/lib/utils/storage";
 import { supabase } from "@/lib/supabase/client";
 
 export const useSiteSettingsManager = () => {
-  const [settings, setSettings] = useState<SiteSettingsItem | null>(null);
+  const [items, setItems] = useState<SiteSettingsItem | null>(null);
   const [loading, setLoading] = useState(true);
   const [isSaving, setIsSaving] = useState(false);
 
@@ -14,7 +15,7 @@ export const useSiteSettingsManager = () => {
     setLoading(true);
     try {
       const data = await getSiteSettings();
-      setSettings(data);
+      setItems(data);
     } catch (err) {
       console.error(err);
     } finally {
@@ -22,57 +23,86 @@ export const useSiteSettingsManager = () => {
     }
   };
 
-  useEffect(() => { fetchSettings(); }, []);
+  useEffect(() => {
+    fetchSettings();
+  }, []);
 
   // 일반 필드 변경
   const handleChange = (field: keyof SiteSettingsItem, value: any) => {
-    if (!settings) return;
-    setSettings({ ...settings, [field]: value });
+    if (!items) return;
+    setItems({ ...items, [field]: value });
   };
 
   // SNS 설정 변경
-  const handleSNSChange = (platform: string, field: "href" | "label", value: string) => {
-    if (!settings) return;
-    setSettings({
-      ...settings,
+  const handleSNSChange = (
+    platform: string,
+    field: "href" | "label",
+    value: string,
+  ) => {
+    if (!items) return;
+    setItems({
+      ...items,
       snsConfig: {
-        ...settings.snsConfig,
-        [platform]: { ...settings.snsConfig[platform], [field]: value },
+        ...items.snsConfig,
+        [platform]: { ...items.snsConfig[platform], [field]: value },
       },
     });
   };
 
-  // 로고 업로드
-  const handleLogoUpload = async (file: File) => {
-    if (!settings) return;
-    try {
-      const publicUrl = await uploadImage(supabase, file, "site", `logo-${crypto.randomUUID()}.webp`, {
-        maxWidthOrHeight: 1000,
-        maxSizeMB: 1
-      });
-      setSettings({ ...settings, brandLogoSrc: publicUrl });
-      return publicUrl;
-    } catch (err) {
-      throw new Error("로고 업로드 실패");
-    }
+  // 4. 이미지 교체 (미리보기)
+  const handleReplaceImage = (file: File) => {
+    const previewUrl = URL.createObjectURL(file);
+    setItems((prev) => (prev ? { ...prev, tempFile: file, previewUrl } : prev));
   };
 
   // 전체 저장
   const handleSave = async () => {
-    if (!settings) return;
+    if (!items) return;
     setIsSaving(true);
     try {
-      await updateSiteSettings(settings);
+      let finalImageUrl = items.brandLogoSrc;
+      if (items.tempFile) {
+        const prefix = `site-logo-`; // 기존 파일명과 겹치는 부분
+        const newName = `${prefix}_${Date.now()}.webp`;
+
+        await cleanupStorageFiles(
+          supabase,
+          "siteSettings",
+          "",
+          [newName],
+          prefix,
+        ); // 기존 파일 청소
+        finalImageUrl = await uploadImage(
+          supabase,
+          items.tempFile,
+          "siteSettings",
+          newName,
+          { maxWidthOrHeight: 1000, maxSizeMB: 2 },
+        );
+      }
+      const { tempFile, previewUrl, ...payload } = items;
+      await updateSiteSettings({ ...payload, brandLogoSrc: finalImageUrl });
       alert("✅ 사이트 설정이 저장되었습니다.");
-    } catch (error) {
-      alert("❌ 저장 실패");
+
+      setItems({ ...payload, brandLogoSrc: finalImageUrl, tempFile: undefined, previewUrl: undefined });
+    } catch (error: any) {
+      console.error(error);
+      alert(`❌ 저장 실패: ${error.message}`);
     } finally {
       setIsSaving(false);
     }
   };
 
   return {
-    settings, loading, isSaving,
-    handleChange, handleSNSChange, handleLogoUpload, handleSave
+   items: items ? {
+      ...items,
+      brandLogoSrc: items.previewUrl || items.brandLogoSrc
+    } : null,
+    loading,
+    isSaving,
+    handleChange,
+    handleSNSChange,
+    handleReplaceImage,
+    handleSave,
   };
 };
