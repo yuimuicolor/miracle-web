@@ -85,7 +85,7 @@ export default function ProductItemForm({
         <div className="grid grid-cols-2 gap-4">
         
           <div className="space-y-2">
-            <span className="text-admin-body font-semibold">메인 제목 <span className="text-blue-600">*</span></span>
+            <span className=" text-admin-small lg:text-admin-body font-semibold">메인 제목 <span className="text-blue-600">*</span></span>
             <AdminInput
               value={item.mainTitle}
               placeholder="메인 제목을 입력하세요."
@@ -94,7 +94,7 @@ export default function ProductItemForm({
             />
           </div>
             <div className="space-y-2">
-            <span className="text-admin-body font-semibold">서브 제목</span>
+            <span className=" text-admin-small lg:text-admin-body font-semibold">서브 제목</span>
             <AdminInput
               value={item.subTitle}
               placeholder="서브 제목을 입력하세요."
@@ -103,7 +103,7 @@ export default function ProductItemForm({
             />
           </div>
           <div className="space-y-2">
-            <span className="text-admin-body font-semibold">카테고리</span>
+            <span className=" text-admin-small lg:text-admin-body font-semibold">카테고리</span>
             <AdminInput
               value={item.category}
               placeholder="카테고리를 입력하세요."
@@ -116,7 +116,7 @@ export default function ProductItemForm({
           <div className="space-y-2">
             {/* 상단: 입력부 */}
             <div className="flex flex-col">
-              <span className="text-admin-body font-bold">옵션</span>
+              <span className=" text-admin-small lg:text-admin-body font-bold">옵션</span>
               <div className="flex items-center gap-2">
                 <AdminInput
                   ref={inputRef}
@@ -174,7 +174,7 @@ export default function ProductItemForm({
         </div>
 
         <div className="space-y-2">
-          <span className="text-admin-body font-semibold">구매 링크</span>
+          <span className=" text-admin-small lg:text-admin-body font-semibold">구매 링크</span>
           <AdminInput
             value={item.purchaseLink}
             placeholder="https:// 형태의 구매 링크를 입력하세요."
@@ -184,7 +184,7 @@ export default function ProductItemForm({
         </div>
 
         <div className="space-y-2">
-          <span className="text-admin-body font-semibold">설명</span>
+          <span className=" text-admin-small lg:text-admin-body font-semibold">설명</span>
           <AdminInput
             value={item.desc}
             disabled={item.isDeleted}

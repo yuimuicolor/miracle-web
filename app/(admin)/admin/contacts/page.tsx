@@ -107,7 +107,7 @@ function AdminContactsPage() {
       )}
       <div className="bg-white rounded-2xl shadow-xl overflow-hidden mb-10 border border-gray-200">
         <div className="overflow-x-auto">
-        <table className="w-full min-w-[1400px] border-collapse">
+        <table className="w-full min-w-[1200px] border-collapse">
           <thead className="bg-gray-200 text-gray-800 text-admin-small lg:text-admin-body font-bold border-b border-gray-300">
             <tr className="flex w-full items-center">
               <th className={`${COL_WIDTHS.check} py-6`}>

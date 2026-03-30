@@ -17,7 +17,7 @@ export function AdminInput({ value, onChange, disabled, bold, textarea, placehol
         placeholder={placeholder}
         rows={4}
         onChange={(e) => onChange(e.target.value)}
-        className={`w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none ${
+        className={`w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none  text-admin-small lg:text-admin-body ${
           bold ? "font-semibold" : ""
         } disabled:bg-transparent disabled:border-transparent`}
       />
@@ -31,8 +31,8 @@ export function AdminInput({ value, onChange, disabled, bold, textarea, placehol
       value={value}
       placeholder={placeholder}
       onChange={(e) => onChange(e.target.value)}
-      className={`w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none ${
-        bold ? "font-semibold" : ""
+      className={`w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500  text-admin-small lg:text-admin-body outline-none ${
+        bold ? "font-semibold" : "" 
       } disabled:bg-transparent disabled:border-transparent`}
     />
   );
