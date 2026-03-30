@@ -4,6 +4,7 @@ import { NextResponse } from "next/server";
 
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
+  const limit = searchParams.get("limit");
   const isAdmin = searchParams.get("admin") === "true";
   // 1. 상품처럼 정렬 순서를 명시적으로 가져옴
   let query = supabaseServer
@@ -14,6 +15,10 @@ export async function GET(request: Request) {
   // 관리자일 때만 isVisible 여부 상관없이 모두 가져옴
   if (!isAdmin) {
     query = query.eq("isVisible", true);
+  }
+
+  if (limit) {
+      query = query.limit(parseInt(limit));
   }
 
   const { data, error } = await query;

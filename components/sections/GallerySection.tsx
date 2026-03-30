@@ -38,6 +38,7 @@ export default function GallerySection() {
 
   useEffect(() => {
     const fetchGalleryImages = async () => {
+      // 최근 6개 이미지 가져오기
       const images = await getPublicGalleryImages(6);
       setGalleryImages(images);
     };

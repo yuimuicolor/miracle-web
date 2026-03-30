@@ -26,7 +26,7 @@ const STYLE = {
 
 export default function GalleryPageGrid({ images }: GalleryPageGridProps) {
   const [visibleCount, setVisibleCount] = useState(PAGE_SIZE);
-
+console.log('Total:', images.length, 'Visible:', visibleCount);
   const visibleImages = useMemo(
     () => images.slice(0, visibleCount),
     [images, visibleCount],

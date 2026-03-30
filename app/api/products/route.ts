@@ -2,13 +2,24 @@ import { supabaseServer } from "@/lib/supabase/server";
 import { deleteItemsWithStorage } from "@/lib/api/common";
 import { NextResponse } from "next/server";
 
-export async function GET() {
-  const { data, error } = await supabaseServer
+export async function GET(request: Request) {
+  const { searchParams } = new URL(request.url);
+  const isAdmin = searchParams.get("admin") === "true";
+
+  let query = supabaseServer
     .from("products")
     .select("*")
     .order("displayOrder", { ascending: true });
 
-  if (error) return NextResponse.json({ error: error.message }, { status: 500 });
+  // 관리자일 때만 isVisible 여부 상관없이 모두 가져옴
+  if (!isAdmin) {
+    query = query.eq("isVisible", true);
+  }
+
+  const { data, error } = await query;
+
+  if (error)
+    return NextResponse.json({ error: error.message }, { status: 500 });
 
   const safeData = data.map((item) => ({
     ...item,
@@ -31,21 +42,28 @@ export async function POST(request: Request) {
 
       if (toDelete) {
         // 모든 이미지 URL을 하나로 합쳐서 스토리지 삭제 호출
-        const formattedToDelete = toDelete.map(item => ({
+        const formattedToDelete = toDelete.map((item) => ({
           id: item.id,
           imageUrl: [
-            item.image, 
-            ...(item.thumbnailImages || []), 
-            ...(item.detailImages || [])
-          ].filter(Boolean)
+            item.image,
+            ...(item.thumbnailImages || []),
+            ...(item.detailImages || []),
+          ].filter(Boolean),
         }));
-        await deleteItemsWithStorage(supabaseServer, "products", "products", formattedToDelete);
+        await deleteItemsWithStorage(
+          supabaseServer,
+          "products",
+          "products",
+          formattedToDelete,
+        );
       }
     }
 
     // 2. 저장 (Upsert)
     if (finalItems?.length > 0) {
-      const { error } = await supabaseServer.from("products").upsert(finalItems);
+      const { error } = await supabaseServer
+        .from("products")
+        .upsert(finalItems);
       if (error) throw error;
     }
 
