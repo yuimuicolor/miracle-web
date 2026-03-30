@@ -3,8 +3,8 @@
 import { AdminHeader } from "@/components/admin/AdminHeader";
 import ContactTableRow from "@/components/admin/ContactTableRow";
 import { useContactsManager } from "@/hooks/useContactManager"
-import { CONTACT_STATUS_OPTIONS, ContactStatus, FILTER_OPTIONS, FilterStatus } from "@/lib/types/contact";
-import { useSearchParams } from "next/navigation";
+import { CONTACT_STATUS_OPTIONS, FILTER_OPTIONS, FilterStatus } from "@/lib/types/contact";
+import { useSearchParams, useRouter, usePathname } from "next/navigation";
 
 
 const COL_WIDTHS = {
@@ -19,30 +19,38 @@ const COL_WIDTHS = {
   base: "p-6 items-start justify-start"
 }
 
-export default function AdminContactsPage() {
+function AdminContactsPage() {
+  const router = useRouter();
+  const pathname = usePathname();
   const searchParams = useSearchParams();
+
   const initialStatus = searchParams.get("status") || "전체";
-  
+
   const {
     contacts, filter, setFilter, loading, currentPage, setCurrentPage,
     itemsPerPage, setItemsPerPage, totalCount, sortOrder, setSortOrder,
-    selectedIds, setSelectedIds, updateContact, bulkUpdateStatus,
+    selectedIds, setSelectedIds,
     expandedIds, setExpandedIds, editingMemoId, setEditingMemoId, tempMemo, setTempMemo,
-    updateStatus, saveMemo, handleBulkUpdate
+    updateStatus, saveMemo, handleBulkUpdate,
   } = useContactsManager(initialStatus);
 
   // URL 변경 로직만 컴포넌트에 유지
   const handleFilterChange = (newStatus: string) => {
     setFilter(newStatus);
-    const params = new URLSearchParams(window.location.search);
-    newStatus === "전체" ? params.delete("status") : params.set("status", newStatus);
-    window.history.replaceState(null, "", `${window.location.pathname}?${params}`);
+
+    const params = new URLSearchParams(searchParams.toString());
+
+    if (newStatus === "전체") {
+    params.delete("status");
+  } else {
+    params.set("status", newStatus);
+  }
+
+   router.replace(`${pathname}?${params.toString()}`);
   };
 
 
   const totalPages = Math.ceil(totalCount / itemsPerPage);
-
-
 
 
   return (
@@ -54,11 +62,10 @@ export default function AdminContactsPage() {
             <button
               key={status}
               onClick={() => handleFilterChange(status as FilterStatus)}
-              className={`px-8 py-2 rounded-full text-admin-body font-semibold transition-all shadow-sm ${
-                filter === status
+              className={`px-8 py-2 rounded-full text-admin-body font-semibold transition-all shadow-sm ${filter === status
                   ? "bg-blue-600 text-white"
                   : "bg-white text-gray-500 border border-gray-200"
-              }`}
+                }`}
             >
               {status}
             </button>
@@ -195,5 +202,15 @@ export default function AdminContactsPage() {
         </button>
       </div>
     </div>
+  );
+}
+
+import { Suspense } from "react";
+
+export default function AdminContactsPageWrapper() {
+  return (
+    <Suspense fallback={<div className="p-20 text-center">페이지 로딩 중...</div>}>
+      <AdminContactsPage />
+    </Suspense>
   );
 }
