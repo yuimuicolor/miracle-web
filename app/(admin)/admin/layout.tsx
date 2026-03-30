@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { ReactNode } from "react";
+import { useState, useEffect, ReactNode } from "react";
 import { usePathname } from "next/navigation";
 import LogoutButton from "./LogoutButton";
 import Logo from "@/components/sections/common/Logo";
@@ -23,6 +23,13 @@ function AdminContent({ children }: { children: React.ReactNode }) {
 
   const { data: session } = useSession();
 
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+
+  // 페이지 이동 시 사이드바 자동으로 닫기
+  useEffect(() => {
+    setIsSidebarOpen(false);
+  }, [pathname]);
+
   // 사이드바 메뉴 구성
   const menuItems = [
     { name: "대시보드", href: "/admin", icon: "🏠" },
@@ -36,77 +43,84 @@ function AdminContent({ children }: { children: React.ReactNode }) {
 
   return (
     <NextAuthProvider>
-      <div className="flex min-h-screen bg-gray-100 font-noto tracking-tight text-black">
-        {/* 사이드바 */}
-        <aside className="w-100 bg-slate-900 text-white flex flex-col shrink-0">
-          <div className="p-10 text-admin-title flex flex-col gap-6 border-b border-slate-800">
-            <Link href="/">
-             <Logo />
-             </Link>
-            <Link href="/admin">
-              관리자 페이지
-            </Link>
+      <div className="flex min-h-screen bg-gray-100 font-noto tracking-tight text-black overflow-x-hidden">
+
+        {/* 2. 모바일용 오버레이 (사이드바 열렸을 때 뒷배경 어둡게) */}
+        {isSidebarOpen && (
+          <div
+            className="fixed inset-0 bg-black/50 z-40 lg:hidden"
+            onClick={() => setIsSidebarOpen(false)}
+          />
+        )}
+
+        {/* 3. 사이드바 (반응형 설정) */}
+        <aside className={`
+        fixed inset-y-0 left-0 z-50 w-full lg:w-100 bg-slate-900 text-white flex flex-col shrink-0
+        transition-transform duration-300 transform
+        ${isSidebarOpen ? "translate-x-0" : "-translate-x-full"} 
+        lg:relative lg:translate-x-0 lg:w-80
+      `}>
+          <div className="p-8 flex gap-6 items-start justify-between border-b border-slate-800">
+            
+            <div className="flex flex-col justify-start items-start gap-2 text-admin-title">
+              <Link href="/"><Logo /></Link>
+            <Link href="/admin">관리자 페이지</Link>
+            </div>
+            
+            <button className="lg:hidden text-4xl" onClick={() => setIsSidebarOpen(false)}>✕</button>
           </div>
 
-          <nav className="text-admin-body flex-1 px-4 py-8 space-y-2">
+          <nav className="flex-1 px-4 py-8 space-y-2 overflow-y-auto">
             {menuItems.map((item) => {
-              // 💡 현재 경로가 메뉴의 href와 일치하는지 체크
-              // /admin/contacts?status=... 같은 경우도 포함하기 위해 startsWith 사용
-              const isActive =
-                pathname === item.href ||
-                (item.href !== "/admin" && pathname.startsWith(item.href));
-
+              const isActive = pathname === item.href || (item.href !== "/admin" && pathname.startsWith(item.href));
               return (
                 <Link
                   key={item.href}
                   href={item.href}
-                  className={`flex items-center gap-4 p-4 rounded-xl transition-all group
-                  ${
-                    isActive
-                      ? "bg-blue-600 text-white shadow-lg shadow-blue-900/20" // ✅ 활성화: 파란 배경
-                      : "text-slate-400 hover:bg-slate-800 hover:text-white" // 비활성화: 회색
-                  }
-                `}
+                  className={`flex items-center gap-4 p-4 rounded-xl transition-all group ${isActive ? "bg-blue-600 text-white shadow-lg" : "text-slate-400 hover:bg-slate-800 hover:text-white"
+                    }`}
                 >
-                  <span
-                    className={`text-[1.8rem] transition-transform group-hover:scale-110 ${isActive ? "opacity-100" : "opacity-50"}`}
-                  >
-                    {item.icon}
-                  </span>
-                  <span className="font-bold tracking-normal">{item.name}</span>
+                  <span className={`w-12 text-4xl ${isActive ? "opacity-100" : "opacity-50"}`}>{item.icon}</span>
+                  <span className="text-admin-body font-bold">{item.name}</span>
                 </Link>
               );
             })}
           </nav>
 
-          <div className="p-6 border-t border-slate-800 text-admin-small text-slate-500">
-            © 2026 {settings?.brandName || "Miracle"} Admin
+          <div className="p-6 border-t border-slate-800 text-xs text-slate-500 text-center">
+            © 2026 {settings?.brandName || "Miracle"}
           </div>
         </aside>
 
-        <main className="flex-1 flex flex-col min-w-0">
-          <header className="h-24 bg-white border-b flex items-center justify-between px-10 shadow-sm">
-            <h2 className="text-admin-title font-bold text-slate-800">
-              {settings?.brandName || "Miracle"}{" "}
-              <span className="text-blue-600">Admin</span>
-            </h2>
-            <div className="flex items-center gap-6">
+        {/* 4. 메인 콘텐츠 영역 */}
+        <main className="flex-1 flex flex-col min-w-0 w-full">
+          {/* 상단 헤더 (햄버거 버튼 포함) */}
+          <header className="h-20 lg:h-24 bg-white border-b flex items-center justify-between px-6 lg:px-10 shadow-sm sticky top-0 z-30">
+            <div className="flex items-center gap-4">
+              {/* 햄버거 버튼 (lg 미만에서만 노출) */}
+              <button
+                onClick={() => setIsSidebarOpen(true)}
+                className="p-2 lg:hidden text-4xl hover:bg-gray-100 rounded-lg"
+              >
+                ☰
+              </button>
+              <h2 className="text-admin-body lg:text-admin-title font-bold text-slate-800">
+                {settings?.brandName || "Miracle"} <span className="text-blue-600">Admin</span>
+              </h2>
+            </div>
+
+            <div className="flex items-center gap-4 lg:gap-6">
               {session?.user?.name && (
                 <div className="flex items-center gap-2">
-                  <div className="w-8 h-8 bg-slate-200 rounded-full flex items-center justify-center text-slate-600">
-                    👤
-                  </div>
-                  <span className="text-admin-body font-bold">
-                    {session.user.name} 님
-                  </span>
+                  <span className="text-admin-body font-bold">{session.user.name} 님</span>
                 </div>
               )}
               <LogoutButton />
             </div>
           </header>
 
-          {/* 스크롤 영역 */}
-          <div className="flex-1 p-10 overflow-y-auto">{children}</div>
+          {/* 페이지 내용 */}
+          <div className="flex-1 p-4 lg:p-10">{children}</div>
         </main>
       </div>
     </NextAuthProvider>
