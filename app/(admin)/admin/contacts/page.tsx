@@ -8,14 +8,14 @@ import { useSearchParams, useRouter, usePathname } from "next/navigation";
 
 
 const COL_WIDTHS = {
-  check: "w-[4%] shrink-0 flex justify-center",
-  date: "w-[9%] shrink-0 flex flex-col",
-  name: "w-[10%] shrink-0 flex flex-col",
-  phone: "w-[11%] shrink-0 flex flex-col",
-  email: "w-[15%] shrink-0 flex flex-col",
-  content: "w-[25%] shrink-0 flex flex-col",
-  status: "w-[9%] shrink-0 flex flex-col",
-  memo: "w-[17%] shrink-0 flex flex-col",
+  check: "w-[4%] flex justify-center",
+  date: "w-[9%] flex flex-col",
+  name: "w-[10%] flex flex-col",
+  phone: "w-[11%] flex flex-col",
+  email: "w-[15%] flex flex-col",
+  content: "w-[25%] flex flex-col",
+  status: "w-[9%] flex flex-col",
+  memo: "w-[17%] flex flex-col",
   base: "p-6 items-start justify-start"
 }
 

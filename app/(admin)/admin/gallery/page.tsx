@@ -53,11 +53,15 @@ export default function AdminGalleryPage() {
       </div>
 
       <div className="bg-white rounded-3xl shadow-sm border border-slate-100 overflow-hidden">
-        <div className="grid grid-cols-12 gap-4 py-5 bg-slate-50 border-b border-slate-100 text-admin-body font-semibold text-slate-500">
+       <div className="overflow-x-auto">
+       <div className="min-w-[400px]">
+          <div className="grid grid-cols-12 gap-4 py-5 bg-slate-50 border-b border-slate-100 text-admin-body font-semibold text-slate-500">
           <div className="col-span-1 text-center">순서</div>
           <div className="col-span-2">미리보기</div>
-          <div className="col-span-3">서브 제목</div>
-          <div className="col-span-3">메인 제목</div>
+
+          <div className="hidden lg:block col-span-3">서브 제목</div>
+          <div className="hidden lg:block col-span-3">메인 제목</div>
+          <div className="block lg:hidden col-span-6">서브제목/메인제목</div>
           <div className="col-span-1 text-center">진열</div>
           <div className="col-span-2 text-center">삭제</div>
         </div>
@@ -135,8 +139,8 @@ export default function AdminGalleryPage() {
                           />
                         </div>
 
-                        {/* 3. 제목 입력 */}
-                        <div className="col-span-3">
+                        {/* 3. 제목 입력  - PC*/}
+                        <div className="hidden lg:block col-span-3">
                           <AdminInput
                             value={item.subtitle}
                             disabled={item.isDeleted}
@@ -145,12 +149,34 @@ export default function AdminGalleryPage() {
                         </div>
 
 
-                        <div className="col-span-3">
+                        <div className="hidden lg:block col-span-3">
                           <AdminInput
                             value={item.mainTitle}
                             disabled={item.isDeleted}
                             onChange={(v) => handleChange(item.id, "mainTitle", v)}
                           />
+                        </div>
+
+                        {/* 3-1. 제목입력 - mobile */}
+                        <div className="flex flex-col lg:hidden col-span-6 gap-2 text-admin-small">
+                          <div className="flex flex-row gap-4">
+                            <span>서브</span>
+                            <AdminInput
+                              value={item.subtitle}
+                              disabled={item.isDeleted}
+                              placeholder="서브 제목"
+                              onChange={(v) => handleChange(item.id, "subtitle", v)}
+                            />
+                          </div>
+                          <div className="flex flex-row gap-4">
+                            <span>메인</span>
+                            <AdminInput
+                              value={item.mainTitle}
+                              disabled={item.isDeleted}
+                              placeholder="메인 제목"
+                              onChange={(v) => handleChange(item.id, "mainTitle", v)}
+                            />
+                          </div>
                         </div>
 
                         {/* 4. 진열 상태 */}
@@ -180,6 +206,8 @@ export default function AdminGalleryPage() {
             )}
           </Droppable>
         </DragDropContext>
+       </div>
+       </div>
       </div>
       <div className="flex justify-center mt-10">
         <AdminSaveButton size="large" onClick={handleAllSave} isSaving={isSaving} />

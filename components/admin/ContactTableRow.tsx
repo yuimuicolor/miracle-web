@@ -43,7 +43,7 @@ export default function ContactTableRow({ contact,
 
                 {/* 연락처 */}
                 <td
-                  className={`${COL_WIDTHS.base} ${COL_WIDTHS.phone} text-admin-small lg:text-admin-body font-medium text-blue-600 pt-8`}
+                  className={`${COL_WIDTHS.base} ${COL_WIDTHS.phone} flex-wrap text-admin-small lg:text-admin-body font-medium text-blue-600 pt-8`}
                 >
                   {contact.phone}
                 </td>

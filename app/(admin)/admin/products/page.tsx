@@ -47,7 +47,7 @@ export default function AdminProductsPage() {
       </div>
 
       <div className="overflow-x-auto bg-white rounded-3xl shadow-sm border border-slate-100 overflow-hidden">
-       <div className="w-full min-w-[1000px]">
+       <div className="w-full min-w-[600px]">
          <div className="grid grid-cols-12 gap-20 py-5 bg-slate-50 border-b border-slate-100 text-admin-small lg:text-admin-body font-semibold text-slate-500">
           <div className="col-span-1 text-center">순서</div>
           <div className="col-span-3 text-center">사진</div>
@@ -56,7 +56,7 @@ export default function AdminProductsPage() {
           <div className="col-span-1 text-center">삭제</div>
         </div>
 
-     <div className="w-full min-w-[1000px]">
+     <div className="w-full min-w-[600px]">
          <DragDropContext onDragEnd={onReorder}>
           <Droppable droppableId="products-list">
             {(provided) => (
