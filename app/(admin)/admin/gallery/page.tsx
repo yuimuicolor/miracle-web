@@ -62,6 +62,7 @@ export default function AdminGalleryPage() {
           <div className="hidden lg:block col-span-3">서브 제목</div>
           <div className="hidden lg:block col-span-3">메인 제목</div>
           <div className="block lg:hidden col-span-6">서브제목/메인제목</div>
+        
           <div className="col-span-1 text-center">진열</div>
           <div className="col-span-2 text-center">삭제</div>
         </div>

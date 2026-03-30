@@ -52,11 +52,17 @@ export default function AdminCertificatesPage() {
       </div>
 
       <div className="bg-white rounded-3xl shadow-sm border border-slate-100 overflow-hidden">
-        <div className="grid grid-cols-12 gap-4 py-5 bg-slate-50 border-b border-slate-100 text-admin-body font-semibold text-slate-500">
+       <div className="overflow-x-auto">
+        <div className="min-w-[400px]">
+           <div className="grid grid-cols-12 gap-4 py-5 bg-slate-50 border-b border-slate-100 text-admin-body font-semibold text-slate-500">
           <div className="col-span-1 text-center">순서</div>
           <div className="col-span-2">미리보기</div>
-          <div className="col-span-3">제목</div>
-          <div className="col-span-3">설명</div>
+
+          <div className="hidden lg:block col-span-3">제목</div>
+          <div className="hidden lg:block col-span-3">설명</div>
+
+          <div className="block lg:hidden col-span-6">제목/설명</div>
+
           <div className="col-span-1 text-center">진열</div>
           <div className="col-span-2 text-center">삭제</div>
         </div>
@@ -134,8 +140,8 @@ export default function AdminCertificatesPage() {
                           />
                         </div>
 
-                        {/* 3. 제목 입력 */}
-                        <div className="col-span-3">
+                        {/* 3. 제목 입력 - PC*/}
+                        <div className="hidden lg:block col-span-3">
                           <AdminInput
                             value={item.title}
                             disabled={item.isDeleted}
@@ -145,13 +151,35 @@ export default function AdminCertificatesPage() {
                         </div>
 
 
-                        <div className="col-span-3">
+                        <div className="hidden lg:block col-span-3">
                           <AdminInput
                             value={item.desc}
                             disabled={item.isDeleted}
                             onChange={(v) => handleChange(item.id, "desc", v)}
                             placeholder="설명을 입력해 주세요."
                           />
+                        </div>
+
+                          {/* 제목/설명 입력 - 모바일 */}
+                         <div className="flex flex-col lg:hidden col-span-6 gap-2 text-admin-small">
+                          <div className="flex flex-row gap-4">
+                            <span>제목</span>
+                            <AdminInput
+                              value={item.title}
+                              disabled={item.isDeleted}
+                              placeholder="제목을 입력해 주세요."
+                              onChange={(v) => handleChange(item.id, "title", v)}
+                            />
+                          </div>
+                          <div className="flex flex-row gap-4">
+                            <span>설명</span>
+                            <AdminInput
+                              value={item.desc}
+                              disabled={item.isDeleted}
+                              placeholder="설명을 입력해 주세요."
+                              onChange={(v) => handleChange(item.id, "desc", v)}
+                            />
+                          </div>
                         </div>
 
                         {/* 4. 진열 상태 */}
@@ -181,6 +209,8 @@ export default function AdminCertificatesPage() {
             )}
           </Droppable>
         </DragDropContext>
+        </div>
+       </div>
       </div>
       <div className="flex justify-center mt-10">
         <AdminSaveButton size="large" onClick={handleAllSave} isSaving={isSaving} />
