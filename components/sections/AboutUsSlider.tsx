@@ -3,14 +3,14 @@
 import Image from "next/image";
 import { useEffect, useMemo, useRef, useState } from "react";
 
-interface AboutSliderProps {
+interface AboutUsSliderProps {
   slides: string[];
 }
 
 const AUTO_SLIDE_MS = 4000;
 const AXIS_LOCK_THRESHOLD = 8;
 
-export default function AboutSlider({ slides }: AboutSliderProps) {
+export default function AboutUsSlider({ slides }: AboutUsSliderProps) {
   const safeSlides = useMemo(
     () => (slides.length > 0 ? slides : ["/images/main-bg.png"]),
     [slides]

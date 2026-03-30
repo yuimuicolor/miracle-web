@@ -9,6 +9,8 @@ export default function AdminDashboard() {
     newInquiries: 0,
     totalProducts: 0,
     galleryImages: 0,
+    historyItems: 0,
+    certificates: 0,
   });
   const [loading, setLoading] = useState(true);
 
@@ -25,12 +27,22 @@ export default function AdminDashboard() {
 
         // 2. 전체 상품 개수
         const { count: productCount } = await supabase
-          .from("products") // 누나 프로젝트의 상품 테이블명 확인!
+          .from("products") 
           .select("*", { count: "exact", head: true });
 
         // 3. 갤러리 이미지 개수
         const { count: galleryCount } = await supabase
-          .from("gallery") // 누나 프로젝트의 갤러리 테이블명 확인!
+          .from("gallery") 
+          .select("*", { count: "exact", head: true });
+
+        // 4. 히스토리 아이템 개수
+        const { count: historyCount } = await supabase
+          .from("history") 
+          .select("*", { count: "exact", head: true });
+
+          // 5. 인증서 개수
+        const { count: certificatesCount } = await supabase
+          .from("certificates")
           .select("*", { count: "exact", head: true });
 
         setCounts((prev) => ({
@@ -38,6 +50,8 @@ export default function AdminDashboard() {
           newInquiries: newCount || 0,
           totalProducts: productCount || 0,
           galleryImages: galleryCount || 0,
+          historyItems: historyCount || 0,
+          certificates: certificatesCount || 0,
         }));
       } catch (error) {
         console.error("데이터 로드 실패:", error);
@@ -69,6 +83,18 @@ export default function AdminDashboard() {
       href: "/admin/gallery",
     },
     {
+      label: "히스토리 관리",
+      value: `${counts.historyItems}개`,
+      color: "text-yellow-600",
+      href: "/admin/history",
+    },
+    {
+      label: "인증서 관리",
+      value: `${counts.certificates}개`,
+      color: "text-purple-600",
+      href: "/admin/certificates",
+    },
+    {
       label: "사이트관리",
       value: "설정⚙",
       color: "text-gray-600",
@@ -78,7 +104,7 @@ export default function AdminDashboard() {
 
   return (
     <div className="space-y-6">
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
         {stats.map((stat, i) => {
           const CardContent = (
             <div

@@ -5,11 +5,14 @@ import {
   ANCHOR_PADDING_TOP,
   SECTION_REVEAL,
   SECTION_REVEAL_EFFECT } from "@/lib/constants/aboutPage";
-import { ABOUT_PAGE_CONTENT } from "@/lib/aboutUsData";
 import { SectionHeading } from "./SharedAboutPage";
+import { getCertificatesItemsByServer } from "@/lib/api/certificates";
+import { CertificateItem } from "@/lib/types/aboutUs";
+import { supabaseServer } from "@/lib/supabase/server";
 
-export default function AboutCertificatesSection() {
-  const { certificates } = ABOUT_PAGE_CONTENT;
+export default async function AboutCertificatesSection() {
+
+  const certificates = await getCertificatesItemsByServer(supabaseServer);
 
   return (
     <section id="certificates" style={{ paddingTop: ANCHOR_PADDING_TOP }}>
@@ -21,16 +24,16 @@ export default function AboutCertificatesSection() {
         {...SECTION_REVEAL_EFFECT}
       >
         <SectionHeading
-          headingEn={certificates.headingEn}
-          headingKo={certificates.headingKo}
-          description={certificates.description}
+          headingEn="CERTIFICATES"
+          headingKo="인증서"
+          description="미라클이 보유한 인증서와 수상 내역을 소개합니다."
         />
       </ScrollReveal>
 
       <div className={ABOUT_PAGE_STYLE.certificateGrid}>
-        {certificates.items.map((cert, index) => (
+        {certificates.map((item: CertificateItem, index: number) => (
           <ScrollReveal
-            key={cert.id}
+            key={item.id}
             as="article"
             className={ABOUT_PAGE_STYLE.certificateCard}
             delayMs={index * 65}
@@ -42,15 +45,15 @@ export default function AboutCertificatesSection() {
             <div className={ABOUT_PAGE_STYLE.certificateImageRatio}>
               <Image
                 src="/images/main-bg.png"
-                alt={cert.title}
+                alt={item.title}
                 fill
                 sizes="(max-width: 767px) 50vw, (max-width: 1023px) 33vw, 20vw"
                 className={ABOUT_PAGE_STYLE.imageObj}
               />
             </div>
             <div className={ABOUT_PAGE_STYLE.certificateCaption}>
-              <p className={ABOUT_PAGE_STYLE.certificateTitle}>{cert.title}</p>
-              <p className={ABOUT_PAGE_STYLE.certificateDesc}>{cert.desc}</p>
+              <p className={ABOUT_PAGE_STYLE.certificateTitle}>{item.title}</p>
+              <p className={ABOUT_PAGE_STYLE.certificateDesc}>{item.desc}</p>
             </div>
           </ScrollReveal>
         ))}

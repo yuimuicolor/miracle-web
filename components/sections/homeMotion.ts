@@ -1,19 +1,19 @@
 export const HOME_REVEAL = {
-  heroTitle: {
+  mainTitle: {
     durationMs: 1100,
     threshold: 0.3,
     rootMargin: "0px 0px -8% 0px",
     hiddenClassName: "opacity-0 translate-y-[2rem] scale-[0.985] blur-[10px]",
     visibleClassName: "opacity-100 translate-y-0 scale-100 blur-0",
   },
-  heroLogo: {
+  mainLogo: {
     durationMs: 1000,
     threshold: 0.3,
     rootMargin: "0px 0px -8% 0px",
     hiddenClassName: "opacity-0 translate-y-[2.4rem] scale-[0.96] blur-[10px]",
     visibleClassName: "opacity-100 translate-y-0 scale-100 blur-0",
   },
-  heroSubtitle: {
+  mainSubtitle: {
     durationMs: 1080,
     threshold: 0.3,
     rootMargin: "0px 0px -8% 0px",

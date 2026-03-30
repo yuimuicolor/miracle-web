@@ -76,16 +76,24 @@ export const cleanupStorageFiles = async (
   const filesToDelete = storageFiles
     .filter((f: any) => {
       if (activeFiles.includes(f.name)) return false;
-      if (folderPath === "" || folderPath === "/") {
-        if (!prefix) return false;
-        return f.name.startsWith(prefix); // 내 아이디로 시작하는 파일만 삭제 대상
+
+      if (prefix) {
+        return f.name.startsWith(prefix);
       }
-      return true;
+      return false;
     })
     .map((f: any) => (folderPath ? `${folderPath}/${f.name}` : f.name));
 
   if (filesToDelete.length > 0) {
-    await supabaseClient.storage.from(bucket).remove(filesToDelete);
+    const { error: removeError } = await supabaseClient.storage
+      .from(bucket)
+      .remove(filesToDelete);
+    
+    if (removeError) {
+      console.error("파일 삭제 중 에러:", removeError);
+    } else {
+      console.log("✅ 정리된 파일들:", filesToDelete);
+    }
   }
 };
 

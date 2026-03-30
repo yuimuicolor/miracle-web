@@ -4,7 +4,7 @@ import { readdirSync } from "node:fs";
 import MoreButton from "../MoreButton";
 import ScrollReveal from "@/components/ScrollReveal";
 import { HOME_REVEAL } from "@/components/sections/homeMotion";
-import AboutSlider from "./AboutSlider";
+import AboutUsSlider from "./AboutUsSlider";
 import SectionTitle from "./common/SectionTitle";
 
 const ABOUT_SLIDER_DIR = path.join(
@@ -86,7 +86,7 @@ const STYLE = {
   `,
 };
 
-export default function AboutSection() {
+export default function AboutUsSection() {
 
   return (
     <section className={STYLE.section}>
@@ -114,7 +114,7 @@ export default function AboutSection() {
           </ScrollReveal>
 
           <ScrollReveal className={STYLE.sliderWrap} delayMs={180} {...HOME_REVEAL.mediaBlock}>
-            <AboutSlider slides={ABOUT_SLIDES} />
+            <AboutUsSlider slides={ABOUT_SLIDES} />
           </ScrollReveal>
         </div>
       </div>

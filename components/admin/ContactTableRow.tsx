@@ -28,7 +28,7 @@ export default function ContactTableRow({ contact,
                 <td
                   className={`${COL_WIDTHS.base} ${COL_WIDTHS.date} text-admin-body text-gray-400 font-medium pt-8`}
                 >
-                  {contact.created_at?.split("T")[0]}
+                  {contact.createdAt?.split("T")[0]}
                 </td>
 
                 {/* 이름(회사) */}
@@ -144,11 +144,11 @@ export default function ContactTableRow({ contact,
                       className={`group relative w-full min-h-[90px] p-4 bg-gray-50 rounded-xl border border-dashed border-gray-300 cursor-pointer hover:border-blue-400 hover:bg-blue-50 transition-all overflow-hidden`}
                       onClick={() => {
                         setEditingMemoId(contact.id);
-                        setTempMemo(contact.admin_memo || "");
+                        setTempMemo(contact.adminMemo || "");
                       }}
                     >
                       <p className="text-admin-small text-gray-600 whitespace-pre-wrap leading-snug">
-                        {contact.admin_memo || "메모 추가..."}
+                        {contact.adminMemo || "메모 추가..."}
                       </p>
                       <div className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity bg-blue-600 text-white px-3 py-1 rounded-md text-[1.2rem] font-bold shadow-sm">
                         수정

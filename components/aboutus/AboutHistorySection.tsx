@@ -1,3 +1,5 @@
+
+
 import Image from "next/image";
 import ScrollReveal from "@/components/ScrollReveal";
 import { SectionHeading } from "@/components/aboutus/SharedAboutPage";
@@ -7,13 +9,15 @@ import {
   HISTORY_STAGGER_MS,
   SECTION_REVEAL,
   SECTION_REVEAL_EFFECT} from "@/lib/constants/aboutPage";
-import { ABOUT_PAGE_CONTENT } from "@/lib/aboutUsData";
+import { getHistoryItemsByServer } from "@/lib/api/history";
+import { supabaseServer } from "@/lib/supabase/server";
 
-export default function AboutHistorySection() {
-  const { history } = ABOUT_PAGE_CONTENT;
+export default async function AboutHistorySection() {
+  const history = await getHistoryItemsByServer(supabaseServer);
+
   const historyRows = Array.from(
-    { length: Math.ceil(history.items.length / 2) },
-    (_, rowIndex) => history.items.slice(rowIndex * 2, rowIndex * 2 + 2),
+    { length: Math.ceil(history.length / 2) },
+    (_, rowIndex) => history.slice(rowIndex * 2, rowIndex * 2 + 2),
   );
 
   return (
@@ -30,9 +34,9 @@ export default function AboutHistorySection() {
         {...SECTION_REVEAL_EFFECT}
       >
         <SectionHeading
-          headingEn={history.headingEn}
-          headingKo={history.headingKo}
-          description={history.description}
+          headingEn="HISTORY"
+          headingKo="연혁"
+          description="미라클의 주요 연혁과 성과를 소개합니다."
         />
       </ScrollReveal>
 
@@ -70,8 +74,8 @@ export default function AboutHistorySection() {
                   >
                     <div className={ABOUT_PAGE_STYLE.historyImageWrap}>
                       <Image
-                        src={item.imageSrc}
-                        alt={item.imageAlt}
+                        src={item.imageUrl}
+                        alt={item.title}
                         fill
                         sizes="(max-width: 1279px) 15rem, 28rem"
                         className={ABOUT_PAGE_STYLE.historyImage}

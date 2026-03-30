@@ -5,7 +5,8 @@ import {
   SECTION_REVEAL,
   SECTION_REVEAL_EFFECT,
 } from "@/lib/constants/aboutPage";
-import { ABOUT_PAGE_CONTENT } from "@/lib/aboutUsData";
+
+const MARQUEE_TEXT = "Miracle - Innovation for Meaningful Change";
 
 export default function AboutMarqueeSection() {
   return (
@@ -24,7 +25,7 @@ export default function AboutMarqueeSection() {
                 key={`marquee-${setIndex}-${chunkIndex}`}
                 className={ABOUT_PAGE_STYLE.marqueeChunk}
               >
-                {` ${ABOUT_PAGE_CONTENT.trustText} `}
+              {MARQUEE_TEXT}
               </span>
             ))}
           </div>

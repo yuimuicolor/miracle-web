@@ -15,7 +15,7 @@ export async function GET(request: Request) {
   let query = supabaseServer
     .from("contacts")
     .select("*", { count: "exact" })
-    .order("created_at", { ascending: sortOrder === "asc" })
+    .order("createdAt", { ascending: sortOrder === "asc" })
     .range(from, to);
 
   if (status && status !== "전체") {

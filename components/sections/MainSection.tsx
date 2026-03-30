@@ -55,14 +55,14 @@ export default function MainSection() {
       <div className={STYLE.glow} />
 
       <div className={STYLE.contentWrap}>
-        <ScrollReveal delayMs={80} {...HOME_REVEAL.heroTitle}>
+        <ScrollReveal delayMs={80} {...HOME_REVEAL.mainTitle}>
           <h3 className={STYLE.title}>
             <b>기적</b>을 <b>일상</b>으로,
             <span className={STYLE.titleStar}>*</span>
           </h3>
         </ScrollReveal>
 
-        <ScrollReveal delayMs={220} {...HOME_REVEAL.heroLogo}>
+        <ScrollReveal delayMs={220} {...HOME_REVEAL.mainLogo}>
           <div className={STYLE.logoWrap}>
             <span className={STYLE.logoText}>
               {settings.brandName}
@@ -70,7 +70,7 @@ export default function MainSection() {
           </div>
         </ScrollReveal>
 
-        <ScrollReveal delayMs={340} {...HOME_REVEAL.heroSubtitle}>
+        <ScrollReveal delayMs={340} {...HOME_REVEAL.mainSubtitle}>
           <h3 className={STYLE.subtitle}>
             Begins Within
           </h3>

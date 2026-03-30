@@ -1,6 +1,6 @@
 import { Suspense } from "react";
 import MainSection from "@/components/sections/MainSection";
-import AboutSection from "@/components/sections/AboutSection";
+import AboutUsSection from "@/components/sections/AboutUsSection";
 import ContactUsSection from "@/components/sections/ContactUsSection";
 import ProductsSection from "@/components/sections/ProductsSection";
 import GallerySection from "@/components/sections/GallerySection";
@@ -29,7 +29,7 @@ export default function Home() {
       </section>
       <Suspense fallback={sectionFallback}>
         <section className={STYLE.snapSection}>
-          <AboutSection />
+          <AboutUsSection />
         </section>
       </Suspense>
       <Suspense fallback={sectionFallback}>

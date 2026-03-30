@@ -31,7 +31,7 @@
   --text-admin-small: 1.6rem;
 
   /* 마키 애니메이션 */
-  --animate-marquee: marquee 120s linear infinite;
+  --animate-marquee: marquee 200s linear infinite;
 
   /* 컬러 등록  */
   --color-bg-dark: #030303;

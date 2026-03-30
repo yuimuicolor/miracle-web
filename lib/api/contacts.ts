@@ -31,7 +31,7 @@ export const updateContactsApi = async (payload: {
   ids?: number[];
   updates: {
     status?: ContactStatus;
-    admin_memo?: string;
+    adminMemo?: string;
     [key: string]: any; 
   };
 }) => {

@@ -29,6 +29,8 @@ function AdminContent({ children }: { children: React.ReactNode }) {
     { name: "문의 관리", href: "/admin/contacts", icon: "📧" },
     { name: "상품 관리", href: "/admin/products", icon: "🛍️" },
     { name: "갤러리 관리", href: "/admin/gallery", icon: "🖼️" },
+    { name: "히스토리 관리", href: "/admin/history", icon: "⏱" },
+    { name: "인증서 관리", href: "/admin/certificates", icon: "📜" },
     { name: "사이트 설정", href: "/admin/siteSettings", icon: "⚙️" },
   ];
 

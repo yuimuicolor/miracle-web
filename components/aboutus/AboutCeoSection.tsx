@@ -6,11 +6,38 @@ import {
   SECTION_REVEAL,
   SECTION_REVEAL_EFFECT,
 } from "@/lib/constants/aboutPage";
-import { ABOUT_PAGE_CONTENT } from "@/lib/aboutUsData";
 
 
 export default function AboutCeoSection() {
-  const { ceo } = ABOUT_PAGE_CONTENT;
+  const ceo = {
+    label: "CHIEF EXECUTIVE OFFICER",
+    title: "C.E.O",
+    name: "김미라 / MIRA KIM",
+    description:
+      "브랜드 전략과 시각 설계를 연결하며,\n의미 있는 변화가 일어나는 디자인을 만듭니다.\nC.E.O로서 미라클의 방향성을 총괄합니다.",
+    sns: {
+      instagram: {
+        href: "https://www.instagram.com/mira.kim_official",
+        label: "Instagram",
+        iconSrc: "/images/icon/icon-sns-instagram.png",
+        hoverIconSrc: "/images/icon/icon-sns-instagram-hover.png",
+      },
+      youtube: {
+        href: "https://www.youtube.com/@miracle-mira",
+        label: "YouTube",
+        iconSrc: "/images/icon/icon-sns-youtube.png",
+        hoverIconSrc: "/images/icon/icon-sns-youtube-hover.png",
+      },
+      x: {
+        href: "https://twitter.com/mira_kim_official",
+        label: "X (Twitter)",
+        iconSrc: "/images/icon/icon-sns-x.png",
+        hoverIconSrc: "/images/icon/icon-sns-x-hover.png",
+      },
+    },
+    imageAlt: "ceo",
+  };
+
 
   return (
     <section

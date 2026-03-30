@@ -3,7 +3,7 @@ import { SiteSettingsItem } from "../types/siteSettings";
 
 export const getFooterItems = (settings: SiteSettingsItem): FooterItem[] => {
   return [
-    { label: "대표이사", value: settings.ownerName },
+    { label: "대표자명", value: settings.ownerName },
     { label: "사업자등록번호", value: settings.businessRegistrationNumber },
     { label: "주소", value: settings.address },
     { label: "전화", value: settings.phone },

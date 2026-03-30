@@ -12,7 +12,6 @@ interface GalleryPageGridProps {
   images: GalleryPageGridItem[];
 }
 
-
 const PAGE_SIZE = 6;
 
 const STYLE = {

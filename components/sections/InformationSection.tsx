@@ -79,7 +79,7 @@ const toDialNumber = (phone: string) => phone.replace(/[^\d+]/g, "");
 
 export default function InformationSection() {
 
- const settings = useSettings();
+  const settings = useSettings();
   if (!settings) return null;
 
 
@@ -193,39 +193,42 @@ export default function InformationSection() {
                 delayMs={460}
                 {...HOME_REVEAL.button}
               >
-                {Object.values(settings?.snsConfig || {}).map(
-                  (snsItem: any) => {
-                    return (
-                      <a
-                        key={snsItem.label}
-                        href={snsItem.href}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className={`${STYLE.snsLink} group`}
-                        aria-label={snsItem.label}
-                      >
-                        <span className={STYLE.snsIconWrap}>
-                          {/* 기본 아이콘 */}
-                          <Image
-                            src={STATIC_ASSETS.sns[snsItem.label as keyof typeof STATIC_ASSETS.sns].base}
-                            alt={snsItem.label}
-                            width={60}
-                            height={60}
-                            className={STYLE.snsIconBase}
-                          />
-                          {/* 호버 아이콘 */}
-                          <Image
-                            src={STATIC_ASSETS.sns[snsItem.label as keyof typeof STATIC_ASSETS.sns].hover}
-                            alt={`${snsItem.label} hover`}
-                            width={60}
-                            height={60}
-                            className={STYLE.snsIconHover}
-                          />
-                        </span>
-                      </a>
-                    );
-                  },
-                )}
+                {Object.values(settings?.snsConfig || {})
+                  .filter((snsItem: any) => {
+                    return snsItem && snsItem.href && snsItem.label;
+                  }).map(
+                    (snsItem: any) => {
+                      return (
+                        <a
+                          key={snsItem.label}
+                          href={snsItem.href}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className={`${STYLE.snsLink} group`}
+                          aria-label={snsItem.label}
+                        >
+                          <span className={STYLE.snsIconWrap}>
+                            {/* 기본 아이콘 */}
+                            <Image
+                              src={STATIC_ASSETS.sns[snsItem.label as keyof typeof STATIC_ASSETS.sns].base}
+                              alt={snsItem.label}
+                              width={60}
+                              height={60}
+                              className={STYLE.snsIconBase}
+                            />
+                            {/* 호버 아이콘 */}
+                            <Image
+                              src={STATIC_ASSETS.sns[snsItem.label as keyof typeof STATIC_ASSETS.sns].hover}
+                              alt={`${snsItem.label} hover`}
+                              width={60}
+                              height={60}
+                              className={STYLE.snsIconHover}
+                            />
+                          </span>
+                        </a>
+                      );
+                    },
+                  )}
               </ScrollReveal>
             </div>
           </div>

@@ -69,7 +69,7 @@ const handleBulkUpdate = async (newStatus: ContactStatus) => {
     try {
       await updateContactsApi({
         id,
-        updates: { admin_memo: tempMemo },
+        updates: { adminMemo: tempMemo },
       });
 
       setEditingMemoId(null);
