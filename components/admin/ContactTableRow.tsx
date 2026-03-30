@@ -7,7 +7,7 @@ export default function ContactTableRow({ contact,
     return (
           <tr
                 key={contact.id}
-                className="flex w-full hover:bg-blue-50/50 items-stretch border-b border-gray-300 last:border-0 transition-colors"
+                className="flex-wrap flex w-full hover:bg-blue-50/50 items-stretch border-b border-gray-300 last:border-0 transition-colors"
               >
                 <td className={`${COL_WIDTHS.check} pt-8`}>
                   <input
@@ -20,44 +20,44 @@ export default function ContactTableRow({ contact,
                           : [...prev, contact.id],
                       )
                     }
-                    className="size-8 cursor-pointer"
+                    className="size-6 lg:size-8 cursor-pointer"
                   />
                 </td>
 
                 {/* 날짜 */}
                 <td
-                  className={`${COL_WIDTHS.base} ${COL_WIDTHS.date} text-admin-body text-gray-400 font-medium pt-8`}
+                  className={`${COL_WIDTHS.base} ${COL_WIDTHS.date} text-admin-small lg:text-admin-body text-gray-400 font-medium pt-8`}
                 >
                   {contact.createdAt?.split("T")[0]}
                 </td>
 
                 {/* 이름(회사) */}
                 <td className={`${COL_WIDTHS.base} ${COL_WIDTHS.name} gap-2 pt-8`}>
-                  <div className="font-bold text-admin-body text-gray-900">
+                  <div className="font-bold text-admin-small lg:text-admin-body text-gray-900">
                     {contact.name}
                   </div>
-                  <div className="text-admin-small text-gray-400">
+                  <div className="text-admin-small lg:text-admin-body text-gray-400">
                     {contact.company || "-"}
                   </div>
                 </td>
 
                 {/* 연락처 */}
                 <td
-                  className={`${COL_WIDTHS.base} ${COL_WIDTHS.phone} text-admin-body font-medium text-blue-600 pt-8`}
+                  className={`${COL_WIDTHS.base} ${COL_WIDTHS.phone} text-admin-small lg:text-admin-body font-medium text-blue-600 pt-8`}
                 >
                   {contact.phone}
                 </td>
 
                 {/* 이메일 */}
                 <td
-                  className={`${COL_WIDTHS.base} ${COL_WIDTHS.email} text-admin-small text-gray-600 break-all pt-8`}
+                  className={`${COL_WIDTHS.base} ${COL_WIDTHS.email} text-admin-small lg:text-admin-body text-gray-600 break-all pt-8`}
                 >
                   {contact.email}
                 </td>
 
                 {/* 문의내용 */}
                 <td
-                  className={`${COL_WIDTHS.base} ${COL_WIDTHS.content} text-admin-body leading-relaxed text-gray-700 pt-8`}
+                  className={`${COL_WIDTHS.base} ${COL_WIDTHS.content} text-admin-small lg:text-admin-body leading-relaxed text-gray-700 pt-8`}
                 >
                   {/* 1. 컨테이너를 block으로 두되, 내부 텍스트는 inline으로 흐르게 합니다. */}
                   <div className="block">
@@ -89,7 +89,7 @@ export default function ContactTableRow({ contact,
                             expandedIds.filter((id:any) => id !== contact.id),
                           )
                         }
-                        className="inline-block ml-2 text-gray-300 hover:text-gray-500 text-admin-small underline"
+                        className="inline-block ml-2 text-gray-300 hover:text-gray-500 text-admin-small lg:text-admin-body underline"
                       >
                         접기
                       </button>
@@ -104,7 +104,7 @@ export default function ContactTableRow({ contact,
                     onChange={(e) =>
                       updateStatus(contact.id, e.target.value as ContactStatus)
                     }
-                    className="border border-gray-300 rounded-xl px-2 py-3 text-admin-small w-full bg-white shadow-sm cursor-pointer focus:ring-2 focus:ring-blue-400 outline-none"
+                    className="border border-gray-300 rounded-xl px-2 py-3 text-admin-small lg:text-admin-body w-full min-w-[100px] bg-white shadow-sm cursor-pointer focus:ring-2 focus:ring-blue-400 outline-none"
                   >
                     {CONTACT_STATUS_OPTIONS.map((s) => (
                       <option key={s} value={s}>
@@ -121,19 +121,19 @@ export default function ContactTableRow({ contact,
                       <textarea
                         value={tempMemo}
                         onChange={(e) => setTempMemo(e.target.value)}
-                        className="p-4 text-admin-small w-full min-h-[140px] resize-none bg-white border-2 border-blue-400 rounded-xl outline-none shadow-inner"
+                        className="p-4 text-admin-small lg:text-admin-body w-full shrink-0 min-h-[140px] resize-none bg-white border-2 border-blue-400 rounded-xl outline-none shadow-inner"
                         autoFocus
                       />
                       <div className="flex gap-2 w-full">
                         <button
                           onClick={() => saveMemo(contact.id)}
-                          className="flex-1 py-3 bg-blue-600 text-white rounded-lg text-admin-small font-bold shadow-md hover:bg-blue-700 active:scale-95 transition-all"
+                          className="flex-1 py-3 bg-blue-600 text-white rounded-lg text-admin-small lg:text-admin-body font-bold shadow-md hover:bg-blue-700 active:scale-95 transition-all"
                         >
                           저장
                         </button>
                         <button
                           onClick={() => setEditingMemoId(null)}
-                          className="flex-1 py-3 bg-gray-200 text-gray-600 rounded-lg text-admin-small font-bold hover:bg-gray-300 active:scale-95 transition-all"
+                          className="flex-1 py-3 bg-gray-200 text-gray-600 rounded-lg text-admin-small lg:text-admin-body font-bold hover:bg-gray-300 active:scale-95 transition-all"
                         >
                           취소
                         </button>

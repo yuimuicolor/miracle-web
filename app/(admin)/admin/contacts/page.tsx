@@ -56,13 +56,13 @@ function AdminContactsPage() {
   return (
     <div>
       <AdminHeader title="문의 관리" subtitle="Contact Us를 통해 접수된 고객 문의 관리 페이지입니다. 상태를 변경하거나 메모를 추가할 수 있습니다." tip="* 별도의 저장 없이 즉시 상태/메모가 반영됩니다." />
-      <div className="flex justify-between items-end mt-6 mb-10">
-        <div className="flex gap-3 overflow-x-auto">
+      <div className="flex flex-col xl:flex-row justify-between xl:items-end mt-6 mb-10">
+        <div className="flex flex-wrap gap-3 overflow-x-auto pb-1 mb-6 xl:mb-0">
           {FILTER_OPTIONS.map((status) => (
             <button
               key={status}
               onClick={() => handleFilterChange(status as FilterStatus)}
-              className={`px-8 py-2 rounded-full text-admin-body font-semibold transition-all shadow-sm ${filter === status
+              className={`px-4 xl:px-8 py-2 rounded-full text-admin-small lg:text-admin-body font-semibold transition-all shadow-sm ${filter === status
                   ? "bg-blue-600 text-white"
                   : "bg-white text-gray-500 border border-gray-200"
                 }`}
@@ -72,15 +72,15 @@ function AdminContactsPage() {
           ))}
         </div>
 
-        <div className="flex items-center gap-4 bg-white p-2 rounded-xl border border-gray-200 shadow-sm">
-          <span className="text-admin-small font-bold px-3 text-gray-500">
+        <div className="self-end w-fit flex items-center gap-4 bg-white p-2 rounded-xl border border-gray-200 shadow-sm">
+          <span className="text-admin-small lg:text-admin-body font-bold px-3 text-gray-500">
             보기:
           </span>
           {[10, 30, 50, 100].map((num) => (
             <button
               key={num}
               onClick={() => setItemsPerPage(num)}
-              className={`px-4 py-2 rounded-lg text-admin-small font-bold transition-all ${itemsPerPage === num ? "bg-gray-800 text-white" : "text-gray-400 hover:bg-gray-100"}`}
+              className={`px-2 xl:px-4 py-2 rounded-lg text-admin-small lg:text-admin-body font-bold transition-all ${itemsPerPage === num ? "bg-gray-800 text-white" : "text-gray-400 hover:bg-gray-100"}`}
             >
               {num}개
             </button>
@@ -89,8 +89,8 @@ function AdminContactsPage() {
       </div>
 
       {selectedIds.length > 0 && (
-        <div className="mb-6 flex items-center gap-4 p-4 bg-blue-50 border border-blue-200 rounded-xl animate-in slide-in-from-top-2">
-          <span className="text-admin-body font-bold text-blue-700">
+        <div className="mb-6 flex-wrap flex items-center gap-4 p-4 bg-blue-50 border border-blue-200 rounded-xl animate-in slide-in-from-top-2">
+          <span className="w-full md:w-fit text-admin-small lg:text-admin-body font-bold text-blue-700">
             {selectedIds.length}개 선택됨
           </span>
           <div className="h-6 w-[1px] bg-blue-300 mx-2" />
@@ -98,7 +98,7 @@ function AdminContactsPage() {
             <button
               key={s}
               onClick={() => handleBulkUpdate(s)}
-              className="px-4 py-2 bg-white border border-blue-300 rounded-lg text-admin-small hover:bg-blue-600 hover:text-white transition-all shadow-sm"
+              className="px-4 py-2 bg-white border border-blue-300 rounded-lg text-admin-small lg:text-admin-body hover:bg-blue-600 hover:text-white transition-all shadow-sm"
             >
               {s}
             </button>
@@ -106,8 +106,9 @@ function AdminContactsPage() {
         </div>
       )}
       <div className="bg-white rounded-2xl shadow-xl overflow-hidden mb-10 border border-gray-200">
-        <table className="w-full">
-          <thead className="bg-gray-200 text-gray-800 text-admin-body font-bold border-b border-gray-300">
+        <div className="overflow-x-auto">
+        <table className="w-full min-w-[1400px] border-collapse">
+          <thead className="bg-gray-200 text-gray-800 text-admin-small lg:text-admin-body font-bold border-b border-gray-300">
             <tr className="flex w-full items-center">
               <th className={`${COL_WIDTHS.check} py-6`}>
                 <input
@@ -121,7 +122,7 @@ function AdminContactsPage() {
                     selectedIds.length === contacts.length &&
                     contacts.length > 0
                   }
-                  className="size-8 cursor-pointer"
+                  className="size-6 lg:size-8 cursor-pointer"
                 />
               </th>
               <th
@@ -131,7 +132,7 @@ function AdminContactsPage() {
                 }
               >
                 날짜
-                <span className="text-admin-small text-blue-600">
+                <span className="text-admin-small lg:text-admin-body text-blue-600">
                   {sortOrder === "asc" ? "▲" : "▼"}
                 </span>
               </th>
@@ -164,6 +165,7 @@ function AdminContactsPage() {
             ))}
           </tbody>
         </table>
+        </div>
         {loading && (
           <div className="p-20 text-center text-admin-body animate-pulse text-gray-400">
             데이터를 동기화 중입니다...
@@ -176,7 +178,7 @@ function AdminContactsPage() {
         <button
           onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
           disabled={currentPage === 1}
-          className="px-6 py-3 bg-white border border-gray-300 rounded-xl disabled:opacity-30 font-bold text-admin-body shadow-sm hover:bg-gray-50 transition-all"
+          className="px-6 py-3 bg-white border border-gray-300 rounded-xl disabled:opacity-30 font-bold text-admin-small lg:text-admin-body shadow-sm hover:bg-gray-50 transition-all"
         >
           이전
         </button>
@@ -185,7 +187,7 @@ function AdminContactsPage() {
             <button
               key={i + 1}
               onClick={() => setCurrentPage(i + 1)}
-              className={`size-14 rounded-xl font-bold text-admin-body transition-all ${currentPage === i + 1 ? "bg-blue-600 text-white scale-110 shadow-lg" : "bg-white border border-gray-200 text-gray-400 hover:bg-gray-50"}`}
+              className={`size-14 rounded-xl font-bold text-admin-small lg:text-admin-body transition-all ${currentPage === i + 1 ? "bg-blue-600 text-white scale-110 shadow-lg" : "bg-white border border-gray-200 text-gray-400 hover:bg-gray-50"}`}
             >
               {i + 1}
             </button>
@@ -196,7 +198,7 @@ function AdminContactsPage() {
             setCurrentPage((prev) => Math.min(prev + 1, totalPages))
           }
           disabled={currentPage === totalPages}
-          className="px-6 py-3 bg-white border border-gray-300 rounded-xl disabled:opacity-30 font-bold text-admin-body shadow-sm hover:bg-gray-50 transition-all"
+          className="px-6 py-3 bg-white border border-gray-300 rounded-xl disabled:opacity-30 font-bold text-admin-small lg:text-admin-body shadow-sm hover:bg-gray-50 transition-all"
         >
           다음
         </button>
