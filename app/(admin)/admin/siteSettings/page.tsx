@@ -50,8 +50,6 @@ export default function AdminSiteSettingsPage() {
           </div>
         </section>
 
-        <hr className="border-slate-100" />
-
         {/* 기본 정보 섹션 */}
         <section className="grid grid-cols-2 gap-6">
           <div>
@@ -62,7 +60,25 @@ export default function AdminSiteSettingsPage() {
             <label className="block text-admin- font-semibold mb-2">대표자명</label>
             <AdminInput value={items?.ownerName || ""} onChange={(v) => handleChange("ownerName", v)} />
           </div>
+            <div>
+            <label className="block text-admin- font-semibold mb-2">연락처</label>
+            <AdminInput value={items?.phone || ""} onChange={(v) => handleChange("phone", v)} />
+          </div>
+          <div>
+            <label className="block text-admin- font-semibold mb-2">이메일</label>
+            <AdminInput value={items?.email || ""} onChange={(v) => handleChange("email", v)} />
+          </div>
+          <div>
+            <label className="block text-admin- font-semibold mb-2">사업자 등록번호</label>
+            <AdminInput value={items?.businessRegistrationNumber || ""} onChange={(v) => handleChange("businessRegistrationNumber", v)} />
+          </div>
+         
+           <div>
+            <label className="block text-admin- font-semibold mb-2">영업시간</label>
+            <AdminInput value={items?.businessHours || ""} onChange={(v) => handleChange("businessHours", v)} placeholder="Information 란에 노출될 영업시간을 입력해 주세요."/>
+          </div>
           <hr className="col-span-2 border-slate-300 mt-6 mb-2" />
+          
           <div className="col-span-2">
             <label className="block text-admin- font-semibold mb-2">주소</label>
             <AdminInput value={items?.address || ""} onChange={(v) => handleChange("address", v)} placeholder="도로명 주소를 입력해 주세요." />
@@ -75,24 +91,7 @@ export default function AdminSiteSettingsPage() {
             <label className="block text-admin- font-semibold mb-2">Google Map 링크</label>
             <AdminInput value={items?.mapLink || ""} onChange={(v) => handleChange("mapLink", v)} placeholder="https://www.google.com/maps/place/로 시작하는 정확한 주소를 입력해 주세요."/>
           </div>
-          <hr className="col-span-2 border-slate-300 mt-6 mb-2" />
-          <div>
-            <label className="block text-admin- font-semibold mb-2">연락처</label>
-            <AdminInput value={items?.phone || ""} onChange={(v) => handleChange("phone", v)} />
-          </div>
-          <div>
-            <label className="block text-admin- font-semibold mb-2">이메일</label>
-            <AdminInput value={items?.email || ""} onChange={(v) => handleChange("email", v)} />
-          </div>
-          <div>
-            <label className="block text-admin- font-semibold mb-2">사업자 등록번호</label>
-            <AdminInput value={items?.businessRegistrationNumber || ""} onChange={(v) => handleChange("businessRegistrationNumber", v)} />
-          </div>
-          <div>
-            <label className="block text-admin- font-semibold mb-2">영업시간</label>
-            <AdminInput value={items?.businessHours || ""} onChange={(v) => handleChange("businessHours", v)} placeholder="Information 란에 노출될 영업시간을 입력해 주세요."/>
-          </div>
-
+          
         </section>
 
         <hr className="col-span-2 border-slate-300 mt-6" />
@@ -109,6 +108,7 @@ export default function AdminSiteSettingsPage() {
           </div>
         </section>
 
+        <hr className="col-span-2 border-slate-300 mt-6" />
         <section>
           <label className="block text-admin- font-semibold mb-2">개인정보처리방침</label>
           <textarea
