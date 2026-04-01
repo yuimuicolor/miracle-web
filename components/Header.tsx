@@ -198,7 +198,9 @@ export default function Header() {
       if (!hash) return;
 
       // Wait for route/content paint before measuring target position.
-      window.setTimeout(() => scrollToHashWithOffset(hash), 120);
+      const timer = window.setTimeout(() => scrollToHashWithOffset(hash), 200);
+
+      return () => clearTimeout(timer);
     };
 
     applyHashOffset();

@@ -86,7 +86,7 @@ export const ABOUT_PAGE_STYLE = {
     md:w-[60rem] md:aspect-[8/5]
     xl:self-auto xl:shrink xl:min-w-0 xl:w-full xl:max-w-[60rem] xl:aspect-[3/2]
   `,
-  imageObj: "w-full h-full object-cover",
+  imageObj: "object-cover",
   marqueeSection: `
     w-full overflow-hidden
     py-[2rem]
@@ -185,7 +185,7 @@ export const ABOUT_PAGE_STYLE = {
     lg:grid-cols-5
   `,
   certificateCard: "relative overflow-hidden",
-  certificateImageRatio: "aspect-[3/4]",
+  certificateImageRatio: "relative aspect-[3/4]",
   certificateCaption:
     "absolute inset-x-0 bottom-0 p-2 bg-gradient-to-t from-black/80 to-transparent",
   certificateTitle: "font-noto text-[1rem] text-white/85",

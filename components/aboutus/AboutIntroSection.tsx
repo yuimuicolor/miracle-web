@@ -21,7 +21,8 @@ const INTRO_ROWS = [
           <span className={ABOUT_PAGE_STYLE.hlPoint}>독창적인 발상</span>으로
         </span>
         <span>
-          일상에 <span className={ABOUT_PAGE_STYLE.hlWhite}>기적 같은 변화</span>
+          일상에{" "}
+          <span className={ABOUT_PAGE_STYLE.hlWhite}>기적 같은 변화</span>
           를.
         </span>
       </>
@@ -32,8 +33,8 @@ const INTRO_ROWS = [
         <br />
         평범한 하루 속에서도 기적 같은 변화를 함께 발견해 나가는 브랜드입니다.
         <br />
-        우리는 거창한 순간보다, 매일 반복되는 일상 속에 숨어 있는 작은
-        가능성에 주목합니다.
+        우리는 거창한 순간보다, 매일 반복되는 일상 속에 숨어 있는 작은 가능성에
+        주목합니다.
         <br />
         <br />
         익숙한 장면 속에서도 새로운 의미를 발견하는 당신의 섬세한 감각처럼,
@@ -130,7 +131,9 @@ export default function AboutIntroSection() {
           <div key={row.imageSrc} className={row.rowClassName}>
             <ScrollReveal
               className={ABOUT_PAGE_STYLE.textCol}
-              delayMs={INTRO_REVEAL.baseDelayMs + INTRO_REVEAL.rowStepMs * rowIndex}
+              delayMs={
+                INTRO_REVEAL.baseDelayMs + INTRO_REVEAL.rowStepMs * rowIndex
+              }
               durationMs={INTRO_REVEAL.durationMs}
               threshold={INTRO_REVEAL.threshold}
               rootMargin={INTRO_REVEAL.rootMargin}
@@ -154,19 +157,26 @@ export default function AboutIntroSection() {
               hiddenClassName={INTRO_REVEAL.hiddenClassName}
               visibleClassName={INTRO_REVEAL.visibleClassName}
             >
-              <Image
-                src={row.imageSrc}
-                alt={row.imageAlt}
-                width={row.imageWidth}
-                height={row.imageHeight}
-                priority={rowIndex === 0}
-                sizes={
-                  rowIndex === 0
-                    ? "(max-width: 767px) 100vw, (max-width: 1279px) 40rem, 50rem"
-                    : "(max-width: 767px) 100vw, (max-width: 1279px) 60rem, 60rem"
-                }
-                className={ABOUT_PAGE_STYLE.imageObj}
-              />
+              {/* 이미지를 감싸는 부모 컨테이너 */}
+              <div
+                className={row.imageClassName} // <-- 여기서 데이터에 있는 클래스를 사용!
+                style={{
+                  position: "relative",
+                  width: "100%",
+                  // 이미지 로딩 전에도 자리를 딱 차지하게 만드는 마법의 속성
+                  aspectRatio: `${row.imageWidth} / ${row.imageHeight}`,
+                  overflow: "hidden",
+                }}
+              >
+                <Image
+                  src={row.imageSrc}
+                  alt={row.imageAlt}
+                  fill
+                  sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                  className="object-cover"
+                  priority={rowIndex === 0}
+                />
+              </div>
             </ScrollReveal>
           </div>
         ))}

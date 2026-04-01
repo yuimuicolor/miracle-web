@@ -47,6 +47,7 @@ export default async function AboutCertificatesSection() {
                 src={item.imageUrl}
                 alt={item.title}
                 fill
+                loading="eager"
                 sizes="(max-width: 767px) 50vw, (max-width: 1023px) 33vw, 20vw"
                 className={ABOUT_PAGE_STYLE.imageObj}
               />

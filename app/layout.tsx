@@ -13,7 +13,7 @@ export default async function RootLayout({
   const settings = await getSiteSettingsByServer(supabaseServer);
 
   return (
-    <html lang="ko">
+    <html lang="ko" data-scroll-behavior="smooth">
       <SiteSettingsProvider settings={settings}>
         <ReCaptchaProvider>
           <body className="antialiased">

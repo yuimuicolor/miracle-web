@@ -139,8 +139,6 @@
   @media (min-width: 1024px) {
     html:has(.home-snap),
     html:has(.snap-container) {
-      scroll-snap-type: y mandatory;
-      scroll-behavior: smooth;
       background-color: var(--color-bg-dark);
     }
 
