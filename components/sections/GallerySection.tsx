@@ -7,9 +7,9 @@ import ScrollReveal from "@/components/ScrollReveal";
 import { HOME_REVEAL } from "@/components/sections/homeMotion";
 import MoreButton from "../MoreButton";
 import SectionTitle from "./common/SectionTitle";
-import { STATIC_ASSETS } from "@/lib/constants/site";
 import { getPublicGalleryImages } from "@/lib/api/gallery";
 import { GalleryItem } from "@/lib/types/gallery";
+import { useSettings } from "@/context/SiteSettingsContext";
 
 const STYLE = {
   section: `
@@ -36,6 +36,9 @@ const STYLE = {
 export default function GallerySection() {
   const [galleryImages, setGalleryImages] = useState<GalleryItem[]>([]);
 
+   const settings = useSettings();
+    if (!settings) return null;
+
   useEffect(() => {
     const fetchGalleryImages = async () => {
       // 최근 6개 이미지 가져오기
@@ -47,7 +50,7 @@ export default function GallerySection() {
   }, []);
 
   return (
-    <section className={STYLE.section} style={{ backgroundImage: `url(${STATIC_ASSETS.galleryBg})` }}>
+    <section className={STYLE.section} style={{ backgroundImage: `url(${settings.galleryBackgroundSrc})` }}>
       <div className={STYLE.content}>
         <ScrollReveal className="w-full" {...HOME_REVEAL.sectionTitle}>
           <SectionTitle title="Gallery" color="white" />

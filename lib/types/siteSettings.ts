@@ -3,6 +3,8 @@ export interface SiteSettingsItem {
   brandName: string;
   brandLogoSrc: string;
   brandLogoAlt: string;
+  mainBackgroundSrc: string;
+  galleryBackgroundSrc: string;
   address: string;
   phone: string;
   email: string;
@@ -21,5 +23,9 @@ export interface SiteSettingsItem {
 
   
   tempFile?: File; // 미리보기용 임시 필드  
-  previewUrl?: string; // 미리보기용 임시 필드
+  previewUrl?: string; // 로고 미리보기용 임시 필드
+  mainBgTempFile?: File; // 메인 배경 미리보기용 임시 필드
+  mainBgPreviewUrl?: string; // 메인 배경 미리보기용 임시 필드
+  galleryBgTempFile?: File; // 갤러리 배경 미리보기용 임시 필드
+  galleryBgPreviewUrl?: string; // 갤러리 배경 미리보기용 임시 필드
 }

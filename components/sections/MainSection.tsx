@@ -3,7 +3,6 @@
 import { ChevronDown } from 'lucide-react';
 import ScrollReveal from '@/components/ScrollReveal';
 import { HOME_REVEAL } from '@/components/sections/homeMotion';
-import { STATIC_ASSETS } from '@/lib/constants/site';
 import { useSettings } from '@/context/SiteSettingsContext';
 
 const STYLE = {
@@ -51,7 +50,7 @@ export default function MainSection() {
 
   return (
     <section className={STYLE.section}>
-      <div className={STYLE.background} style={{ backgroundImage: `url(${STATIC_ASSETS.mainBg})`}} />
+      <div className={STYLE.background} style={{ backgroundImage: `url(${settings.mainBackgroundSrc})`}} />
       <div className={STYLE.glow} />
 
       <div className={STYLE.contentWrap}>
