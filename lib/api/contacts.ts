@@ -1,9 +1,7 @@
-// lib/api/contacts.ts
 import { ContactInput, ContactStatus, FilterStatus } from "@/lib/types/contact";
 
-// 1. GET: 응답 데이터의 타입을 위해 인터페이스 정의 (선택 사항)
 interface ContactsResponse {
-  data: any[]; // 상세 타입이 있다면 적용 가능
+  data: any[];
   count: number;
 }
 
@@ -46,12 +44,11 @@ export const updateContactsApi = async (payload: {
 };
 
 // 3. POST: 신규 등록
-export const createContact = async (submitData: ContactInput) => {
+export const createContact = async (formData: ContactInput, token: string) => {
   const res = await fetch("/api/contacts", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    // status: "미확인" 자체가 ContactStatus 타입에 해당함
-    body: JSON.stringify({ ...submitData, status: "미확인" as ContactStatus }),
+    body: JSON.stringify({ ...formData, status: "미확인" as ContactStatus, token }),
   });
 
   if (!res.ok) {

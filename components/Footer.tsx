@@ -27,8 +27,10 @@ const STYLE = {
   mobileItem: "flex items-start justify-start gap-[0.8rem]",
   mobileLabel: "text-white/70",
   mobileValue: "text-white",
+  policyWrap: "flex flex-col items-start gap-[1.2rem]",
   policy:
-    "text-[1.8rem] text-white/70 underline decoration-white/40 underline-offset-2",
+    "text-[1.8rem] text-white",
+  recaptchaNoticeWrap: "text-[1.2rem] text-white/50 gap-x-[0.4rem] flex items-center [&_a]:underline [&_a]:underline-offset-4",
 };
 
 export default function Footer() {
@@ -49,7 +51,7 @@ export default function Footer() {
       </span>
     </div>
   );
-  
+
   return (
     <>
       <footer className={STYLE.root}>
@@ -67,21 +69,34 @@ export default function Footer() {
               renderInfoItem(item.label, item.value, true),
             )}
           </div>
-          <p className={STYLE.policy}>
-            <span
-              className="cursor-pointer border-b border-transparent hover:border-gray-400 transition-all"
+          <div className={STYLE.policyWrap}>
+            <div
+              className={STYLE.policy}
               onClick={() => setIsTextModalOpen(true)}
             >
               개인정보처리방침
-            </span>
-          </p>
+            </div>
+            <div className={STYLE.recaptchaNoticeWrap}>
+              This site is protected by reCAPTCHA and the Google
+              <a href="https://policies.google.com/privacy">
+                Privacy Policy
+              </a>{" "}
+              and
+              <a href="https://policies.google.com/terms">
+                Terms of Service
+              </a>{" "}
+              apply.
+            </div>
+          </div>
         </div>
       </footer>
       <TextModal
         isOpen={isTextModalOpen}
         onClose={() => setIsTextModalOpen(false)}
         title="개인정보처리방침"
-        content={ settings.privacyPolicyText || "개인정보처리방침 내용이 없습니다." }
+        content={
+          settings.privacyPolicyText || "개인정보처리방침 내용이 없습니다."
+        }
       />
     </>
   );

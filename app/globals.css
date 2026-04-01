@@ -23,10 +23,9 @@
   --font-noto: "Noto Sans KR", sans-serif;
   --font-playwrite: "Playwrite US Trad", cursive;
 
-
   /* 관리자용 폰트 사이즈 */
   --text-admin-title: 2.4rem;
-  --text-admin-subtitle: 2.0rem;
+  --text-admin-subtitle: 2rem;
   --text-admin-body: 1.8rem;
   --text-admin-small: 1.6rem;
 
@@ -105,7 +104,8 @@
     --screen-minus-page-offset: calc(100dvh - var(--page-offset-top));
   }
 
-  button, select {
+  button,
+  select {
     cursor: pointer;
   }
 
@@ -119,6 +119,10 @@
 
     @media (max-width: 480px) {
       font-size: 50%; /* 1rem = 8px */
+    }
+
+    .grecaptcha-badge {
+      visibility: hidden;
     }
   }
 

@@ -6,8 +6,9 @@ import { HOME_REVEAL } from "@/components/sections/homeMotion";
 import TextModal from "../TextModal";
 import { useSettings } from "@/context/SiteSettingsContext";
 import { ContactInput } from "@/lib/types/contact";
-import { useContactsManager } from "@/hooks/useContactManager";
 import { formatPhoneNumber } from "@/lib/utils/storage";
+import { useGoogleReCaptcha } from "react-google-recaptcha-v3";
+import { createContact } from "@/lib/api/contacts";
 
 const STYLE = {
   section: `
@@ -80,14 +81,30 @@ const FIELDS: Array<{
   type?: string;
   isTextarea?: boolean;
 }> = [
-    { id: "contact_u_name", name: "name", label: "이름", required: true },
-    { id: "contact_u_phone", name: "phone", label: "전화번호", type: "tell", required: true },
-    { id: "contact_u_email", name: "email", label: "이메일", type: "email", required: true },
-    { id: "contact_u_company", name: "company", label: "회사명" },
-    { id: "contact_u_msg", name: "message", label: "문의내용", required: true, isTextarea: true },
-  ];
-
-
+  { id: "contact_u_name", name: "name", label: "이름", required: true },
+  {
+    id: "contact_u_phone",
+    name: "phone",
+    label: "전화번호",
+    type: "tell",
+    required: true,
+  },
+  {
+    id: "contact_u_email",
+    name: "email",
+    label: "이메일",
+    type: "email",
+    required: true,
+  },
+  { id: "contact_u_company", name: "company", label: "회사명" },
+  {
+    id: "contact_u_msg",
+    name: "message",
+    label: "문의내용",
+    required: true,
+    isTextarea: true,
+  },
+];
 
 export default function ContactUsSection() {
   // 전문보기 모달 상태
@@ -102,9 +119,12 @@ export default function ContactUsSection() {
   });
   const settings = useSettings();
 
-  const { sendContactEmail } = useContactsManager("미확인");
+  // reCAPTCHA
+  const { executeRecaptcha } = useGoogleReCaptcha();
 
-  const handleChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+  const handleChange = (
+    e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+  ) => {
     const { name, value } = e.target;
 
     if (name === "phone") {
@@ -129,8 +149,17 @@ export default function ContactUsSection() {
     }
 
     try {
-      const result = await sendContactEmail(formData);
-      if (result.success) {
+      if (!executeRecaptcha) {
+        alert("리캡처 로딩 중입니다.");
+        return;
+      }
+
+      // 1. 리캡처 토큰 생성
+      const token = await executeRecaptcha("contact");
+
+      // 2. 서버(API Route)에 토큰 검증 요청 + 메일 발송 처리
+      const response = await createContact(formData, token);
+      if (response.success) {
         alert("접수되었습니다!");
         setFormData({
           name: "",

@@ -58,12 +58,13 @@ export const useContactsManager = (initialFilter: FilterStatus) => {
       alert("상태 변경 실패!");
     }
   };
-  
-const handleBulkUpdate = async (newStatus: ContactStatus) => {
-  if (selectedIds.length === 0) return alert("선택된 항목이 없습니다.");
-  if (!confirm(`${selectedIds.length}개를 '${newStatus}'로 변경할까요?`)) return;
-  await handleUpdateStatus(selectedIds, newStatus);
-};
+
+  const handleBulkUpdate = async (newStatus: ContactStatus) => {
+    if (selectedIds.length === 0) return alert("선택된 항목이 없습니다.");
+    if (!confirm(`${selectedIds.length}개를 '${newStatus}'로 변경할까요?`))
+      return;
+    await handleUpdateStatus(selectedIds, newStatus);
+  };
 
   const saveMemo = async (id: number) => {
     try {
@@ -76,25 +77,6 @@ const handleBulkUpdate = async (newStatus: ContactStatus) => {
       await fetchContacts(); // 메모 저장 후 리스트 새로고침
     } catch (error) {
       alert("메모 저장 실패!");
-    }
-  };
-
-  const sendContactEmail = async (submitData: ContactInput) => {
-    try {
-      const res = await createContact(submitData);
-
-      if (!res.ok) {
-        const errorData = await res.json();
-        throw new Error(errorData.error || "처리 중 오류가 발생했습니다.");
-      }
-
-      return { success: true };
-    } catch (error) {
-      console.error("Action Error:", error);
-      return {
-        success: false,
-        message: error instanceof Error ? error.message : "알 수 없는 오류",
-      };
     }
   };
 
@@ -122,7 +104,6 @@ const handleBulkUpdate = async (newStatus: ContactStatus) => {
       handleUpdateStatus(id, status),
     saveMemo,
     handleBulkUpdate,
-    sendContactEmail,
     fetchContacts,
   };
 };

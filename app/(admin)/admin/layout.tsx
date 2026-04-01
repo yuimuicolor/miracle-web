@@ -8,7 +8,6 @@ import Logo from "@/components/sections/common/Logo";
 import { useSession } from "next-auth/react";
 import { useSettings } from "@/context/SiteSettingsContext";
 import NextAuthProvider from "@/components/provider/NextAuthProvider";
-import { GoogleReCaptchaProvider } from "react-google-recaptcha-v3";
 
 export default function AdminLayout({ children }: { children: ReactNode }) {
   return (
@@ -44,16 +43,6 @@ function AdminContent({ children }: { children: React.ReactNode }) {
 
   return (
     <NextAuthProvider>
-      <GoogleReCaptchaProvider
-        reCaptchaKey={process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY!}
-        language="ko"
-        scriptProps={{
-          async: false,
-          defer: false,
-          appendTo: "head",
-          nonce: undefined,
-        }}
-      >
         <div className="flex min-h-screen bg-gray-100 font-noto tracking-tight text-black overflow-x-hidden">
           {/* 2. 모바일용 오버레이 (사이드바 열렸을 때 뒷배경 어둡게) */}
           {isSidebarOpen && (
@@ -155,7 +144,6 @@ function AdminContent({ children }: { children: React.ReactNode }) {
             <div className="flex-1 p-4 lg:p-10">{children}</div>
           </main>
         </div>
-      </GoogleReCaptchaProvider>
     </NextAuthProvider>
   );
 }
