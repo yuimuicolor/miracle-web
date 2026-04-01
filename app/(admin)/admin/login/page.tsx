@@ -3,14 +3,39 @@
 import { useState } from "react";
 import { signIn } from "next-auth/react";
 import { supabase } from "@/lib/supabase/client";
+import { useGoogleReCaptcha } from "react-google-recaptcha-v3";
 
 export default function AdminLoginPage() {
   const [userId, setUserId] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
 
+  const { executeRecaptcha } = useGoogleReCaptcha();
+
   const handleLogin = async (e: React.SyntheticEvent) => {
     e.preventDefault();
+
+    if (!executeRecaptcha) {
+      alert("리캡처 로딩 중입니다.");
+      return;
+    }
+
+    // 1. 리캡처 토큰 생성
+    const token = await executeRecaptcha("admin_login");
+
+    // 2. 서버(API Route)에 토큰 검증 요청
+    const verifyRes = await fetch("/api/verify-recaptcha", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ token }),
+    });
+
+    const verifyData = await verifyRes.json();
+
+    if (!verifyData.success || verifyData.score < 0.5) {
+      alert("비정상적인 접근이 감지되었습니다.");
+      return;
+    }
 
     // NextAuth의 signIn 함수 호출
     const result = await signIn("credentials", {

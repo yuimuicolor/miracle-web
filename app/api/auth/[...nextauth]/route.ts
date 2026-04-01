@@ -1,4 +1,5 @@
-import { supabase } from "@/lib/supabase/client";
+
+import { supabaseServer } from "@/lib/supabase/server";
 import NextAuth from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 
@@ -28,7 +29,7 @@ const handler = NextAuth({
 callbacks: {
     async signIn({ user }) {
       // 1. NextAuth 로그인 성공 시, Supabase에도 똑같이 로그인 시킴
-      const { data, error } = await supabase.auth.signInWithPassword({
+      const { data, error } = await supabaseServer.auth.signInWithPassword({
         email: process.env.NEXT_PUBLIC_SUPABASE_ADMIN_EMAIL!, // Supabase에 등록한 관리자 이메일
         password: process.env.NEXT_PUBLIC_SUPABASE_ADMIN_PASSWORD!, // Supabase에 등록한 관리자 비번
       });
