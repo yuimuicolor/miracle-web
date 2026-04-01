@@ -35,7 +35,7 @@ export async function PATCH(request: Request) {
     const rawData = await request.json();
 
     // id를 포함해서 DB 컬럼이 아닌 모든 것들을 확실히 제외합니다.
-    const { id, tempFile, previewUrl, ...cleanData } = rawData;
+    const { id, tempFile, previewUrl, mainBgTempFile, mainBgPreviewUrl, galleryBgTempFile, galleryBgPreviewUrl, imageSlider, ...cleanData } = rawData;
 
     const { data, error } = await supabaseServer
       .from("siteSettings")
@@ -47,7 +47,7 @@ export async function PATCH(request: Request) {
     if (error) throw error;
     return NextResponse.json(data);
   } catch (error: any) {
-    // 500 에러가 나면 브라우저 Console -> Network 탭에서 
+    // 500 에러가 나면 브라우저 Console -> Network 탭에서 확인 가능
     return NextResponse.json(
       { error: error.message || "Failed to update settings" },
       { status: 500 }

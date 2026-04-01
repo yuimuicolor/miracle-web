@@ -100,7 +100,7 @@ export default function ContactTableRow({ contact,
                 {/* 상태 */}
                 <td className={`${COL_WIDTHS.base} ${COL_WIDTHS.status} items-center! pt-7`}>
                   <select
-                    value={contact.status}
+                    value={contact?.status || ""}
                     onChange={(e) =>
                       updateStatus(contact.id, e.target.value as ContactStatus)
                     }

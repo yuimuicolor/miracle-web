@@ -6,6 +6,7 @@ import { AdminInput } from "@/components/admin/AdminInput";
 import Image from "next/image";
 import { useSiteSettingsManager } from "@/hooks/useSiteSettingsManager";
 import { useRef } from "react";
+import { ImageList } from "@/components/admin/ImageList";
 
 export default function AdminSiteSettingsPage() {
   const {
@@ -15,6 +16,9 @@ export default function AdminSiteSettingsPage() {
     handleChange,
     handleSNSChange,
     handleReplaceImage,
+    reorderImageList,
+    handleListUpload,
+    handleRemoveImage,
     handleSave,
   } = useSiteSettingsManager();
 
@@ -116,7 +120,9 @@ export default function AdminSiteSettingsPage() {
               <div className="relative w-40 h-20 bg-slate-300 rounded-xl overflow-hidden border border-slate-200">
                 <Image
                   src={
-                    items?.galleryBgPreviewUrl || items?.galleryBackgroundSrc || ""
+                    items?.galleryBgPreviewUrl ||
+                    items?.galleryBackgroundSrc ||
+                    ""
                   }
                   alt="p"
                   fill
@@ -142,6 +148,19 @@ export default function AdminSiteSettingsPage() {
                 }}
               />
             </div>
+          </div>
+        </section>
+
+        {/* 메인 이미지 슬라이더 섹션 */}
+        <section>
+          <div>
+            <ImageList
+              type="imageSlider"
+              images={items?.imageSlider || []}
+              onUpload={(files) => handleListUpload(files)}
+              onRemove={(id) => handleRemoveImage(id)}
+              onReorder={(res) => reorderImageList(res)}
+            />
           </div>
         </section>
 

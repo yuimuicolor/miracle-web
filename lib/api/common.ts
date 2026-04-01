@@ -73,17 +73,21 @@ export const cleanupStorageFiles = async (
 
   if (listError || !storageFiles) return;
 
-  const filesToDelete = storageFiles
+const filesToDelete = storageFiles
     .filter((f: any) => {
+      // 1. 현재 사용 중인 파일(activeFiles)에 포함되어 있다면 절대 삭제 금지!
       if (activeFiles.includes(f.name)) return false;
 
+      // 2. prefix가 있다면 해당 prefix로 시작하는 파일만 타겟팅
       if (prefix) {
         return f.name.startsWith(prefix);
       }
-      return false;
+
+      // 3. (추가된 부분) prefix가 없다면? 위에서 걸러진 activeFiles 외에 모든 파일을 삭제 타겟으로 설정
+      return true; 
     })
     .map((f: any) => (folderPath ? `${folderPath}/${f.name}` : f.name));
-
+    
   if (filesToDelete.length > 0) {
     const { error: removeError } = await supabaseClient.storage
       .from(bucket)

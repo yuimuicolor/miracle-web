@@ -4,18 +4,19 @@ import Image from "next/image";
 import { getFileNameFromUrl } from "@/lib/utils/storage";
 
 interface Props {
-  type: "thumbnail" | "detail";
+  type: "thumbnail" | "detail" | "imageSlider";
   images: ImageSlot[];
   onUpload: (files: File[]) => void;
   onRemove: (id: string) => void;
   onReorder: (result: DropResult) => void;
 }
-export function ProductImageList({ type, images, onUpload, onRemove, onReorder }: Props) {
+
+export function ImageList({ type, images, onUpload, onRemove, onReorder }: Props) {
   return (
     <div className="space-y-2">
       <div className="flex justify-between items-center">
         <span className="text-admin-small font-bold">
-          {type === "thumbnail" ? <>썸네일 <span className="text-blue-600">*</span></> : "상세 이미지"}
+          {type === "thumbnail" ? <>썸네일 <span className="text-blue-600">*</span></> : type === "detail" ? "상세 이미지" : "메인 이미지 슬라이더"}
         </span>
         <label className="cursor-pointer text-[12px] font-semibold bg-blue-50 text-blue-600 px-2 py-1 rounded hover:bg-blue-100 transition-colors">
           파일 추가

@@ -1,7 +1,7 @@
 import { ProductItem, ImageSlot } from "@/lib/types/products";
 import { AdminToggle } from "./AdminToggle";
 import { AdminInput } from "./AdminInput";
-import { ProductImageList } from "./ProductImageList";
+import { ImageList } from "./ImageList";
 import { AdminDeleteButton } from "./AdminDeleteButton";
 import { DropResult } from "@hello-pangea/dnd";
 import { useRef, useState } from "react";
@@ -61,7 +61,7 @@ export default function ProductItemForm({
         </div>
 
         {/* 썸네일 리스트 (여러개) */}
-        <ProductImageList
+        <ImageList
           type="thumbnail"
           images={item.thumbnailImages}
           onUpload={(files) => handleListUpload(index, "thumbnailImages", files)}
@@ -70,7 +70,7 @@ export default function ProductItemForm({
         />
 
         {/* 상세 이미지 리스트 (여러개) */}
-        <ProductImageList
+        <ImageList
           type="detail"
           images={item.detailImages}
           onUpload={(files) => handleListUpload(index, "detailImages", files)}

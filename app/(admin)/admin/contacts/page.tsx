@@ -47,6 +47,8 @@ function AdminContactsPage() {
   }
 
    router.replace(`${pathname}?${params.toString()}`);
+   setSelectedIds([]); // 필터 변경 시 선택 초기화
+   setCurrentPage(1); // 필터 변경 시 페이지 초기화
   };
 
 
@@ -115,12 +117,12 @@ function AdminContactsPage() {
                   type="checkbox"
                   onChange={(e) =>
                     setSelectedIds(
-                      e.target.checked ? contacts.map((c) => c.id) : [],
+                      e.target.checked ? contacts?.map((c) => c.id) : [],
                     )
                   }
                   checked={
-                    selectedIds.length === contacts.length &&
-                    contacts.length > 0
+                    selectedIds.length === contacts?.length &&
+                    contacts?.length > 0
                   }
                   className="size-6 lg:size-8 cursor-pointer"
                 />
