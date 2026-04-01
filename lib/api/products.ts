@@ -55,7 +55,11 @@ export const processImageList = async (supabaseClient: any, list: any[], type: s
     if (slot.file) {
       const uniqueName = `${crypto.randomUUID()}_${Date.now()}.webp`;
       const targetPath = `${folder}/${type}/${uniqueName}`;
-      return await uploadImage(supabaseClient, slot.file, "products", targetPath);
+      return await uploadImage(supabaseClient, slot.file, "products", targetPath, {
+        maxSizeMB: 6,
+        maxWidthOrHeight: 1500,
+        fileType: "image/webp",
+      });
     }
     return slot.url || null;
   });
@@ -85,7 +89,11 @@ export const prepareProductData = async (supabaseClient: any, activeItems: any[]
       if (item.tempMainFile) {
         const mainName = `main_${Date.now()}.webp`;
         await cleanupStorageFiles(supabaseClient, "products", folder, [mainName], "main_");
-        finalMain = await uploadImage(supabaseClient, item.tempMainFile, "products", `${folder}/${mainName}`);
+        finalMain = await uploadImage(supabaseClient, item.tempMainFile, "products", `${folder}/${mainName}`, {
+          maxSizeMB: 1,
+          maxWidthOrHeight: 800,
+          fileType: "image/webp",
+        });
       }
 
       // 리스트 이미지
