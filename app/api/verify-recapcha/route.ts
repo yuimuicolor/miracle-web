@@ -18,7 +18,7 @@ export async function POST(request: Request) {
     if (data.success) {
       return NextResponse.json({
         success: true,
-        score: data.score, // v3는 점수(0.0~1.0)를 줍니다.
+        score: data.score,
         action: data.action,
       });
     } else {
