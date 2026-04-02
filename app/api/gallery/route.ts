@@ -1,11 +1,16 @@
 import { deleteItemsWithStorage } from "@/lib/api/common";
+import { authOptions } from "@/lib/auth";
 import { supabaseServer } from "@/lib/supabase/server";
+import { getServerSession } from "next-auth";
 import { NextResponse } from "next/server";
 
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
   const limit = searchParams.get("limit");
-  const isAdmin = searchParams.get("admin") === "true";
+
+  const referer = request.headers.get("referer") || "";
+  const isAdmin = referer.includes("/admin");
+  
   // 1. 상품처럼 정렬 순서를 명시적으로 가져옴
   let query = supabaseServer
     .from("gallery")

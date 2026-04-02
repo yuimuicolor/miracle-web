@@ -19,7 +19,7 @@ export const useProductManager = () => {
   const [isSaving, setIsSaving] = useState(false);
 
   // 1. 데이터 가져오기
-  const fetchProducts = async () => {
+  const fetchProducts = async (type?: string) => {
     setLoading(true);
     const data = await getAllProducts();
 

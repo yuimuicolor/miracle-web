@@ -15,8 +15,9 @@ export const getCertificatesItemsByServer = async (supabaseClient:any): Promise<
   const {data,error} = await supabaseClient
     .from("certificates")
     .select("*")
-    .order("displayOrder", { ascending: true });
-
+    .order("displayOrder", { ascending: true })
+    .eq("isVisible", true);
+    
     if (error) {
       console.error("인증서 데이터를 불러오는데 실패했습니다.", error);
       return [];

@@ -3,8 +3,9 @@ import { supabaseServer } from "@/lib/supabase/server";
 import { NextResponse } from "next/server";
 
 export async function GET(request: Request) {
-  const { searchParams } = new URL(request.url);
-  const isAdmin = searchParams.get("admin") === "true";
+  const referer = request.headers.get("referer") || "";
+  const isAdmin = referer.includes("/admin");
+
   // 1. 상품처럼 정렬 순서를 명시적으로 가져옴
   let query = supabaseServer
     .from("history")
@@ -15,7 +16,7 @@ export async function GET(request: Request) {
   if (!isAdmin) {
     query = query.eq("isVisible", true);
   }
-  
+
   const { data, error } = await query;
 
   if (error)

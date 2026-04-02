@@ -14,7 +14,6 @@ import { supabaseServer } from "@/lib/supabase/server";
 
 export default async function AboutHistorySection() {
   const history = await getHistoryItemsByServer(supabaseServer);
-
   const historyRows = Array.from(
     { length: Math.ceil(history.length / 2) },
     (_, rowIndex) => history.slice(rowIndex * 2, rowIndex * 2 + 2),

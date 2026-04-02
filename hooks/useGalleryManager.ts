@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 import { uploadImage } from "@/lib/utils/storage";
 import { toggleDeleteState } from "@/lib/utils/storage";
-import { getAllGalleryForAdmin, saveGalleryAll } from "@/lib/api/gallery";
+import { getGalleryImages, saveGalleryAll } from "@/lib/api/gallery";
 import { reorderItems } from "@/lib/utils/reorder";
 import { GalleryItem } from "@/lib/types/gallery";
 import { cleanupStorageFiles, ensureRecordId } from "@/lib/api/common";
@@ -17,7 +17,7 @@ export const useGalleryManager = () => {
   const fetchGallery = async () => {
     setLoading(true);
     try {
-      const data = await getAllGalleryForAdmin();
+      const data = await getGalleryImages();
       setItems(data);
     } catch (error) {
       console.error("데이터 로딩 중 에러 발생:", error);

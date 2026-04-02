@@ -1,6 +1,5 @@
 import { HistoryItem } from "../types/aboutUs";
 
-
 // 1. GET
 export const getHistoryItems = async (): Promise<HistoryItem[]> => {
   const res = await fetch("/api/history", { cache: "no-store" });
@@ -12,20 +11,24 @@ export const getHistoryItems = async (): Promise<HistoryItem[]> => {
   return res.json();
 };
 
-export const getHistoryItemsByServer = async (supabaseClient:any): Promise<HistoryItem[]> => {
-  const {data,error} = await supabaseClient
+// 2. 서버용 함수 수정
+export const getHistoryItemsByServer = async (
+  supabaseClient: any,
+): Promise<HistoryItem[]> => {
+  let query = supabaseClient
     .from("history")
     .select("*")
-    .order("displayOrder", { ascending: true });
+    .order("displayOrder", { ascending: true })
+    .eq("isVisible", true);
 
+  const { data, error } = await query;
 
-    if (error) {
-      console.error("히스토리 데이터를 불러오는데 실패했습니다.", error);
-      return [];
-    }
-    return data || [];
+  if (error) {
+    console.error("히스토리 데이터를 불러오는데 실패했습니다.", error);
+    return [];
+  }
+  return data || [];
 };
-
 
 // 3. POST (업데이트/생성/삭제 한번에 처리)
 export const saveHistoryItems = async (items: HistoryItem[]) => {

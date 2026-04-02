@@ -5,7 +5,7 @@ import GalleryPageGrid from "../../../components/gallery/GalleryPageGrid";
 import ScrollReveal from "@/components/ScrollReveal";
 import { HOME_REVEAL } from "@/components/sections/homeMotion";
 import SectionTitle from "@/components/sections/common/SectionTitle";
-import { getPublicGalleryImages } from "@/lib/api/gallery";
+import { getGalleryImages } from "@/lib/api/gallery";
 import { GalleryItem } from "@/lib/types/gallery";
 
 const STYLE = {
@@ -26,7 +26,7 @@ export default function GalleryPage() {
 
   useEffect(() => {
     const fetchAllImages = async () => {
-      const data = await getPublicGalleryImages(); 
+      const data = await getGalleryImages(); 
       setGalleryImages(data);
     };
     fetchAllImages();

@@ -7,7 +7,7 @@ import ScrollReveal from "@/components/ScrollReveal";
 import { HOME_REVEAL } from "@/components/sections/homeMotion";
 import MoreButton from "../MoreButton";
 import SectionTitle from "./common/SectionTitle";
-import { getPublicGalleryImages } from "@/lib/api/gallery";
+import { getGalleryImages } from "@/lib/api/gallery";
 import { GalleryItem } from "@/lib/types/gallery";
 import { useSettings } from "@/context/SiteSettingsContext";
 
@@ -42,7 +42,7 @@ export default function GallerySection() {
   useEffect(() => {
     const fetchGalleryImages = async () => {
       // 최근 6개 이미지 가져오기
-      const images = await getPublicGalleryImages(6);
+      const images = await getGalleryImages(6);
       setGalleryImages(images);
     };
 
