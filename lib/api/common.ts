@@ -83,7 +83,7 @@ const filesToDelete = storageFiles
         return f.name.startsWith(prefix);
       }
 
-      // 3. (추가된 부분) prefix가 없다면? 위에서 걸러진 activeFiles 외에 모든 파일을 삭제 타겟으로 설정
+      // 3. prefix가 없다면 위에서 걸러진 activeFiles 외에 모든 파일을 삭제 타겟으로 설정
       return true; 
     })
     .map((f: any) => (folderPath ? `${folderPath}/${f.name}` : f.name));
@@ -95,8 +95,6 @@ const filesToDelete = storageFiles
     
     if (removeError) {
       console.error("파일 삭제 중 에러:", removeError);
-    } else {
-      console.log("✅ 정리된 파일들:", filesToDelete);
     }
   }
 };
