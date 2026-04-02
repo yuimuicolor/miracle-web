@@ -1,5 +1,5 @@
-import TopButton from "@/components/TopButton";
 import "./globals.css";
+import TopButton from "@/components/TopButton";
 import { SiteSettingsProvider } from "@/context/SiteSettingsContext";
 import { supabaseServer } from "@/lib/supabase/server";
 import { getSiteSettingsByServer } from "@/lib/api/siteSettings";
