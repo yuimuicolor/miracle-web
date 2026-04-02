@@ -239,6 +239,7 @@ export default function Header() {
     }
   };
 
+  // 라우트 이동 중 오버레이 (모바일 메뉴 닫히는 애니메이션과 겹치지 않도록)
   const routeLoadingOverlay = isRouteNavigating ? (
     <div className="pointer-events-none fixed inset-0 z-120 flex items-center justify-center bg-black/25 backdrop-blur-[2px]">
       <div className="h-[4.2rem] w-[4.2rem] animate-spin rounded-full border-[0.35rem] border-white/25 border-t-point-light" />
