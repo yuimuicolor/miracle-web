@@ -1,4 +1,4 @@
-"use client"; // 👈 이게 핵심입니다!
+"use client";
 
 import { GoogleReCaptchaProvider } from "react-google-recaptcha-v3";
 

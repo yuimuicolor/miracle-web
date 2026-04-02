@@ -39,15 +39,14 @@ export async function PATCH(request: Request) {
 
     const { data, error } = await supabaseServer
       .from("siteSettings")
-      .update(cleanData) // 여기서 cleanData에는 'id'가 없어야 합니다!
-      .eq("id", 1)       // 수정할 대상은 여기서 지정하니까요.
+      .update(cleanData)
+      .eq("id", 1) 
       .select()
       .single();
 
     if (error) throw error;
     return NextResponse.json(data);
   } catch (error: any) {
-    // 500 에러가 나면 브라우저 Console -> Network 탭에서 확인 가능
     return NextResponse.json(
       { error: error.message || "Failed to update settings" },
       { status: 500 }

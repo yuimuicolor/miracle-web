@@ -47,10 +47,9 @@ export default function AdminLoginPage() {
     if (result?.error) {
       setError("아이디/비밀번호 오류입니다. 다시 시도해주세요.");
     } else if (result?.ok) {
-      // 💡 [핵심] 2. 브라우저의 Supabase 객체도 직접 로그인 시킵니다.
-      // 이렇게 해야 브라우저 쿠키/로컬스토리지에 Supabase 전용 '신분증'이 저장돼요!
+      // 💡 [핵심] 2. 브라우저의 Supabase 객체도 직접 로그인.
       const { error } = await supabase.auth.signInWithPassword({
-        email: process.env.NEXT_PUBLIC_SUPABASE_ADMIN_EMAIL!, // 공개 가능한 관리자 계정 이메일
+        email: process.env.NEXT_PUBLIC_SUPABASE_ADMIN_EMAIL!,
         password: process.env.NEXT_PUBLIC_SUPABASE_ADMIN_PASSWORD!,
       });
 

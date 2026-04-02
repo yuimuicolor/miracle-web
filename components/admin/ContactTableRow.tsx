@@ -59,7 +59,6 @@ export default function ContactTableRow({ contact,
                 <td
                   className={`${COL_WIDTHS.base} ${COL_WIDTHS.content} text-admin-small lg:text-admin-body leading-relaxed text-gray-700 pt-8`}
                 >
-                  {/* 1. 컨테이너를 block으로 두되, 내부 텍스트는 inline으로 흐르게 합니다. */}
                   <div className="block">
                     <span className="inline whitespace-pre-wrap break-all">
                       {!expandedIds.includes(contact.id) &&
@@ -68,7 +67,6 @@ export default function ContactTableRow({ contact,
                         : contact.message}
                     </span>
 
-                    {/* 2. '더보기' 버튼을 inline-block으로 설정해서 글자 바로 옆에 붙입니다. */}
                     {contact.message?.length > 60 &&
                       !expandedIds.includes(contact.id) && (
                         <button
@@ -81,7 +79,6 @@ export default function ContactTableRow({ contact,
                         </button>
                       )}
 
-                    {/* 3. 접기 버튼도 필요하면 똑같이 inline-block으로! */}
                     {expandedIds.includes(contact.id) && (
                       <button
                         onClick={() =>

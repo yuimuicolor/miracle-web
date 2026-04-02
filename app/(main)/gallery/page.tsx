@@ -12,7 +12,7 @@ const STYLE = {
   section: `
     relative flex w-full flex-col items-center overflow-hidden bg-bg-dark
   `,
-  bgImage: `absolute inset-0 bg-[url('/images/gallery-bg.png')] bg-cover bg-center bg-no-repeat`,
+  bgImage: `absolute inset-0 bg-black bg-cover bg-center bg-no-repeat`,
   bgOverlay: `absolute inset-0 bg-black/70 backdrop-blur-[60px]`,
   content: `relative z-10 flex w-full flex-col items-center justify-center
     px-[1.6em] gap-[4rem]

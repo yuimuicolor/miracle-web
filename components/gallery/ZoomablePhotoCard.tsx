@@ -132,7 +132,7 @@ export default function ZoomablePhotoCard({
           </div>
         ) : null}
         <div className={STYLE.hoverBlur}>
-          <Image src={src} alt="" fill sizes={sizes} className="object-cover" aria-hidden="true" />
+          <Image src={src} alt="" fill sizes={sizes} className="object-cover" aria-hidden="true" loading="eager" />
           <div className="absolute inset-0 bg-linear-to-b from-transparent to-black/50" />
         </div>
         <div className={STYLE.hoverShade} />

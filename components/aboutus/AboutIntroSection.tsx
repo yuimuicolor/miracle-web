@@ -157,13 +157,11 @@ export default function AboutIntroSection() {
               hiddenClassName={INTRO_REVEAL.hiddenClassName}
               visibleClassName={INTRO_REVEAL.visibleClassName}
             >
-              {/* 이미지를 감싸는 부모 컨테이너 */}
               <div
-                className={row.imageClassName} // <-- 여기서 데이터에 있는 클래스를 사용!
+                className={row.imageClassName} 
                 style={{
                   position: "relative",
                   width: "100%",
-                  // 이미지 로딩 전에도 자리를 딱 차지하게 만드는 마법의 속성
                   aspectRatio: `${row.imageWidth} / ${row.imageHeight}`,
                   overflow: "hidden",
                 }}

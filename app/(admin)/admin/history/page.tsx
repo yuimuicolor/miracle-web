@@ -44,8 +44,8 @@ export default function AdminHistoryPage() {
             <div className="flex gap-3 mt-6 lg:mt-0  mb-10 justify-end">
                 <input type="file" ref={fileInputRef} className="hidden" accept="image/*" onChange={(e) => {
                     const file = e.target.files?.[0];
-                    if (file) addItem(file); // 훅에 있는 addItem 호출!
-                    e.target.value = ""; // 같은 파일 또 올릴 수 있게 비워주기
+                    if (file) addItem(file); 
+                    e.target.value = "";
                 }} />
                 <AdminAddButton onClick={() => fileInputRef.current?.click()} label="연혁 추가" />
                 <AdminSaveButton onClick={handleAllSave} isSaving={isSaving} />

@@ -37,11 +37,6 @@ export const NAVIGATION_MENU: NavigationMenuItem[] = [
 ];
 
 export const STATIC_ASSETS = {
-  // 로고 및 배경
-  logo: "/images/miracle-main-logo.png",
-  mainBg: "/images/main-bg.png",
-  galleryBg: "/images/gallery-bg.png",
-
   // 정보 섹션 아이콘
   info: {
     location: "/images/icon/icon_location.png",

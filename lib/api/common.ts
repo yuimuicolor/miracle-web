@@ -75,7 +75,7 @@ export const cleanupStorageFiles = async (
 
 const filesToDelete = storageFiles
     .filter((f: any) => {
-      // 1. 현재 사용 중인 파일(activeFiles)에 포함되어 있다면 절대 삭제 금지!
+      // 1. 현재 사용 중인 파일(activeFiles)에 포함되어 있다면 절대 삭제 금지
       if (activeFiles.includes(f.name)) return false;
 
       // 2. prefix가 있다면 해당 prefix로 시작하는 파일만 타겟팅
